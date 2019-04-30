@@ -1,4 +1,4 @@
-package com.example.myapplication.dao;
+package com.example.myapplication.database.dao;
 
 public class CategoryDAO extends AbstractDAO {
 
