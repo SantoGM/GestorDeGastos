@@ -16,6 +16,9 @@ public class OpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DataBaseContract.AccountEntry.SQL_CREATE_TABLE);
+        db.execSQL(DataBaseContract.CategoryEntry.SQL_CREATE_TABLE);
+        db.execSQL(DataBaseContract.PaymentEntry.SQL_CREATE_TABLE);
+        db.execSQL(DataBaseContract.TransferenceEntry.SQL_CREATE_TABLE);
     }
 
     @Override

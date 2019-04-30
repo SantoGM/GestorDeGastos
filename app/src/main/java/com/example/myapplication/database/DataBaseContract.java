@@ -35,6 +35,7 @@ public final class DataBaseContract {
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_PARENT + " INTEGER )";
     }
+
     public static final class PaymentEntry implements BaseColumns {
         public static final String TABLE_NAME = "accounts";
 
@@ -55,6 +56,7 @@ public final class DataBaseContract {
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_IS_CREDIT_CARD + " INTEGER NOT NULL )";
     }
+
     public static final class TransferenceEntry implements BaseColumns {
         public static final String TABLE_NAME = "transferences";
 
@@ -73,4 +75,5 @@ public final class DataBaseContract {
                         COLUMN_ID_ACCOUNT_DEST + " INTEGER NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT )";
     }
+
 }
