@@ -1,19 +1,17 @@
 package com.example.myapplication.database.dao;
 
-import java.util.List;
-
 public class AccountDAO extends AbstractDAO {
 
     private String name;
+    private String description;
     private Float balance;
-    private List<MovementDAO> movements;
 
 
-    public AccountDAO(Long id, String name, Float balance, List<MovementDAO> movements) {
+    public AccountDAO(Long id, String name, String description, Float balance) {
         this.setId(id);
         this.name = name;
+        this.description = description;
         this.balance = balance;
-        this.movements = movements;
     }
 
 
@@ -23,17 +21,17 @@ public class AccountDAO extends AbstractDAO {
     public void setName(String name) {
         this.name = name;
     }
+    public String getDescription() {
+        return description;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
     public Float getBalance() {
         return balance;
     }
     public void setBalance(Float balance) {
         this.balance = balance;
-    }
-    public List<MovementDAO> getMovements() {
-        return movements;
-    }
-    public void setMovements(List<MovementDAO> movements) {
-        this.movements = movements;
     }
 
 }
