@@ -30,24 +30,69 @@ public class AccountManager {
     }
 
 
-    public List<AccountDAO> getAll(OpenHelper dbHelper) {
+    public List<AccountDAO> getAccounts() {
+        return this.accounts;
+    }
+
+
+    public static void loadFromDB(OpenHelper dbHelper) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
                             AccountEntry.COLUMN_DESCRIPTION,
                             AccountEntry.COLUMN_BALANCE};
+        String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
-        Cursor Accoutncur = db.query(AccountEntry.TABLE_NAME,
+        Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
                                      columns,
-                            null,
-                         null,
-                            null,
-                              null,
-                            AccountEntry.COLUMN_NAME + " DESC");
+                                     null,
+                                     null,
+                                     null,
+                                     null,
+                                     accountOrderBy);
 
-        Accoutncur.close();/*TODO Delete this line and close the cursor properly when it is needed*/
+        loadAccounts(accountCur);
+    }
 
-        return new ArrayList<AccountDAO>(); /*TODO put the proper return*/
+
+    private static void loadAccounts(Cursor cursor) {
+        int accIdPos = cursor.getColumnIndex(AccountEntry._ID);
+        int accNamePos = cursor.getColumnIndex(AccountEntry.COLUMN_NAME);
+        int accDescriptionPos = cursor.getColumnIndex(AccountEntry.COLUMN_DESCRIPTION);
+        int accBalancePos = cursor.getColumnIndex(AccountEntry.COLUMN_BALANCE);
+
+        AccountManager am = getInstance();
+        am.accounts.clear();
+
+        while (cursor.moveToNext()) {
+            Long id = cursor.getLong(accIdPos);
+            String name = cursor.getString(accNamePos);
+            String description = cursor.getString(accDescriptionPos);
+            Float balance = cursor.getFloat(accBalancePos);
+
+            AccountDAO accountDAO = new AccountDAO(id, name, description, balance);
+            am.accounts.add(accountDAO);
+        }
+
+        cursor.close();
+    }
+
+
+    public AccountDAO findById(Long id) {
+        for (AccountDAO account : accounts) {
+            if (id.equals(account.getId()))  //TODO chk if equals works or we should change it to ==
+                return account;
+        }
+        return null;
+    }
+
+
+    public AccountDAO findByName(String name) {
+        for (AccountDAO account : accounts) {
+            if (name.equals(account.getName()))
+                return account;
+        }
+        return null;
     }
 
 }

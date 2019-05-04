@@ -26,14 +26,12 @@ public final class DataBaseContract {
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
-        public static final String COLUMN_PARENT = "parent";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
-                        COLUMN_DESCRIPTION + " TEXT, " +
-                        COLUMN_PARENT + " INTEGER )";
+                        COLUMN_DESCRIPTION + " TEXT )";
     }
 
     public static final class PaymentEntry implements BaseColumns {

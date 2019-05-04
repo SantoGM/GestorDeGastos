@@ -1,13 +1,21 @@
 package com.example.myapplication.database.dataManager;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.myapplication.database.DataBaseContract;
+import com.example.myapplication.database.OpenHelper;
+import com.example.myapplication.database.dao.CategoryDAO;
+
+import java.util.List;
+
+import static com.example.myapplication.database.DataBaseContract.*;
+
 public class CategoryManager {
 
     private static CategoryManager categoryManager = null;
 
-    private Long id;
-    private String name;
-    private String description;
-    private CategoryManager parent;
+    private List<CategoryDAO> categories;
 
 
     private CategoryManager() {
@@ -21,29 +29,65 @@ public class CategoryManager {
     }
 
 
-    public Long getId() {
-        return id;
+    public List<CategoryDAO> getCategories() {
+        return categories;
     }
-    public void setId(Long id) {
-        this.id = id;
+
+
+    public static void loadFromDB(OpenHelper dbHelper) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] columns = {CategoryEntry._ID,
+                            CategoryEntry.COLUMN_NAME,
+                            CategoryEntry.COLUMN_DESCRIPTION};
+
+        Cursor categoryCur = db.query(CategoryEntry.TABLE_NAME,
+                                      columns,
+                                      null,
+                                      null,
+                                      null,
+                                      null,
+                                      null);
+
+        loadCategories(categoryCur);
+
     }
-    public String getName() {
-        return name;
+
+    private static void loadCategories(Cursor cursor) {
+        int catIdPos = cursor.getColumnIndex(CategoryEntry._ID);
+        int catNamePos = cursor.getColumnIndex(CategoryEntry.COLUMN_NAME);
+        int catDescriptionPos = cursor.getColumnIndex(CategoryEntry.COLUMN_DESCRIPTION);
+
+        CategoryManager cm = getInstance();
+        cm.categories.clear();
+
+        while (cursor.moveToNext()) {
+            Long id = cursor.getLong(catIdPos);
+            String name = cursor.getString(catNamePos);
+            String description = cursor.getString(catDescriptionPos);
+
+            CategoryDAO categoryDAO = new CategoryDAO(id, name, description);
+            cm.categories.add(categoryDAO);
+        }
+
+        cursor.close();
     }
-    public void setName(String name) {
-        this.name = name;
+
+
+    public CategoryDAO findById(Long id) {
+        for (CategoryDAO category : categories) {
+            if (id.equals(category.getId()))  //TODO chk if equals works or we should change it to ==
+                return category;
+        }
+        return null;
     }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    public CategoryManager getParent() {
-        return parent;
-    }
-    public void setParent(CategoryManager parent) {
-        this.parent = parent;
+
+
+    public CategoryDAO findByName(String name) {
+        for (CategoryDAO category : categories) {
+            if (name.equals(category.getName()))
+                return category;
+        }
+        return null;
     }
 
 }
