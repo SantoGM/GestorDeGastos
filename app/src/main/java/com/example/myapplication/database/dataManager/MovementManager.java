@@ -5,8 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.myapplication.database.DataBaseContract.PaymentEntry;
 import com.example.myapplication.database.OpenHelper;
+import com.example.myapplication.view.pojo.AccountPojo;
+import com.example.myapplication.view.pojo.CategoryPojo;
 import com.example.myapplication.view.pojo.PaymenyPojo;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +57,11 @@ public class MovementManager {
 
     }
 
+
     private List<PaymenyPojo> loadPayments(Cursor cursor) {
+        CategoryManager cm = CategoryManager.getInstance();
+        AccountManager am = AccountManager.getInstance();
+
         List<PaymenyPojo> payments = new ArrayList<>();
 
         int payIdPos = cursor.getColumnIndex(PaymentEntry._ID);
@@ -63,35 +72,46 @@ public class MovementManager {
         int payDescriptionPos = cursor.getColumnIndex(PaymentEntry.COLUMN_DESCRIPTION);
         int payCCPos = cursor.getColumnIndex(PaymentEntry.COLUMN_IS_CREDIT_CARD);
 
-        //MovementManager mm = getInstance();
-
         while (cursor.moveToNext()) {
             Long id = cursor.getLong(payIdPos);
-            //Date date = cursor.get   // TODO finish with this - find the way to handle dates
-                                       //
-        }
-        /*
+            String dateString = cursor.getString(payDatePos);
+            Float amount = cursor.getFloat(payAmountPos);
+            Long categoryId = cursor.getLong(payCategoryPos);
+            Long accountId = cursor.getLong(payAccountPos);
+            String description = cursor.getString(payDescriptionPos);
+            Integer creditCardInt = cursor.getInt(payCCPos);
 
+            Date date = stringToDate(dateString);
+            CategoryPojo category = cm.findById(categoryId);
+            AccountPojo account = am.findById(accountId);
+            Boolean creditCard = intToBoolean(creditCardInt);
 
-        AccountManager am = getInstance();
-        am.accounts.clear();
+            PaymenyPojo payment = new PaymenyPojo(id, date, amount, category, account, description, creditCard);
 
-        while (cursor.moveToNext()) {
-            Long id = cursor.getLong(accIdPos);
-            String name = cursor.getString(accNamePos);
-            String description = cursor.getString(accDescriptionPos);
-            Float balance = cursor.getFloat(accBalancePos);
-
-            AccountPojo account = new AccountPojo(id, name, description, balance);
-            am.accounts.add(account);
+            payments.add(payment);
         }
 
-*/
         cursor.close();
 
-
         return payments;
+    }
 
+
+    private Date stringToDate(String dateString) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = format.parse(dateString);
+        }
+        catch (ParseException ex) {
+            date = null;
+        }
+        return date;
+    }
+
+
+    private Boolean intToBoolean(Integer creditCardInt) {
+        return creditCardInt > 0;
     }
 
 
