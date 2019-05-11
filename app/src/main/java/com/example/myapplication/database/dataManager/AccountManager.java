@@ -17,7 +17,6 @@ public class AccountManager {
 
     private List<AccountDAO> accounts;
 
-
     private AccountManager() {
     }
 

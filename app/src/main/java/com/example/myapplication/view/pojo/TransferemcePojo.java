@@ -2,9 +2,8 @@ package com.example.myapplication.view.pojo;
 
 import java.util.Date;
 
-public class TransferemcePojo implements MovementPojo {
+public class TransferemcePojo extends AbstractPojo implements MovementPojo {
 
-    private Long id;
     private Date date;
     private Float amount;
     private AccountPojo accountOrigin;
@@ -16,21 +15,12 @@ public class TransferemcePojo implements MovementPojo {
     }
 
     public TransferemcePojo(Long id, Date date, Float amount, AccountPojo accountOrigin, AccountPojo accountDestiny, String description) {
-        this.id = id;
+        this.setId(id);
         this.date = date;
         this.amount = amount;
         this.accountOrigin = accountOrigin;
         this.accountDestiny = accountDestiny;
         Description = description;
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Date getDate() {

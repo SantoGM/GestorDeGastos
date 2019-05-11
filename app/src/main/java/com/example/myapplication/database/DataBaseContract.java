@@ -14,7 +14,7 @@ public final class DataBaseContract {
         public static final String COLUMN_BALANCE = "balance";
 
         public static final String SQL_CREATE_TABLE =
-                "CREATE TABLE " + TABLE_NAME + " (" +
+                "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT, " +
@@ -28,7 +28,7 @@ public final class DataBaseContract {
         public static final String COLUMN_DESCRIPTION = "description";
 
         public static final String SQL_CREATE_TABLE =
-                "CREATE TABLE " + TABLE_NAME + " (" +
+                "CREATE TABLE  IF NOT EXISTS " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT )";
@@ -45,7 +45,7 @@ public final class DataBaseContract {
         public static final String COLUMN_IS_CREDIT_CARD = "is_credit_card";
 
         public static final String SQL_CREATE_TABLE =
-                "CREATE TABLE " + TABLE_NAME + " (" +
+                "CREATE TABLE  IF NOT EXISTS " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_DATE + " TEXT NOT NULL, " +
                         COLUMN_AMOUNT + " REAL NOT NULL, " +
@@ -65,13 +65,28 @@ public final class DataBaseContract {
         public static final String COLUMN_DESCRIPTION = "description";
 
         public static final String SQL_CREATE_TABLE =
-                "CREATE TABLE " + TABLE_NAME + " (" +
+                "CREATE TABLE  IF NOT EXISTS " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_DATE + " TEXT NOT NULL, " +
                         COLUMN_AMOUNT + " REAL NOT NULL, " +
                         COLUMN_ID_ACCOUNT_ORG + " INTEGER NOT NULL, " +
                         COLUMN_ID_ACCOUNT_DEST + " INTEGER NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT )";
+    }
+
+    public static final class UserDataEntry implements BaseColumns {
+        public static final String TABLE_NAME = "user_data";
+
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_EMAIL = "email";
+        public static final String COLUMN_PIN = "pin";
+
+        public static final String SQL_CREATE_TABLE =
+                "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
+                        _ID + " INTEGER PRIMARY KEY, " +
+                        COLUMN_NAME + " TEXT NOT NULL, " +
+                        COLUMN_EMAIL + " TEXT NOT NULL, " +
+                        COLUMN_PIN + " INTEGER NOT NULL )";
     }
 
 }

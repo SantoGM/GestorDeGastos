@@ -1,8 +1,7 @@
 package com.example.myapplication.view.pojo;
 
-public class CategoryPojo {
+public class CategoryPojo extends AbstractPojo{
 
-    private Long id;
     private String name;
     private String description;
 
@@ -11,18 +10,11 @@ public class CategoryPojo {
     }
 
     public CategoryPojo(Long id, String name, String description) {
-        this.id = id;
+        this.setId(id);
         this.name = name;
         this.description = description;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
     public String getName() {
         return name;
     }

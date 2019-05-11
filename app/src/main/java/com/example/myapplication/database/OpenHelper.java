@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class OpenHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "GestorDeGastos.db";
+    public static final String DATABASE_NAME = "GestorDeGastos";
     public static final int DATABASE_VERSION = 1;
 
     public OpenHelper(Context context) {
@@ -19,6 +19,11 @@ public class OpenHelper extends SQLiteOpenHelper {
         db.execSQL(DataBaseContract.CategoryEntry.SQL_CREATE_TABLE);
         db.execSQL(DataBaseContract.PaymentEntry.SQL_CREATE_TABLE);
         db.execSQL(DataBaseContract.TransferenceEntry.SQL_CREATE_TABLE);
+        db.execSQL(DataBaseContract.UserDataEntry.SQL_CREATE_TABLE);
+
+        DataWorker dbw = new DataWorker(db);
+
+        dbw.insertAccounts();
     }
 
     @Override

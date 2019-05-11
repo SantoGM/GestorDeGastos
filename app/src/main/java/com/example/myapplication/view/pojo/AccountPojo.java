@@ -1,8 +1,7 @@
 package com.example.myapplication.view.pojo;
 
-public class AccountPojo {
+public class AccountPojo extends AbstractPojo{
 
-    private Long id;
     private String name;
     private String description;
     private Float balance;
@@ -12,19 +11,12 @@ public class AccountPojo {
     }
 
     public AccountPojo(Long id, String name, String description, Float balance) {
-        this.id = id;
+        setId(id);
         this.name = name;
         this.description = description;
         this.balance = balance;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
     public String getName() {
         return name;
     }
