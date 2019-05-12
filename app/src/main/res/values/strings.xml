@@ -5,6 +5,9 @@
     <string name="lblNombre">Nombre</string>
     <string name="lblApellido">Apellido</string>
     <string name="lblPin">Pin</string>
+    <string name="lblPinRepeat">Reingrese Pin</string>
+    <string name="lblGreet">Hola!</string>
+    <string name="lblRequestPin">Olvidaste el pin?</string>
 
     <!--Botton -->
     <string name="btnSignIn">SingIn</string>
@@ -15,6 +18,8 @@
     <string name="app_name">Gestor de Gastos</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">Login</string>
+    <string name="pin_activity">PIN</string>
+    <string name="register_activity">Registrarse</string>
 
     <!-- Strings related to login -->
     <string name="action_sign_in">Sign in or register</string>
@@ -28,5 +33,6 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="title_activity_basic">Gestor de Gastos</string>
 
 </resources>

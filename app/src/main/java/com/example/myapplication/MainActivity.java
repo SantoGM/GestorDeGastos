@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +15,9 @@ import android.view.MenuItem;
 import com.example.myapplication.database.DataBaseContract;
 import com.example.myapplication.database.OpenHelper;
 import com.example.myapplication.database.dataManager.UserDataManager;
+import com.example.myapplication.view.LoginActivity;
+import com.example.myapplication.view.PINActivity;
+import com.example.myapplication.view.RegisterActivity;
 import com.example.myapplication.view.pojo.UserDataPojo;
 
 public class MainActivity extends AppCompatActivity {
@@ -51,9 +56,20 @@ public class MainActivity extends AppCompatActivity {
         UserDataPojo userData = UserDataManager.getInstance(dbOpenHelper).getUserData();
 
         if (userData != null){
-            // Ir a la pantalla de ingreso de PIN
+
+            // Creo el Intent para ir a PINActivity
+            Intent intent = new Intent(getApplicationContext(),PINActivity.class);
+            // Le los datos de ususario al Intent
+            ContentValues record = new ContentValues();
+            intent.putExtra("user",userData.getName());
+            intent.putExtra("pin",userData.getPin());
+            intent.putExtra("email",userData.getEmail());
+
+            // Y llamo a la pantalla de PIN
+            startActivity(intent);
         } else {
             // Ir a la pantalla de alta de usuario
+            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
         }
     }
 

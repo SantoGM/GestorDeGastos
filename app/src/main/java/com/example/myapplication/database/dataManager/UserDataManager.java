@@ -1,5 +1,6 @@
 package com.example.myapplication.database.dataManager;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.service.autofill.UserData;
@@ -12,17 +13,17 @@ public class UserDataManager {
 
     private static UserDataManager instance;
     private static UserDataPojo userData;
+    private static OpenHelper oh;
 
     private UserDataManager(){
     }
 
-    public static UserDataManager getInstance(OpenHelper oh){
+    public static UserDataManager getInstance(OpenHelper ohx){
         if (instance == null){
             instance = new UserDataManager();
         }
-
+        oh = ohx;
         getUserData(oh);
-
         return instance;
     }
 
@@ -44,6 +45,7 @@ public class UserDataManager {
                 null);
 
         loadUser(userDataCursor);
+        db.close();
     }
 
     private static void loadUser(Cursor cursor) {
@@ -51,14 +53,28 @@ public class UserDataManager {
         int usrMailPos = cursor.getColumnIndex(DataBaseContract.UserDataEntry.COLUMN_EMAIL);
         int usrPinPos = cursor.getColumnIndex(DataBaseContract.UserDataEntry.COLUMN_PIN);
 
-        cursor.moveToNext();
-        String name = cursor.getString(usrNamePos);
-        String email = cursor.getString(usrMailPos);
-        Integer pin = cursor.getInt(usrPinPos);
+        if(cursor != null && cursor.getCount() > 0) {
+            cursor.moveToNext();
+            String name = cursor.getString(usrNamePos);
+            String email = cursor.getString(usrMailPos);
+            Integer pin = cursor.getInt(usrPinPos);
 
-        userData = new UserDataPojo(name, email, pin);
+            userData = new UserDataPojo(name, email, pin);
 
-        cursor.close();
+            cursor.close();
+        }
+    }
+
+    public void registerUser(String name, String email, Integer PIN){
+        SQLiteDatabase db = oh.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(DataBaseContract.UserDataEntry.COLUMN_NAME, name);
+        values.put(DataBaseContract.UserDataEntry.COLUMN_EMAIL, email);
+        values.put(DataBaseContract.UserDataEntry.COLUMN_PIN, PIN);
+
+        db.insert(DataBaseContract.UserDataEntry.TABLE_NAME, null, values);
+        db.close();
     }
 
     public UserDataPojo getUserData(){

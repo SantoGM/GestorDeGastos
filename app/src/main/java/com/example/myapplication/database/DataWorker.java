@@ -12,7 +12,6 @@ public class DataWorker {
 
     public void insertAccounts() {
         insertAccount("Cuenta Base", "-",0.00);
-        insertUser();
     }
 
     private void insertAccount(String accName, String accDesc, Double accBalance) {
