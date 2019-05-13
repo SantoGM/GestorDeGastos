@@ -33,10 +33,11 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (validateRegister(lblName, lblMail, lblPinInput, lblPinRepeat)) {
 
-                    UserDataManager.getInstance(new OpenHelper(getApplicationContext())).
+                    UserDataManager.getInstance().
                             registerUser(lblName.getText().toString(),
                                     lblMail.getText().toString(),
-                                    Integer.parseInt(lblPinInput.getText().toString()));
+                                    Integer.parseInt(lblPinInput.getText().toString()),
+                                    getApplicationContext());
 
                     Intent intent = new Intent(view.getContext(), BasicActivity.class);
                     startActivityForResult(intent, 0);

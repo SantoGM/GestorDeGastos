@@ -1,9 +1,9 @@
 package com.example.myapplication.database.dataManager;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.service.autofill.UserData;
 
 import com.example.myapplication.database.DataBaseContract;
 import com.example.myapplication.database.OpenHelper;
@@ -13,21 +13,20 @@ public class UserDataManager {
 
     private static UserDataManager instance;
     private static UserDataPojo userData;
-    private static OpenHelper oh;
 
     private UserDataManager(){
     }
 
-    public static UserDataManager getInstance(OpenHelper ohx){
+    public static UserDataManager getInstance(){
         if (instance == null){
             instance = new UserDataManager();
         }
-        oh = ohx;
-        getUserData(oh);
         return instance;
     }
 
-    private static void getUserData(OpenHelper oh){
+    public UserDataPojo getUserData(Context ctx){
+
+        OpenHelper oh = new OpenHelper(ctx);
 
         SQLiteDatabase db = oh.getReadableDatabase();
         String[] columns = {"ROWID",
@@ -46,6 +45,9 @@ public class UserDataManager {
 
         loadUser(userDataCursor);
         db.close();
+        oh.close();
+
+        return userData;
     }
 
     private static void loadUser(Cursor cursor) {
@@ -65,7 +67,10 @@ public class UserDataManager {
         }
     }
 
-    public void registerUser(String name, String email, Integer PIN){
+    public void registerUser(String name, String email, Integer PIN, Context ctx){
+
+        OpenHelper oh = new OpenHelper(ctx);
+
         SQLiteDatabase db = oh.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -75,9 +80,6 @@ public class UserDataManager {
 
         db.insert(DataBaseContract.UserDataEntry.TABLE_NAME, null, values);
         db.close();
-    }
-
-    public UserDataPojo getUserData(){
-        return userData;
+        oh.close();
     }
 }

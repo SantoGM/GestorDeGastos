@@ -40,20 +40,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        dbOpenHelper = new OpenHelper(this);
-
-        SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-
-        db.query(DataBaseContract.UserDataEntry.TABLE_NAME,
-                new String[]{DataBaseContract.UserDataEntry.COLUMN_PIN},
-                null,
-                 null,
-                null,
-                null, null);
-
-        db.close();
-
-        UserDataPojo userData = UserDataManager.getInstance(dbOpenHelper).getUserData();
+        UserDataPojo userData = UserDataManager.getInstance().getUserData(getApplicationContext());
 
         if (userData != null){
 
