@@ -1,5 +1,8 @@
 package com.example.myapplication;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,14 +12,24 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.myapplication.database.DataBaseContract;
+import com.example.myapplication.database.OpenHelper;
+import com.example.myapplication.database.dataManager.UserDataManager;
+import com.example.myapplication.view.LoginActivity;
+import com.example.myapplication.view.PINActivity;
+import com.example.myapplication.view.RegisterActivity;
+import com.example.myapplication.view.pojo.UserDataPojo;
+
 public class MainActivity extends AppCompatActivity {
+
+    private OpenHelper dbOpenHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -26,6 +39,25 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        UserDataPojo userData = UserDataManager.getInstance().getUserData(getApplicationContext());
+
+        if (userData != null){
+
+            // Creo el Intent para ir a PINActivity
+            Intent intent = new Intent(getApplicationContext(),PINActivity.class);
+            // Le los datos de ususario al Intent
+            ContentValues record = new ContentValues();
+            intent.putExtra("user",userData.getName());
+            intent.putExtra("pin",userData.getPin());
+            intent.putExtra("email",userData.getEmail());
+
+            // Y llamo a la pantalla de PIN
+            startActivity(intent);
+        } else {
+            // Ir a la pantalla de alta de usuario
+            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+        }
     }
 
     @Override
@@ -48,5 +80,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        dbOpenHelper.close();
+        super.onDestroy();
     }
 }
