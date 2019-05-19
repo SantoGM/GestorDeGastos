@@ -23,43 +23,36 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
         Description = description;
     }
 
+
     public Date getDate() {
         return date;
     }
-
     public void setDate(Date date) {
         this.date = date;
     }
-
     public Float getAmount() {
         return amount;
     }
-
     public void setAmount(Float amount) {
         this.amount = amount;
     }
-
     public AccountPojo getAccountOrigin() {
         return accountOrigin;
     }
-
     public void setAccountOrigin(AccountPojo accountOrigin) {
         this.accountOrigin = accountOrigin;
     }
-
     public AccountPojo getAccountDestiny() {
         return accountDestiny;
     }
-
     public void setAccountDestiny(AccountPojo accountDestiny) {
         this.accountDestiny = accountDestiny;
     }
-
     public String getDescription() {
         return Description;
     }
-
     public void setDescription(String description) {
         Description = description;
     }
+
 }

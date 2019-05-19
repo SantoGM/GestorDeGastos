@@ -3,19 +3,18 @@ package com.example.myapplication.database.dataManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.myapplication.database.DataBaseContract;
 import com.example.myapplication.database.OpenHelper;
-import com.example.myapplication.database.dao.CategoryDAO;
+import com.example.myapplication.view.pojo.CategoryPojo;
 
 import java.util.List;
 
-import static com.example.myapplication.database.DataBaseContract.*;
+import static com.example.myapplication.database.DataBaseContract.CategoryEntry;
 
 public class CategoryManager {
 
     private static CategoryManager categoryManager = null;
 
-    private List<CategoryDAO> categories;
+    private List<CategoryPojo> categories;
 
 
     private CategoryManager() {
@@ -29,7 +28,7 @@ public class CategoryManager {
     }
 
 
-    public List<CategoryDAO> getCategories() {
+    public List<CategoryPojo> getCategories() {
         return categories;
     }
 
@@ -65,16 +64,16 @@ public class CategoryManager {
             String name = cursor.getString(catNamePos);
             String description = cursor.getString(catDescriptionPos);
 
-            CategoryDAO categoryDAO = new CategoryDAO(id, name, description);
-            cm.categories.add(categoryDAO);
+            CategoryPojo category = new CategoryPojo(id, name, description);
+            cm.categories.add(category);
         }
 
         cursor.close();
     }
 
 
-    public CategoryDAO findById(Long id) {
-        for (CategoryDAO category : categories) {
+    public CategoryPojo findById(Long id) {
+        for (CategoryPojo category : categories) {
             if (id.equals(category.getId()))  //TODO chk if equals works or we should change it to ==
                 return category;
         }
@@ -82,8 +81,8 @@ public class CategoryManager {
     }
 
 
-    public CategoryDAO findByName(String name) {
-        for (CategoryDAO category : categories) {
+    public CategoryPojo findByName(String name) {
+        for (CategoryPojo category : categories) {
             if (name.equals(category.getName()))
                 return category;
         }

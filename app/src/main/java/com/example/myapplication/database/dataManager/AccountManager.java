@@ -4,7 +4,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.myapplication.database.OpenHelper;
-import com.example.myapplication.database.dao.AccountDAO;
+import com.example.myapplication.view.pojo.AccountPojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class AccountManager {
 
     private static AccountManager accountManager = null;
 
-    private List<AccountDAO> accounts;
+    private List<AccountPojo> accounts;
 
     private AccountManager() {
     }
@@ -29,7 +29,7 @@ public class AccountManager {
     }
 
 
-    public List<AccountDAO> getAccounts() {
+    public List<AccountPojo> getAccounts() {
         return this.accounts;
     }
 
@@ -69,16 +69,16 @@ public class AccountManager {
             String description = cursor.getString(accDescriptionPos);
             Float balance = cursor.getFloat(accBalancePos);
 
-            AccountDAO accountDAO = new AccountDAO(id, name, description, balance);
-            am.accounts.add(accountDAO);
+            AccountPojo account = new AccountPojo(id, name, description, balance);
+            am.accounts.add(account);
         }
 
         cursor.close();
     }
 
 
-    public AccountDAO findById(Long id) {
-        for (AccountDAO account : accounts) {
+    public AccountPojo findById(Long id) {
+        for (AccountPojo account : accounts) {
             if (id.equals(account.getId()))  //TODO chk if equals works or we should change it to ==
                 return account;
         }
@@ -86,8 +86,8 @@ public class AccountManager {
     }
 
 
-    public AccountDAO findByName(String name) {
-        for (AccountDAO account : accounts) {
+    public AccountPojo findByName(String name) {
+        for (AccountPojo account : accounts) {
             if (name.equals(account.getName()))
                 return account;
         }
