@@ -4,10 +4,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.myapplication.database.DataBaseContract.PaymentEntry;
+import com.example.myapplication.database.DataBaseContract.TransferenceEntry;
 import com.example.myapplication.database.OpenHelper;
 import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.CategoryPojo;
 import com.example.myapplication.view.pojo.PaymenyPojo;
+import com.example.myapplication.view.pojo.TransferemcePojo;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -112,6 +114,65 @@ public class MovementManager {
 
     private Boolean intToBoolean(Integer creditCardInt) {
         return creditCardInt > 0;
+    }
+
+
+    public List<TransferemcePojo> getAllTransferences(OpenHelper dbHelper) {
+        List<TransferemcePojo> transferences;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String[] columns = {TransferenceEntry._ID,
+                            TransferenceEntry.COLUMN_DATE,
+                            TransferenceEntry.COLUMN_AMOUNT,
+                            TransferenceEntry.COLUMN_ID_ACCOUNT_ORG,
+                            TransferenceEntry.COLUMN_ID_ACCOUNT_DEST,
+                            TransferenceEntry.COLUMN_DESCRIPTION};
+        String transferenceOrderBy = TransferenceEntry.COLUMN_DATE + " ASC";
+
+        Cursor transferenceCur = db.query(TransferenceEntry.TABLE_NAME,
+                                          columns,
+                                          null,
+                                          null,
+                                          null,
+                                          null,
+                                          transferenceOrderBy);
+
+        transferences = loadTransferences(transferenceCur);
+
+        return transferences;
+    }
+
+    private List<TransferemcePojo> loadTransferences(Cursor cursor) {
+        AccountManager am = AccountManager.getInstance();
+
+        List<TransferemcePojo> transferences = new ArrayList<>();
+
+        int transIdPos = cursor.getColumnIndex(TransferenceEntry._ID);
+        int transDatePos = cursor.getColumnIndex(TransferenceEntry.COLUMN_DATE);
+        int transAmountPos = cursor.getColumnIndex(TransferenceEntry.COLUMN_AMOUNT);
+        int transAccountOrgPos = cursor.getColumnIndex(TransferenceEntry.COLUMN_ID_ACCOUNT_ORG);
+        int transAccountDestPos = cursor.getColumnIndex(TransferenceEntry.COLUMN_ID_ACCOUNT_DEST);
+        int transDescriptionPos = cursor.getColumnIndex(TransferenceEntry.COLUMN_DESCRIPTION);
+        
+        while (cursor.moveToNext()) {
+            Long id = cursor.getLong(transIdPos);
+            String dateString = cursor.getString(transDatePos);
+            Float amount = cursor.getFloat(transAmountPos);
+            Long accountOrgId = cursor.getLong(transAccountOrgPos);
+            Long accountDestId = cursor.getLong(transAccountDestPos);
+            String description = cursor.getString(transDescriptionPos);
+
+            Date date = stringToDate(dateString);
+            AccountPojo accountOrg = am.findById(accountOrgId);
+            AccountPojo accountDest = am.findById(accountDestId);
+
+            TransferemcePojo transference = new TransferemcePojo(id, date, amount, accountOrg, accountDest, description);
+
+            transferences.add(transference);
+        }
+
+        cursor.close();
+
+        return transferences;
     }
 
 

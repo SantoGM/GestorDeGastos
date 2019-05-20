@@ -8,7 +8,7 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
     private Float amount;
     private AccountPojo accountOrigin;
     private AccountPojo accountDestiny;
-    private String Description;
+    private String description;
 
 
     public TransferemcePojo() {
@@ -20,7 +20,7 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
         this.amount = amount;
         this.accountOrigin = accountOrigin;
         this.accountDestiny = accountDestiny;
-        Description = description;
+        this.description = description;
     }
 
 
@@ -49,10 +49,21 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
         this.accountDestiny = accountDestiny;
     }
     public String getDescription() {
-        return Description;
+        return description;
     }
     public void setDescription(String description) {
-        Description = description;
+        description = description;
     }
 
+
+    @Override
+    public String[] showDetails() {
+        String[] details = {String.valueOf(this.getId()),
+                            String.valueOf(this.date),
+                            String.valueOf(this.amount),
+                            this.accountOrigin.getName(),
+                            this.accountDestiny.getName(),
+                            this.description};
+        return details;
+    }
 }
