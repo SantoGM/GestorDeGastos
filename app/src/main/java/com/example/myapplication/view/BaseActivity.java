@@ -1,5 +1,6 @@
 package com.example.myapplication.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -15,7 +16,16 @@ public class BaseActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+    private Intent crearIntent(Class clas){
+        return new Intent(getApplicationContext(),clas);
 
+    }
+    private void goToActivity(Class clas){
+        startActivity(crearIntent(clas));
+    }
+    private void reportes(){
+
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -24,8 +34,7 @@ public class BaseActivity extends AppCompatActivity {
                 // newGame();
                 return true;
             case R.id.menu_action_report:
-                Intent intent = new Intent(getApplicationContext(),ReportActivity.class);
-                startActivity(intent);
+                goToActivity(ReportActivity.class);
                 //showHelp();
                 return true;
             case R.id.menu_action_out:
