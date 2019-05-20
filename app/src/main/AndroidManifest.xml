@@ -11,6 +11,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.ReportActivity"></activity>
         <activity
+            android:name=".view.AddExpenseActivity"
+            android:label="@string/title_activity_add_expense"></activity>
+        <activity
             android:name=".view.BasicActivity"
             android:label="@string/title_activity_basic"
             android:theme="@style/AppTheme.NoActionBar" />

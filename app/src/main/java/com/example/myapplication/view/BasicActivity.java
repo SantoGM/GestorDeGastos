@@ -3,14 +3,17 @@ package com.example.myapplication.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.businessLogic.AccountsFacade;
+import com.example.myapplication.businessLogic.PersistentDataModel;
 
 public class BasicActivity extends BaseActivity {
 
@@ -21,14 +24,23 @@ public class BasicActivity extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.addExpense);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent goToAddExpense = new Intent(getApplicationContext(), AddExpenseActivity.class);
+                startActivity(goToAddExpense);
             }
         });
+
+        ArrayAdapter<PersistentDataModel> adapter = new ArrayAdapter(getApplicationContext(), R.layout.activity_listview, AccountsFacade.getInstance().getAccountsSpinnerModel());
+
+        ListView listView = findViewById(R.id.basicViewList);
+        listView.setAdapter(adapter);
     }
 
+    @Override
+    public void onBackPressed() {
+        // Do nothing
+    }
 }
