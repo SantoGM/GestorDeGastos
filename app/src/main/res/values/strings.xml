@@ -34,5 +34,15 @@
         completions."
     </string>
     <string name="title_activity_basic">Gestor de Gastos</string>
+    <string name="title_activity_add_expense">AddExpenseActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="lblAddExpense">Agregar Gasto</string>
+    <string name="hintDescriptionExpense">¿En qué gastaste?</string>
+    <string name="lblPayedWith">Pagado con</string>
+    <string name="lblAmount">Monto</string>
+    <string name="lblDescription">Descripción</string>
+    <string name="lblCategory">Categoría</string>
 
 </resources>

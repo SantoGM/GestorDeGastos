@@ -14,6 +14,9 @@ import com.example.myapplication.R;
 
 public class PINActivity extends AppCompatActivity {
 
+    private final Integer INVALID_PIN = -1;
+    private final Integer NULL_PIN = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,37 +27,48 @@ public class PINActivity extends AppCompatActivity {
     }
 
     private void initButtons() {
+        // Enter button
         Button btnEnter = findViewById(R.id.btnIngresar);
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Integer pin = getIntent().getIntExtra("pin",-1);
-                Editable txtInput = ((EditText) findViewById(R.id.lblIngresoPin)).getText();
-                Integer input = (txtInput.toString().equals(""))? new Integer(0):Integer.parseInt(txtInput.toString());
-
-                if(input.toString().length()<4) {
-                    toastMe("Complete el PIN");
-                } else if (!input.equals(pin)) {
-                    toastMe("PIN incorrecto");
-                } else {
+                if(validateInput()) {
                     startActivity(new Intent(getApplicationContext(), BasicActivity.class));
                 }
             }
         });
 
+        // Forgot PIN button
         TextView lblRequestPin = findViewById(R.id.lblRequestPin);
         lblRequestPin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = getIntent().getStringExtra("email");
+                String email = getIntent().getStringExtra(IntentViewConstants.EMAIL);
                 // TODO Logica de envio de mail
                 toastMe("Hemos enviado su PIN a " + email);
             }
         });
     }
 
+    private boolean validateInput() {
+        Boolean result = true;
+
+        Integer pin = getIntent().getIntExtra(IntentViewConstants.PIN, INVALID_PIN);
+        EditText txtComponent = findViewById(R.id.lblIngresoPin);
+        Editable txtInput = txtComponent.getText();
+        Integer input = (txtInput.toString().equals("")) ? NULL_PIN : Integer.parseInt(txtInput.toString());
+
+        if (input.toString().length() < 4) {
+            result = buildError(txtComponent, "Complete el PIN");
+        } else if (!input.equals(pin)) {
+            txtInput.clear();
+            result = buildError(txtComponent,"PIN incorrecto");
+        }
+        return result;
+    }
+
     private void greetUser() {
-        String user = getIntent().getStringExtra("user");
+        String user = getIntent().getStringExtra(IntentViewConstants.USER);
         if (user != null && !user.equals("")) {
             TextView text = findViewById(R.id.lblGreet);
             text.setText("Hola " + user + "!");
@@ -64,5 +78,17 @@ public class PINActivity extends AppCompatActivity {
     private void toastMe(String message) {
         Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    private boolean buildError(EditText compoonent, String message) {
+        compoonent.setError(message);
+        compoonent.setFocusableInTouchMode(true);
+        compoonent.requestFocus();
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing
     }
 }

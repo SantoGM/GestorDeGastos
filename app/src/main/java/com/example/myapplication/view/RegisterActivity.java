@@ -84,7 +84,11 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean buildError(EditText compoonent, String message) {
         compoonent.setError(message);
         compoonent.setFocusableInTouchMode(true);
-        compoonent.requestFocus();
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Do nothing
     }
 }
