@@ -35,4 +35,10 @@
     </string>
     <string name="title_activity_basic">Gestor de Gastos</string>
 
+    <!--Menu -->
+    <string name="menu_op_check">Registrar Gasto</string>
+    <string name="menu_op_report">Reportes</string>
+    <string name="menu_op_logout">Salir</string>
+    <string name="menu_op_about">Acerca de ****</string>
+
 </resources>
