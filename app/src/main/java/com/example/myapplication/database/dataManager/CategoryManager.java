@@ -1,5 +1,6 @@
 package com.example.myapplication.database.dataManager;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -87,6 +88,35 @@ public class CategoryManager {
                 return category;
         }
         return null;
+    }
+
+
+    public void insertCategory(OpenHelper dbHelper, CategoryPojo category){
+        ContentValues values = new ContentValues();
+        values.put(CategoryEntry._ID, "");
+        values.put(CategoryEntry.COLUMN_NAME, "");
+        values.put(CategoryEntry.COLUMN_DESCRIPTION, "");
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int newCategoryId = (int) db.insert(CategoryEntry.TABLE_NAME, null, values);
+
+        updateCategory(dbHelper, category, newCategoryId);
+    }
+
+
+    public void updateCategory(OpenHelper dbHelper, CategoryPojo category, int categoryId) {
+        String selection = CategoryEntry._ID + " = ?";
+        String[] selectionArgs = {Integer.toString(categoryId)};
+
+        ContentValues values = new ContentValues();
+        values.put(CategoryEntry._ID, categoryId);
+        values.put(CategoryEntry.COLUMN_NAME, category.getName());
+        values.put(CategoryEntry.COLUMN_DESCRIPTION, category.getDescription());
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(CategoryEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        loadFromDB(dbHelper);
     }
 
 }

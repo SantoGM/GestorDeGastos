@@ -1,5 +1,6 @@
 package com.example.myapplication.database.dataManager;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -112,8 +113,24 @@ public class MovementManager {
     }
 
 
+    private String dateToString(Date dateDate) {
+        String pattern = "yyyy-MM-dd";
+
+        DateFormat df = new SimpleDateFormat(pattern);
+
+        String date = df.format(dateDate);
+
+        return date;
+    }
+
+
     private Boolean intToBoolean(Integer creditCardInt) {
         return creditCardInt > 0;
+    }
+
+
+    private Integer booleanToInt(Boolean creditCardBool) {
+        return creditCardBool ? 1 : 0;
     }
 
 
@@ -140,6 +157,7 @@ public class MovementManager {
 
         return transferences;
     }
+
 
     private List<TransferemcePojo> loadTransferences(Cursor cursor) {
         AccountManager am = AccountManager.getInstance();
@@ -173,6 +191,84 @@ public class MovementManager {
         cursor.close();
 
         return transferences;
+    }
+
+
+    public void insertPayment(OpenHelper dbHelper, PaymenyPojo payment) {
+        ContentValues values = new ContentValues();
+        values.put(PaymentEntry._ID, "");
+        values.put(PaymentEntry.COLUMN_DATE, "");
+        values.put(PaymentEntry.COLUMN_AMOUNT, "");
+        values.put(PaymentEntry.COLUMN_ID_CATEGORY, "");
+        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, "");
+        values.put(PaymentEntry.COLUMN_DESCRIPTION, "");
+        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, "");
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int newPaymentId = (int) db.insert(PaymentEntry.TABLE_NAME, null, values);
+
+        updatePayment(dbHelper, payment, newPaymentId);
+    }
+
+
+    public void updatePayment(OpenHelper dbHelper, PaymenyPojo payment, int paymentId) {
+        CategoryManager cm = CategoryManager.getInstance();
+        AccountManager am = AccountManager.getInstance();
+
+        String selection = PaymentEntry._ID + " = ?";
+        String[] selectionArgs = {Integer.toString(paymentId)};
+
+        String date = dateToString(payment.getDate());
+        Integer creditCard = booleanToInt(payment.getCreditCard());
+
+        ContentValues values = new ContentValues();
+        values.put(PaymentEntry._ID, paymentId);
+        values.put(PaymentEntry.COLUMN_DATE, date);
+        values.put(PaymentEntry.COLUMN_AMOUNT, payment.getAmount());
+        values.put(PaymentEntry.COLUMN_ID_CATEGORY, payment.getCategory().getId());
+        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, payment.getAccount().getId());
+        values.put(PaymentEntry.COLUMN_DESCRIPTION, payment.getDetail());
+        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, creditCard);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(PaymentEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+
+    public void insertTransference(OpenHelper dbHelper, TransferemcePojo transference) {
+        ContentValues values = new ContentValues();
+        values.put(TransferenceEntry._ID, "");
+        values.put(TransferenceEntry.COLUMN_DATE, "");
+        values.put(TransferenceEntry.COLUMN_AMOUNT, "");
+        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_ORG, "");
+        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_DEST, "");
+        values.put(TransferenceEntry.COLUMN_DESCRIPTION, "");
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int newTransferenceId = (int) db.insert(TransferenceEntry.TABLE_NAME, null, values);
+
+        updateTransference(dbHelper, transference, newTransferenceId);
+    }
+
+
+    private void updateTransference(OpenHelper dbHelper, TransferemcePojo transference, int transferenceId) {
+        AccountManager am = AccountManager.getInstance();
+
+        String selection = TransferenceEntry._ID + " = ?";
+        String[] selectionArgs = {Integer.toString(transferenceId)};
+
+        String date = dateToString(transference.getDate());
+
+        ContentValues values = new ContentValues();
+        values.put(TransferenceEntry._ID, transferenceId);
+        values.put(TransferenceEntry.COLUMN_DATE, date);
+        values.put(TransferenceEntry.COLUMN_AMOUNT, transference.getAmount());
+        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_ORG, transference.getAccountOrigin().getId());
+        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_DEST, transference.getAccountDestiny().getId());
+        values.put(TransferenceEntry.COLUMN_DESCRIPTION, transference.getDescription());
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(TransferenceEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
 
