@@ -8,19 +8,19 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
     private Float amount;
     private AccountPojo accountOrigin;
     private AccountPojo accountDestiny;
-    private String description;
+    private String detail;
 
 
     public TransferemcePojo() {
     }
 
-    public TransferemcePojo(Long id, Date date, Float amount, AccountPojo accountOrigin, AccountPojo accountDestiny, String description) {
+    public TransferemcePojo(Long id, Date date, Float amount, AccountPojo accountOrigin, AccountPojo accountDestiny, String detail) {
         this.setId(id);
         this.date = date;
         this.amount = amount;
         this.accountOrigin = accountOrigin;
         this.accountDestiny = accountDestiny;
-        this.description = description;
+        this.detail = detail;
     }
 
 
@@ -48,11 +48,11 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
     public void setAccountDestiny(AccountPojo accountDestiny) {
         this.accountDestiny = accountDestiny;
     }
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
-    public void setDescription(String description) {
-        description = description;
+    public void setDetail(String detail) {
+        detail = detail;
     }
 
 
@@ -63,7 +63,7 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
                             String.valueOf(this.amount),
                             this.accountOrigin.getName(),
                             this.accountDestiny.getName(),
-                            this.description};
+                            this.detail};
         return details;
     }
 }

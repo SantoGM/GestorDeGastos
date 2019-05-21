@@ -9,6 +9,7 @@ import com.example.myapplication.database.DataBaseContract.TransferenceEntry;
 import com.example.myapplication.database.OpenHelper;
 import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.CategoryPojo;
+import com.example.myapplication.view.pojo.MovementPojo;
 import com.example.myapplication.view.pojo.PaymenyPojo;
 import com.example.myapplication.view.pojo.TransferemcePojo;
 
@@ -16,6 +17,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -34,9 +37,47 @@ public class MovementManager {
     }
 
 
-    public List<PaymenyPojo> getAllPayments(OpenHelper dbHelper) {
+    public PaymenyPojo findPaymentById(OpenHelper dbHelper, Long id) {
+        PaymenyPojo payment;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = PaymentEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(id)};
+
+        String[] columns = {PaymentEntry._ID,
+                PaymentEntry.COLUMN_DATE,
+                PaymentEntry.COLUMN_AMOUNT,
+                PaymentEntry.COLUMN_ID_CATEGORY,
+                PaymentEntry.COLUMN_ID_ACCOUNT,
+                PaymentEntry.COLUMN_DESCRIPTION,
+                PaymentEntry.COLUMN_IS_CREDIT_CARD};
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+        Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     paymentOrderBy);
+
+        payment = loadPayments(paymentCur).get(0);
+
+        return payment;
+    }
+
+
+
+    public List<PaymenyPojo> getAllPayments(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String selection = PaymentEntry.COLUMN_DATE + " >= ? and " + PaymentEntry.COLUMN_DATE + " <= ?";
+        String[] selectionArgs = {from, to};
+
         String[] columns = {PaymentEntry._ID,
                             PaymentEntry.COLUMN_DATE,
                             PaymentEntry.COLUMN_AMOUNT,
@@ -48,8 +89,8 @@ public class MovementManager {
 
         Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
                                      columns,
-                                     null,
-                                     null,
+                                     selection,
+                                     selectionArgs,
                                      null,
                                      null,
                                       paymentOrderBy);
@@ -134,9 +175,13 @@ public class MovementManager {
     }
 
 
-    public List<TransferemcePojo> getAllTransferences(OpenHelper dbHelper) {
-        List<TransferemcePojo> transferences;
+    public TransferemcePojo findTransferenceById(OpenHelper dbHelper, Long id) {
+        TransferemcePojo transference;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = TransferenceEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(id)};
+
         String[] columns = {TransferenceEntry._ID,
                             TransferenceEntry.COLUMN_DATE,
                             TransferenceEntry.COLUMN_AMOUNT,
@@ -147,8 +192,40 @@ public class MovementManager {
 
         Cursor transferenceCur = db.query(TransferenceEntry.TABLE_NAME,
                                           columns,
+                                          selection,
+                                          selectionArgs,
                                           null,
                                           null,
+                                          transferenceOrderBy);
+
+        transference = loadTransferences(transferenceCur).get(0);
+
+        return transference;
+    }
+
+
+    public List<TransferemcePojo> getAllTransferences(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
+        List<TransferemcePojo> transferences;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String selection = TransferenceEntry.COLUMN_DATE + " >= ? and " + TransferenceEntry.COLUMN_DATE + " <= ?";
+        String[] selectionArgs = {from, to};
+
+        String[] columns = {TransferenceEntry._ID,
+                            TransferenceEntry.COLUMN_DATE,
+                            TransferenceEntry.COLUMN_AMOUNT,
+                            TransferenceEntry.COLUMN_ID_ACCOUNT_ORG,
+                            TransferenceEntry.COLUMN_ID_ACCOUNT_DEST,
+                            TransferenceEntry.COLUMN_DESCRIPTION};
+        String transferenceOrderBy = TransferenceEntry.COLUMN_DATE + " ASC";
+
+        Cursor transferenceCur = db.query(TransferenceEntry.TABLE_NAME,
+                                          columns,
+                                          selection,
+                                          selectionArgs,
                                           null,
                                           null,
                                           transferenceOrderBy);
@@ -205,18 +282,18 @@ public class MovementManager {
         values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, "");
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int newPaymentId = (int) db.insert(PaymentEntry.TABLE_NAME, null, values);
+        Long newPaymentId = (Long) db.insert(PaymentEntry.TABLE_NAME, null, values);
 
         updatePayment(dbHelper, payment, newPaymentId);
     }
 
 
-    public void updatePayment(OpenHelper dbHelper, PaymenyPojo payment, int paymentId) {
+    public void updatePayment(OpenHelper dbHelper, PaymenyPojo payment, Long paymentId) {
         CategoryManager cm = CategoryManager.getInstance();
         AccountManager am = AccountManager.getInstance();
 
         String selection = PaymentEntry._ID + " = ?";
-        String[] selectionArgs = {Integer.toString(paymentId)};
+        String[] selectionArgs = {Long.toString(paymentId)};
 
         String date = dateToString(payment.getDate());
         Integer creditCard = booleanToInt(payment.getCreditCard());
@@ -245,17 +322,17 @@ public class MovementManager {
         values.put(TransferenceEntry.COLUMN_DESCRIPTION, "");
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int newTransferenceId = (int) db.insert(TransferenceEntry.TABLE_NAME, null, values);
+        Long newTransferenceId = (Long) db.insert(TransferenceEntry.TABLE_NAME, null, values);
 
         updateTransference(dbHelper, transference, newTransferenceId);
     }
 
 
-    private void updateTransference(OpenHelper dbHelper, TransferemcePojo transference, int transferenceId) {
+    public void updateTransference(OpenHelper dbHelper, TransferemcePojo transference, Long transferenceId) {
         AccountManager am = AccountManager.getInstance();
 
         String selection = TransferenceEntry._ID + " = ?";
-        String[] selectionArgs = {Integer.toString(transferenceId)};
+        String[] selectionArgs = {Long.toString(transferenceId)};
 
         String date = dateToString(transference.getDate());
 
@@ -265,10 +342,71 @@ public class MovementManager {
         values.put(TransferenceEntry.COLUMN_AMOUNT, transference.getAmount());
         values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_ORG, transference.getAccountOrigin().getId());
         values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_DEST, transference.getAccountDestiny().getId());
-        values.put(TransferenceEntry.COLUMN_DESCRIPTION, transference.getDescription());
+        values.put(TransferenceEntry.COLUMN_DESCRIPTION, transference.getDetail());
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(TransferenceEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+
+    public List<MovementPojo> getAllMovements(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
+
+        Comparator<MovementPojo> comparator = new Comparator<MovementPojo>() {
+            @Override
+            public int compare(MovementPojo o1, MovementPojo o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        };
+
+        List<PaymenyPojo> payments = getAllPayments(dbHelper, dateFrom, dateTo);
+        List<TransferemcePojo> transferences = getAllTransferences(dbHelper, dateFrom, dateTo);
+
+        List<MovementPojo> movements = new ArrayList<>();
+
+        movements.addAll(payments);
+        movements.addAll(transferences);
+
+        Collections.sort(movements, comparator);
+
+        /*
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String query = " select ID, DATE, AMOUNT "
+                     + " from ("
+                     + "     select "
+                     +           PaymentEntry._ID + " as ID, "
+                     +           PaymentEntry.COLUMN_DATE + " as DATE, "
+                     +           PaymentEntry.COLUMN_AMOUNT + " as AMOUNT "
+                     + "     from "
+                     +           PaymentEntry.TABLE_NAME
+                     + "     where "
+                     +           PaymentEntry.COLUMN_DATE + " between ? and ? "
+                     + "     union "
+                     + "     select "
+                     +           TransferenceEntry._ID + " as ID, "
+                     +           TransferenceEntry.COLUMN_DATE + " as DATE, "
+                     +           TransferenceEntry.COLUMN_AMOUNT + " as AMOUNT "
+                     + "     from "
+                     +           TransferenceEntry.TABLE_NAME
+                     + "     where "
+                     +           TransferenceEntry.COLUMN_DATE + " between ? and ? "
+                     + "       ) "
+                     + " order by DATE asc";
+
+        String[] selectionArgs = {from,
+                                  to,
+                                  from,
+                                  to};
+
+        Cursor movementsCur = db.rawQuery(query, selectionArgs);
+
+        movements = loadMovements(movementsCur);
+        */
+
+        return movements;
     }
 
 
