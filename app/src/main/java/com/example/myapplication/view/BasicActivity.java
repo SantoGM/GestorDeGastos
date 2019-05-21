@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -13,7 +15,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.businessLogic.AccountsFacade;
 import com.example.myapplication.businessLogic.PersistentDataModel;
 
-public class BasicActivity extends AppCompatActivity {
+public class BasicActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
