@@ -1,26 +1,22 @@
-package com.example.myapplication.dao;
+package com.example.myapplication.view.pojo;
 
-public class CategoryDAO extends AbstractDAO {
+public class AccountPojo extends AbstractPojo{
 
-    private CategoryDAO parent;
     private String name;
     private String description;
+    private Float balance;
 
 
-    public CategoryDAO(Long id, CategoryDAO parent, String name, String description) {
-        this.setId(id);
-        this.parent = parent;
+    public AccountPojo() {
+    }
+
+    public AccountPojo(Long id, String name, String description, Float balance) {
+        setId(id);
         this.name = name;
         this.description = description;
+        this.balance = balance;
     }
 
-
-    public CategoryDAO getParent() {
-        return parent;
-    }
-    public void setParent(CategoryDAO parent) {
-        this.parent = parent;
-    }
     public String getName() {
         return name;
     }
@@ -32,6 +28,12 @@ public class CategoryDAO extends AbstractDAO {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+    public Float getBalance() {
+        return balance;
+    }
+    public void setBalance(Float balance) {
+        this.balance = balance;
     }
 
 }

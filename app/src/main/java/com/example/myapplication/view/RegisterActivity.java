@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.myapplication.R;
+import com.example.myapplication.database.OpenHelper;
+import com.example.myapplication.database.dataManager.UserDataManager;
 
 import java.util.regex.Pattern;
 
@@ -19,88 +21,70 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Button btnregistro = (Button) findViewById(R.id.btnRegistrarse);
-        btnregistro.setOnClickListener(new View.OnClickListener() {
+        Button btnRegister = findViewById(R.id.btnRegistrarse);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                EditText lblMail = (EditText) findViewById(R.id.lblEmail);
-                EditText lblNombre = (EditText) findViewById(R.id.lblNombre);
-                EditText lblApellido = (EditText) findViewById(R.id.lblApellido);
-                EditText lblPin = (EditText) findViewById(R.id.lblPin);
+                EditText lblName = findViewById(R.id.lblName);
+                EditText lblMail = findViewById(R.id.lblEmail);
+                EditText lblPinInput = findViewById(R.id.lblPinInput);
+                EditText lblPinRepeat = findViewById(R.id.lblPinRepeat);
 
-                if (validarCampos(lblMail, lblNombre, lblApellido, lblPin)) {
-                    Intent intent = new Intent(view.getContext(), LoginActivity.class);
+                if (validateRegister(lblName, lblMail, lblPinInput, lblPinRepeat)) {
+
+                    UserDataManager.getInstance().
+                            registerUser(lblName.getText().toString(),
+                                    lblMail.getText().toString(),
+                                    Integer.parseInt(lblPinInput.getText().toString()),
+                                    getApplicationContext());
+
+                    Intent intent = new Intent(view.getContext(), BasicActivity.class);
                     startActivityForResult(intent, 0);
                 }
             }
         });
     }
 
-    private boolean validarEmail(String email){
+    private boolean validateEmail(String email){
         Pattern pattern = Patterns.EMAIL_ADDRESS;
         return pattern.matcher(email).matches();
     }
 
-    private boolean validarCampos(EditText lblMail,EditText lblNombre, EditText lblApellido, EditText lblPin){
+    private boolean validateRegister(EditText lblNombre, EditText lblMail, EditText lblPinInput, EditText lblPinRepeat){
 
-        boolean ok = false;
-
-        lblMail.setBackgroundColor(getResources().getColor(android.R.color.white));
-        lblNombre.setBackgroundColor(getResources().getColor(android.R.color.white));
-        lblApellido.setBackgroundColor(getResources().getColor(android.R.color.white));
-        lblPin.setBackgroundColor(getResources().getColor(android.R.color.white));
+        boolean ok = true;
 
         lblMail.setError(null);
 
+        if(!validateEmail(lblMail.getText().toString())){
+            ok = buildError(lblMail, "Ingrese una direccion valida");
+        }
 
-        if(!validarEmail(lblMail.getText().toString())){
+        if (lblNombre.getText().toString().isEmpty()
+                || lblNombre.getText().toString().length()<3) {
+            ok = buildError(lblNombre, "Ingrese el nombre (al menos 3 caracteres)");
+        }
 
-            lblMail.setError("Ingrese mail");
-
-            lblMail.setBackgroundColor((int)R.color.colorAccent);
-
-            lblMail.setFocusableInTouchMode(true);
-            lblMail.requestFocus();
-
-        }else {
-            if (lblNombre.getText().toString().isEmpty()) {
-
-                lblNombre.setError("Ingrese nombre");
-
-                lblNombre.setBackgroundColor((int) R.color.colorAccent);
-
-                lblNombre.setFocusableInTouchMode(true);
-                lblNombre.requestFocus();
-
-            } else {
-                if (lblApellido.getText().toString().isEmpty()) {
-
-                    lblApellido.setError("Ingrese apellido");
-
-                    lblApellido.setBackgroundColor((int) R.color.colorAccent);
-
-                    lblApellido.setFocusableInTouchMode(true);
-                    lblApellido.requestFocus();
-
-
-                } else {
-                    if (lblPin.getText().toString().isEmpty()) {
-
-                        lblPin.setError("Ingrese PIN");
-
-                        lblPin.setBackgroundColor((int) R.color.colorAccent);
-
-                        lblPin.setFocusableInTouchMode(true);
-                        lblPin.requestFocus();
-
-                        
-                    } else {
-                        ok = true;
-                    }
-                }
+        if (lblPinInput.getText().toString().isEmpty()
+                || lblPinInput.getText().toString().length() < 4) {
+            ok = buildError(lblPinInput, "Ingrese un PIN de 4 digitos");
+        } else {
+            String inputPin = lblPinInput.getText().toString();
+            if (lblPinRepeat.getText().toString().isEmpty()){
+                ok = buildError(lblPinRepeat, "Reingrese el pin para verificar");
+            } else if (!lblPinRepeat.getText().toString().equals(inputPin)) {
+                ok = buildError(lblPinRepeat, "El PIN ingresado no coincide");
             }
         }
+
         return ok;
+    }
+
+    private boolean buildError(EditText compoonent, String message) {
+        compoonent.setError(message);
+        compoonent.setFocusableInTouchMode(true);
+        compoonent.requestFocus();
+        return false;
     }
 }

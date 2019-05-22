@@ -1,4 +1,4 @@
-package com.example.myapplication.dao;
+package com.example.myapplication.database.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -9,8 +9,8 @@ public class CreditCardDAO extends AccountDAO {
     private Date expirationDate;
 
 
-    public CreditCardDAO(Long id, String name, Float balance, List<MovementDAO> movements, Date closingDate, Date expirationDate) {
-        super(id, name, balance, movements);
+    public CreditCardDAO(Long id, String name, Float balance, String description, Date closingDate, Date expirationDate) {
+        super(id, name, description, balance);
         this.closingDate = closingDate;
         this.expirationDate = expirationDate;
     }
