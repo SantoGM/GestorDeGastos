@@ -1,5 +1,6 @@
 package com.example.myapplication.database.dataManager;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -93,4 +94,36 @@ public class AccountManager {
         }
         return null;
     }
+
+
+    public void insertAccount(OpenHelper dbHelper, AccountPojo account){
+        ContentValues values = new ContentValues();
+        values.put(AccountEntry._ID, "");
+        values.put(AccountEntry.COLUMN_NAME, "");
+        values.put(AccountEntry.COLUMN_DESCRIPTION, "");
+        values.put(AccountEntry.COLUMN_BALANCE, "");
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int newAccountId = (int) db.insert(AccountEntry.TABLE_NAME, null, values);
+
+        updateAccount(dbHelper, account, newAccountId);
+    }
+
+
+    public void updateAccount(OpenHelper dbHelper, AccountPojo account, int accountId) {
+        String selection = AccountEntry._ID + " = ?";
+        String[] selectionArgs = {Integer.toString(accountId)};
+
+        ContentValues values = new ContentValues();
+        values.put(AccountEntry._ID, accountId);
+        values.put(AccountEntry.COLUMN_NAME, account.getName());
+        values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
+        values.put(AccountEntry.COLUMN_BALANCE, account.getBalance());
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(AccountEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        loadFromDB(dbHelper);
+    }
+
 }

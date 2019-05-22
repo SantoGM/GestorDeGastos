@@ -8,7 +8,7 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
     private Float amount;
     private CategoryPojo category;
     private AccountPojo account;
-    private String Detail;
+    private String detail;
     private Boolean creditCard;
 
 
@@ -21,7 +21,7 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
         this.amount = amount;
         this.category = category;
         this.account = account;
-        Detail = detail;
+        this.detail = detail;
         this.creditCard = creditCard;
     }
 
@@ -50,16 +50,29 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
         this.account = account;
     }
     public String getDetail() {
-        return Detail;
+        return detail;
     }
     public void setDetail(String detail) {
-        Detail = detail;
+        this.detail = detail;
     }
     public Boolean getCreditCard() {
         return creditCard;
     }
     public void setCreditCard(Boolean creditCard) {
         this.creditCard = creditCard;
+    }
+
+
+    @Override
+    public String[] showDetails() {
+        String[] details = {String.valueOf(this.getId()),
+                            String.valueOf(this.date),
+                            String.valueOf(this.amount),
+                            this.category.getName(),
+                            this.account.getName(),
+                            this.detail,
+                            String.valueOf(this.creditCard)};
+        return details;
     }
 
 }
