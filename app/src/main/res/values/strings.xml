@@ -50,5 +50,6 @@
     <string name="menu_op_report">Reportes</string>
     <string name="menu_op_logout">Salir</string>
     <string name="menu_op_about">Acerca de ****</string>
+    <string name="txtDate">Fecha</string>
 
 </resources>

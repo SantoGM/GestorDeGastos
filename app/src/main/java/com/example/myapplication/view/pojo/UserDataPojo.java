@@ -35,4 +35,9 @@ public class UserDataPojo extends AbstractPojo {
     public void setPin(Integer pin) {
         this.pin = pin;
     }
+
+    @Override
+    public String nameToShow() {
+        return getName();
+    }
 }

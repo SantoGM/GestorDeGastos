@@ -10,4 +10,5 @@ public abstract class AbstractPojo {
     public void setId(Long id) {
         this.id = id;
     }
+    public abstract String nameToShow();
 }

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.myapplication.database.OpenHelper;
 import com.example.myapplication.view.pojo.CategoryPojo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.myapplication.database.DataBaseContract.CategoryEntry;
@@ -15,7 +16,7 @@ public class CategoryManager {
 
     private static CategoryManager categoryManager = null;
 
-    private List<CategoryPojo> categories;
+    private static List<CategoryPojo> categories;
 
 
     private CategoryManager() {
@@ -23,6 +24,7 @@ public class CategoryManager {
 
     public static CategoryManager getInstance() {
         if (categoryManager == null) {
+            categories = new ArrayList<CategoryPojo>();
             categoryManager = new CategoryManager();
         }
         return categoryManager;
@@ -34,7 +36,7 @@ public class CategoryManager {
     }
 
 
-    public static void loadFromDB(OpenHelper dbHelper) {
+    public void loadFromDB(OpenHelper dbHelper) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {CategoryEntry._ID,
                             CategoryEntry.COLUMN_NAME,
@@ -49,10 +51,9 @@ public class CategoryManager {
                                       null);
 
         loadCategories(categoryCur);
-
     }
 
-    private static void loadCategories(Cursor cursor) {
+    private void loadCategories(Cursor cursor) {
         int catIdPos = cursor.getColumnIndex(CategoryEntry._ID);
         int catNamePos = cursor.getColumnIndex(CategoryEntry.COLUMN_NAME);
         int catDescriptionPos = cursor.getColumnIndex(CategoryEntry.COLUMN_DESCRIPTION);

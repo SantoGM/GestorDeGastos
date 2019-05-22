@@ -36,4 +36,8 @@ public class AccountPojo extends AbstractPojo{
         this.balance = balance;
     }
 
+    @Override
+    public String nameToShow() {
+        return getName();
+    }
 }

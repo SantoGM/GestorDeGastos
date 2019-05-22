@@ -75,4 +75,8 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
         return details;
     }
 
+    @Override
+    public String nameToShow() {
+        return getDate() + "-" + getAmount() + "(" + getAccount() + ")";
+    }
 }

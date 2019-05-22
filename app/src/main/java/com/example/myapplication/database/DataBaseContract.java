@@ -35,7 +35,7 @@ public final class DataBaseContract {
     }
 
     public static final class PaymentEntry implements BaseColumns {
-        public static final String TABLE_NAME = "accounts";
+        public static final String TABLE_NAME = "payments";
 
         public static final String COLUMN_DATE = "date";
         public static final String COLUMN_AMOUNT = "amount";

@@ -1,5 +1,10 @@
 package com.example.myapplication.businessLogic;
 
+import android.content.Context;
+
+import com.example.myapplication.database.OpenHelper;
+import com.example.myapplication.database.dataManager.AccountManager;
+import com.example.myapplication.database.dataManager.CategoryManager;
 import com.example.myapplication.view.pojo.AccountPojo;
 
 import java.util.ArrayList;
@@ -19,7 +24,9 @@ public class AccountsFacade extends AbstractFacade{
         return instance;
     }
 
-    public ArrayList<PersistentDataModel> getAccountsSpinnerModel() {
-        return buildDataModel(new String[] {"Cuenta BBVA", "Cuenta Santander", "Tarjeta MasterCard", "TarjetaVisa"}, AccountPojo.class);
+    public ArrayList<PersistentDataModel> getAccountsSpinnerModel(Context ctx) {
+        OpenHelper oh = new OpenHelper(ctx);
+        AccountManager.getInstance().loadFromDB(oh);
+        return buildDataModel(AccountManager.getInstance().getAccounts(), AccountPojo.class);
     }
 }

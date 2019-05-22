@@ -66,4 +66,9 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
                             this.description};
         return details;
     }
+
+    @Override
+    public String nameToShow() {
+        return getDate() + "- ^[" + getAccountOrigin().getName() + ":" + getAccountDestiny().getName() + "]";
+    }
 }

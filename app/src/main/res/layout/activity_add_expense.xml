@@ -12,10 +12,10 @@
         android:id="@+id/lblCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="48dp"
         android:text="@string/lblCategory"
         app:layout_constraintEnd_toEndOf="@+id/lblDescription"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/lblDate" />
 
     <TextView
         android:id="@+id/lblDescription"
@@ -103,5 +103,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblPayedWith"
         app:layout_constraintVertical_bias="0.215" />
+
+    <TextView
+        android:id="@+id/lblDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="@string/txtDate"
+        app:layout_constraintEnd_toEndOf="@+id/lblCategory"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="date"
+        android:focusable="false"
+        android:clickable="true"
+        android:maxLines="1"
+        app:layout_constraintBottom_toBottomOf="@+id/lblDate"
+        app:layout_constraintStart_toStartOf="@+id/spnCateogry"
+        app:layout_constraintTop_toTopOf="@+id/lblDate" />
 
 </android.support.constraint.ConstraintLayout>

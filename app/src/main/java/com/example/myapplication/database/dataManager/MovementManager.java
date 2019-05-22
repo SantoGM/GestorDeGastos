@@ -196,18 +196,17 @@ public class MovementManager {
 
     public void insertPayment(OpenHelper dbHelper, PaymenyPojo payment) {
         ContentValues values = new ContentValues();
-        values.put(PaymentEntry._ID, "");
-        values.put(PaymentEntry.COLUMN_DATE, "");
-        values.put(PaymentEntry.COLUMN_AMOUNT, "");
-        values.put(PaymentEntry.COLUMN_ID_CATEGORY, "");
-        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, "");
-        values.put(PaymentEntry.COLUMN_DESCRIPTION, "");
-        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, "");
+        values.put(PaymentEntry.COLUMN_DATE, dateToString(payment.getDate()));
+        values.put(PaymentEntry.COLUMN_AMOUNT, payment.getAmount());
+        values.put(PaymentEntry.COLUMN_ID_CATEGORY, payment.getCategory().getId());
+        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, payment.getAccount().getId());
+        values.put(PaymentEntry.COLUMN_DESCRIPTION, payment.getDetail());
+        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, payment.getCreditCard());
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int newPaymentId = (int) db.insert(PaymentEntry.TABLE_NAME, null, values);
 
-        updatePayment(dbHelper, payment, newPaymentId);
+        //updatePayment(dbHelper, payment, newPaymentId);
     }
 
 

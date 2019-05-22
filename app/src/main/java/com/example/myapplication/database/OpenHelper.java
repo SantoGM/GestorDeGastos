@@ -24,6 +24,7 @@ public class OpenHelper extends SQLiteOpenHelper {
         DataWorker dbw = new DataWorker(db);
 
         dbw.insertAccounts();
+        dbw.insertCategory();
     }
 
     @Override
