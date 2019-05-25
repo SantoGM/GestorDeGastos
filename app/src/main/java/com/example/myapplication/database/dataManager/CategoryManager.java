@@ -119,7 +119,11 @@ public class CategoryManager {
     }
 
 
-    public void insertCategory(OpenHelper dbHelper, CategoryPojo category){
+    public void insertCategory(OpenHelper dbHelper, CategoryPojo category) throws IllegalArgumentException {
+
+        if (category.getName() == null || category.getName().isEmpty() || category.getName().trim() == "")
+            throw new IllegalArgumentException("The name of the category cannot be empty");
+
         ContentValues values = new ContentValues();
         values.put(CategoryEntry._ID, "");
         values.put(CategoryEntry.COLUMN_NAME, category.getName());

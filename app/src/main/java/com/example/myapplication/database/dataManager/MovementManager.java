@@ -264,6 +264,35 @@ public class MovementManager {
 
 
     public void insertPayment(OpenHelper dbHelper, PaymenyPojo payment) {
+
+        AccountPojo account;
+        CategoryPojo category;
+
+        if (payment.getDate() == null)
+            throw new IllegalArgumentException("The date of the payment cannot be empty");
+
+        if (payment.getAmount() == null | payment.getAmount() == 0)
+            throw new IllegalArgumentException("The amount of the payment cannot be empty");
+
+        if (payment.getAccount() == null)
+            throw new IllegalArgumentException("The acount of the payment cannot be empty");
+
+        if (payment.getCategory() == null)
+            throw new IllegalArgumentException("The category of the payment cannot be empty");
+
+        if (payment.getCreditCard() == null)
+            throw new IllegalArgumentException("The credit card field of the payment cannot be empty");
+
+
+        account = am.findById(dbHelper, payment.getAccount().getId());
+        if (account == null)
+            throw new IllegalArgumentException("The account does not exist");
+
+        category = cm.findById(dbHelper, payment.getCategory().getId());
+        if (category == null)
+            throw new IllegalArgumentException("The category does not exist");
+
+        
         String date = dateToString(payment.getDate());
         Integer creditCard = booleanToInt(payment.getCreditCard());
 
@@ -303,6 +332,31 @@ public class MovementManager {
 
 
     public void insertTransference(OpenHelper dbHelper, TransferemcePojo transference) {
+
+        AccountPojo account;
+
+        if (transference.getDate() == null)
+            throw new IllegalArgumentException("The date of the transference cannot be empty");
+
+        if (transference.getAmount() == null | transference.getAmount() == 0)
+            throw new IllegalArgumentException("The amount of the transference cannot be empty");
+
+        if (transference.getAccountOrigin() == null)
+            throw new IllegalArgumentException("The account origin of the transference cannot be empty");
+
+        if (transference.getAccountDestiny() == null)
+            throw new IllegalArgumentException("The account destiny of the transference cannot be empty");
+
+
+        account = am.findById(dbHelper, transference.getAccountOrigin().getId());
+        if (account == null)
+            throw new IllegalArgumentException("The account origin does not exist");
+
+        account = am.findById(dbHelper, transference.getAccountDestiny().getId());
+        if (account == null)
+            throw new IllegalArgumentException("The account destiny does not exist");
+
+
         String date = dateToString(transference.getDate());
 
         ContentValues values = new ContentValues();

@@ -123,12 +123,23 @@ public class AccountManager {
     }
 
 
-    public void insertAccount(OpenHelper dbHelper, AccountPojo account){
+    public void insertAccount(OpenHelper dbHelper, AccountPojo account) throws IllegalArgumentException {
+
+        Float balance;
+
+        if (account.getName() == null || account.getName().isEmpty() || account.getName().trim() == "")
+            throw new IllegalArgumentException("The name of the account cannot be empty");
+
+        if (account.getBalance() == null)
+            balance = 0f;
+        else
+            balance = account.getBalance();
+
         ContentValues values = new ContentValues();
         values.put(AccountEntry._ID, "");
         values.put(AccountEntry.COLUMN_NAME, account.getName());
         values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
-        values.put(AccountEntry.COLUMN_BALANCE, account.getBalance());
+        values.put(AccountEntry.COLUMN_BALANCE, balance);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.insert(AccountEntry.TABLE_NAME, null, values);
