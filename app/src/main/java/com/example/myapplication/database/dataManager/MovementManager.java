@@ -4,8 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.myapplication.database.DataBaseContract;
 import com.example.myapplication.database.DataBaseContract.PaymentEntry;
 import com.example.myapplication.database.DataBaseContract.TransferenceEntry;
+import com.example.myapplication.database.DataBaseContract.CategoryEntry;
 import com.example.myapplication.database.OpenHelper;
 import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.CategoryPojo;
@@ -95,7 +97,6 @@ public class MovementManager {
         payments = loadPayments(dbHelper, paymentCur);
 
         return payments;
-
     }
 
 
@@ -292,7 +293,7 @@ public class MovementManager {
         if (category == null)
             throw new IllegalArgumentException("The category does not exist");
 
-        
+
         String date = dateToString(payment.getDate());
         Integer creditCard = booleanToInt(payment.getCreditCard());
 
@@ -451,6 +452,90 @@ public class MovementManager {
 
         return movements;
     }
+
+
+    public List<PaymenyPojo> getPaymentByCategoryName(OpenHelper dbHelper, String name, Date dateFrom, Date dateTo) {
+        List<PaymenyPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String tablesWithJoin = PaymentEntry.TABLE_NAME
+                              + " JOIN " + CategoryEntry.TABLE_NAME
+                                         + " ON " + PaymentEntry.getQName(PaymentEntry.COLUMN_ID_CATEGORY)
+                                                  + " = " + CategoryEntry.getQName(CategoryEntry._ID);
+
+        String[] columns = {PaymentEntry.getQName(PaymentEntry._ID),
+                            PaymentEntry.getQName(PaymentEntry.COLUMN_DATE),
+                            PaymentEntry.getQName(PaymentEntry.COLUMN_AMOUNT),
+                            PaymentEntry.getQName(PaymentEntry.COLUMN_ID_CATEGORY),
+                            PaymentEntry.getQName(PaymentEntry.COLUMN_ID_ACCOUNT),
+                            PaymentEntry.getQName(PaymentEntry.COLUMN_DESCRIPTION),
+                            PaymentEntry.getQName(PaymentEntry.COLUMN_IS_CREDIT_CARD)};
+
+        String selection = CategoryEntry.getQName(CategoryEntry.COLUMN_NAME) + " = ? "
+                         + " and " + PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " >= ? "
+                         + " and " + PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " <= ?";
+
+        String[] selectionArgs = {name, from, to};
+
+        String paymentOrderBy = PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " ASC";
+
+
+        Cursor paymentCur = db.query(tablesWithJoin,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    public List<PaymenyPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId, Date dateFrom, Date dateTo) {
+        List<PaymenyPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String table = PaymentEntry.TABLE_NAME;
+
+        String[] columns = {PaymentEntry._ID,
+                            PaymentEntry.COLUMN_DATE,
+                            PaymentEntry.COLUMN_AMOUNT,
+                            PaymentEntry.COLUMN_ID_CATEGORY,
+                            PaymentEntry.COLUMN_ID_ACCOUNT,
+                            PaymentEntry.COLUMN_DESCRIPTION,
+                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ? "
+                + " and " + PaymentEntry.COLUMN_DATE + " >= ? "
+                + " and " + PaymentEntry.COLUMN_DATE + " <= ?";
+
+        String[] selectionArgs = {String.valueOf(categoryId), from, to};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+
+        Cursor paymentCur = db.query(table,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
 
 
 }
