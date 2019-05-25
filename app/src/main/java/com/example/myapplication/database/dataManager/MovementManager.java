@@ -24,16 +24,13 @@ import java.util.List;
 
 public class MovementManager {
 
-    private static MovementManager movementManager = null;
+    private AccountManager am;
+    private CategoryManager cm;
 
 
-    private MovementManager() {}
-
-    public static MovementManager getInstance() {
-        if (movementManager == null) {
-            movementManager = new MovementManager();
-        }
-        return movementManager;
+    public MovementManager() {
+        am = new AccountManager();
+        cm = new CategoryManager();
     }
 
 
@@ -61,7 +58,7 @@ public class MovementManager {
                                      null,
                                      paymentOrderBy);
 
-        payment = loadPayments(paymentCur).get(0);
+        payment = loadPayments(dbHelper, paymentCur).get(0);
 
         return payment;
     }
@@ -95,17 +92,14 @@ public class MovementManager {
                                      null,
                                       paymentOrderBy);
 
-        payments = loadPayments(paymentCur);
+        payments = loadPayments(dbHelper, paymentCur);
 
         return payments;
 
     }
 
 
-    private List<PaymenyPojo> loadPayments(Cursor cursor) {
-        CategoryManager cm = CategoryManager.getInstance();
-        AccountManager am = AccountManager.getInstance();
-
+    private List<PaymenyPojo> loadPayments(OpenHelper dbHelper, Cursor cursor) {
         List<PaymenyPojo> payments = new ArrayList<>();
 
         int payIdPos = cursor.getColumnIndex(PaymentEntry._ID);
@@ -126,8 +120,8 @@ public class MovementManager {
             Integer creditCardInt = cursor.getInt(payCCPos);
 
             Date date = stringToDate(dateString);
-            CategoryPojo category = cm.findById(categoryId);
-            AccountPojo account = am.findById(accountId);
+            CategoryPojo category = cm.findById(dbHelper, categoryId);
+            AccountPojo account = am.findById(dbHelper, accountId);
             Boolean creditCard = intToBoolean(creditCardInt);
 
             PaymenyPojo payment = new PaymenyPojo(id, date, amount, category, account, description, creditCard);
@@ -198,7 +192,7 @@ public class MovementManager {
                                           null,
                                           transferenceOrderBy);
 
-        transference = loadTransferences(transferenceCur).get(0);
+        transference = loadTransferences(dbHelper, transferenceCur).get(0);
 
         return transference;
     }
@@ -230,15 +224,13 @@ public class MovementManager {
                                           null,
                                           transferenceOrderBy);
 
-        transferences = loadTransferences(transferenceCur);
+        transferences = loadTransferences(dbHelper, transferenceCur);
 
         return transferences;
     }
 
 
-    private List<TransferemcePojo> loadTransferences(Cursor cursor) {
-        AccountManager am = AccountManager.getInstance();
-
+    private List<TransferemcePojo> loadTransferences(OpenHelper dbHelper, Cursor cursor) {
         List<TransferemcePojo> transferences = new ArrayList<>();
 
         int transIdPos = cursor.getColumnIndex(TransferenceEntry._ID);
@@ -257,8 +249,8 @@ public class MovementManager {
             String description = cursor.getString(transDescriptionPos);
 
             Date date = stringToDate(dateString);
-            AccountPojo accountOrg = am.findById(accountOrgId);
-            AccountPojo accountDest = am.findById(accountDestId);
+            AccountPojo accountOrg = am.findById(dbHelper, accountOrgId);
+            AccountPojo accountDest = am.findById(dbHelper, accountDestId);
 
             TransferemcePojo transference = new TransferemcePojo(id, date, amount, accountOrg, accountDest, description);
 
@@ -290,9 +282,6 @@ public class MovementManager {
 
 
     public void updatePayment(OpenHelper dbHelper, PaymenyPojo payment, Long paymentId) {
-        CategoryManager cm = CategoryManager.getInstance();
-        AccountManager am = AccountManager.getInstance();
-
         String selection = PaymentEntry._ID + " = ?";
         String[] selectionArgs = {Long.toString(paymentId)};
 
@@ -330,7 +319,6 @@ public class MovementManager {
 
 
     public void updateTransference(OpenHelper dbHelper, TransferemcePojo transference, Long transferenceId) {
-        AccountManager am = AccountManager.getInstance();
 
         String selection = TransferenceEntry._ID + " = ?";
         String[] selectionArgs = {Long.toString(transferenceId)};
