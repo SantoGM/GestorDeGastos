@@ -454,7 +454,7 @@ public class MovementManager {
     }
 
 
-    public List<PaymenyPojo> getPaymentByCategoryName(OpenHelper dbHelper, String name, Date dateFrom, Date dateTo) {
+    public List<PaymenyPojo> getPaymentByCategoryName(OpenHelper dbHelper, String categoryName, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -478,7 +478,7 @@ public class MovementManager {
                          + " and " + PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " >= ? "
                          + " and " + PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " <= ?";
 
-        String[] selectionArgs = {name, from, to};
+        String[] selectionArgs = {categoryName, from, to};
 
         String paymentOrderBy = PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " ASC";
 
@@ -519,6 +519,41 @@ public class MovementManager {
                 + " and " + PaymentEntry.COLUMN_DATE + " <= ?";
 
         String[] selectionArgs = {String.valueOf(categoryId), from, to};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+
+        Cursor paymentCur = db.query(table,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    public List<PaymenyPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId) {
+        List<PaymenyPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String table = PaymentEntry.TABLE_NAME;
+
+        String[] columns = {PaymentEntry._ID,
+                            PaymentEntry.COLUMN_DATE,
+                            PaymentEntry.COLUMN_AMOUNT,
+                            PaymentEntry.COLUMN_ID_CATEGORY,
+                            PaymentEntry.COLUMN_ID_ACCOUNT,
+                            PaymentEntry.COLUMN_DESCRIPTION,
+                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ?";
+
+        String[] selectionArgs = {String.valueOf(categoryId)};
 
         String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
 
