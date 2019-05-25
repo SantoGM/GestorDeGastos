@@ -99,14 +99,12 @@ public class AccountManager {
     public void insertAccount(OpenHelper dbHelper, AccountPojo account){
         ContentValues values = new ContentValues();
         values.put(AccountEntry._ID, "");
-        values.put(AccountEntry.COLUMN_NAME, "");
-        values.put(AccountEntry.COLUMN_DESCRIPTION, "");
-        values.put(AccountEntry.COLUMN_BALANCE, "");
+        values.put(AccountEntry.COLUMN_NAME, account.getName());
+        values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
+        values.put(AccountEntry.COLUMN_BALANCE, account.getBalance());
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int newAccountId = (int) db.insert(AccountEntry.TABLE_NAME, null, values);
-
-        updateAccount(dbHelper, account, newAccountId);
+        db.insert(AccountEntry.TABLE_NAME, null, values);
     }
 
 

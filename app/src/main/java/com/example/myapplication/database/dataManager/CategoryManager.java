@@ -94,13 +94,11 @@ public class CategoryManager {
     public void insertCategory(OpenHelper dbHelper, CategoryPojo category){
         ContentValues values = new ContentValues();
         values.put(CategoryEntry._ID, "");
-        values.put(CategoryEntry.COLUMN_NAME, "");
-        values.put(CategoryEntry.COLUMN_DESCRIPTION, "");
+        values.put(CategoryEntry.COLUMN_NAME, category.getName());
+        values.put(CategoryEntry.COLUMN_DESCRIPTION, category.getDescription());
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int newCategoryId = (int) db.insert(CategoryEntry.TABLE_NAME, null, values);
-
-        updateCategory(dbHelper, category, newCategoryId);
+        db.insert(CategoryEntry.TABLE_NAME, null, values);
     }
 
 

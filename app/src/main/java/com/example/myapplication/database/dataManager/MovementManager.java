@@ -272,19 +272,20 @@ public class MovementManager {
 
 
     public void insertPayment(OpenHelper dbHelper, PaymenyPojo payment) {
+        String date = dateToString(payment.getDate());
+        Integer creditCard = booleanToInt(payment.getCreditCard());
+
         ContentValues values = new ContentValues();
         values.put(PaymentEntry._ID, "");
-        values.put(PaymentEntry.COLUMN_DATE, "");
-        values.put(PaymentEntry.COLUMN_AMOUNT, "");
-        values.put(PaymentEntry.COLUMN_ID_CATEGORY, "");
-        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, "");
-        values.put(PaymentEntry.COLUMN_DESCRIPTION, "");
-        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, "");
+        values.put(PaymentEntry.COLUMN_DATE, date);
+        values.put(PaymentEntry.COLUMN_AMOUNT, payment.getAmount());
+        values.put(PaymentEntry.COLUMN_ID_CATEGORY, payment.getCategory().getId());
+        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, payment.getAccount().getId());
+        values.put(PaymentEntry.COLUMN_DESCRIPTION, payment.getDetail());
+        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, creditCard);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Long newPaymentId = (Long) db.insert(PaymentEntry.TABLE_NAME, null, values);
-
-        updatePayment(dbHelper, payment, newPaymentId);
+        db.insert(PaymentEntry.TABLE_NAME, null, values);
     }
 
 
@@ -313,18 +314,18 @@ public class MovementManager {
 
 
     public void insertTransference(OpenHelper dbHelper, TransferemcePojo transference) {
+        String date = dateToString(transference.getDate());
+
         ContentValues values = new ContentValues();
         values.put(TransferenceEntry._ID, "");
-        values.put(TransferenceEntry.COLUMN_DATE, "");
-        values.put(TransferenceEntry.COLUMN_AMOUNT, "");
-        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_ORG, "");
-        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_DEST, "");
-        values.put(TransferenceEntry.COLUMN_DESCRIPTION, "");
+        values.put(TransferenceEntry.COLUMN_DATE, date);
+        values.put(TransferenceEntry.COLUMN_AMOUNT, transference.getAmount());
+        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_ORG, transference.getAccountOrigin().getId());
+        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_DEST, transference.getAccountDestiny().getId());
+        values.put(TransferenceEntry.COLUMN_DESCRIPTION, transference.getDetail());
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Long newTransferenceId = (Long) db.insert(TransferenceEntry.TABLE_NAME, null, values);
-
-        updateTransference(dbHelper, transference, newTransferenceId);
+        db.insert(TransferenceEntry.TABLE_NAME, null, values);
     }
 
 
