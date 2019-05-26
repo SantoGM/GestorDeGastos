@@ -3,6 +3,7 @@ package com.example.myapplication.view;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -69,7 +70,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.lblEmail);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.lblName);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.lblPassword);
@@ -84,12 +85,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.btnSignIn);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button btnSingInOrRegister = (Button) findViewById(R.id.btnSignIn);
+        btnSingInOrRegister.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
 
+                EditText lblLoguinMail = (EditText) findViewById(R.id.lblName);
+                EditText lblLoguinPass = (EditText) findViewById(R.id.lblPassword);
+
+                if(lblLoguinMail.getText().toString().isEmpty()) {
+
+                    Intent intent = new Intent(view.getContext(), RegisterActivity.class);
+                    startActivityForResult(intent, 0);
+                }
             }
         });
 
