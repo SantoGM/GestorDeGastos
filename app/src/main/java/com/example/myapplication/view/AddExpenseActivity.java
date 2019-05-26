@@ -24,11 +24,11 @@ import java.util.HashMap;
 
 public class AddExpenseActivity extends BaseActivity {
 
-    private static String FIELD_DATE = "date";
-    private static String FIELD_CATEGORY = "categoryID";
-    private static String FIELD_DETAIL = "detail";
-    private static String FIELD_AMOUNT = "amount";
-    private static String FIELD_PAYED_WITH = "accountID";
+    private static final String FIELD_DATE = "date";
+    private static final String FIELD_CATEGORY = "categoryID";
+    private static final String FIELD_DETAIL = "detail";
+    private static final String FIELD_AMOUNT = "amount";
+    private static final String FIELD_PAYED_WITH = "accountID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +139,7 @@ public class AddExpenseActivity extends BaseActivity {
     }
 
     private boolean validateInput() {
-        Boolean result = true;
+        Boolean result = Boolean.TRUE;
 
         EditText nmbAmount = findViewById(R.id.nmbAmount);
         Editable input = nmbAmount.getText();
@@ -157,6 +157,7 @@ public class AddExpenseActivity extends BaseActivity {
         return result;
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean buildError(EditText compoonent, String message) {
         compoonent.setError(message);
         compoonent.setFocusableInTouchMode(true);

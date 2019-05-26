@@ -124,6 +124,7 @@
         android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="@+id/lblDate"
         app:layout_constraintStart_toStartOf="@+id/spnCateogry"
-        app:layout_constraintTop_toTopOf="@+id/lblDate" />
+        app:layout_constraintTop_toTopOf="@+id/lblDate"
+        android:importantForAutofill="no" />
 
 </android.support.constraint.ConstraintLayout>

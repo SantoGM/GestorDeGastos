@@ -20,12 +20,12 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
-        final LineView lineView = (LineView) findViewById(R.id.line_view);
-        final LineView lineViewFloat = (LineView) findViewById(R.id.line_view_float);
+        final LineView lineView = findViewById(R.id.line_view);
+        final LineView lineViewFloat = findViewById(R.id.line_view_float);
 
         initLineView(lineView);
         initLineView(lineViewFloat);
-        Button lineButton = (Button) findViewById(R.id.line_button);
+        Button lineButton = findViewById(R.id.line_button);
         lineButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                // randomSet(lineView, lineViewFloat);
@@ -36,7 +36,7 @@ public class ReportActivity extends AppCompatActivity {
     }
 
     private void initLineView(LineView lineView) {
-        ArrayList<String> test = new ArrayList<String>();
+        ArrayList<String> test = new ArrayList<>();
         for (int i = 0; i < randomint; i++) {
             test.add(String.valueOf(i + 1));
         }

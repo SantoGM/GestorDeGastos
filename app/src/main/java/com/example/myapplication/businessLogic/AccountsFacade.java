@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.example.myapplication.database.OpenHelper;
 import com.example.myapplication.database.dataManager.AccountManager;
-import com.example.myapplication.database.dataManager.CategoryManager;
 import com.example.myapplication.view.pojo.AccountPojo;
 
 import java.util.ArrayList;

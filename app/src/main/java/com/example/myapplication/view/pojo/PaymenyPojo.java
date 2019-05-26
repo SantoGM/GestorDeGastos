@@ -65,14 +65,13 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
 
     @Override
     public String[] showDetails() {
-        String[] details = {String.valueOf(this.getId()),
+        return new String[]{String.valueOf(this.getId()),
                             String.valueOf(this.date),
                             String.valueOf(this.amount),
                             this.category.getName(),
                             this.account.getName(),
                             this.detail,
                             String.valueOf(this.creditCard)};
-        return details;
     }
 
     @Override

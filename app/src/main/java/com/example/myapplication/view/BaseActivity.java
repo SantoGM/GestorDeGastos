@@ -24,7 +24,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void reportes(){
-
+        // TODO que hace este método?
     }
 
     @Override

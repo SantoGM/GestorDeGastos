@@ -1,7 +1,6 @@
 package com.example.myapplication.businessLogic;
 
 import com.example.myapplication.view.pojo.AbstractPojo;
-import com.example.myapplication.view.pojo.AccountPojo;
 
 import java.util.ArrayList;
 import java.util.List;

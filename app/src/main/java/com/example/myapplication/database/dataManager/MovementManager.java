@@ -118,9 +118,7 @@ public class MovementManager {
 
         DateFormat df = new SimpleDateFormat(pattern);
 
-        String date = df.format(dateDate);
-
-        return date;
+        return df.format(dateDate);
     }
 
 

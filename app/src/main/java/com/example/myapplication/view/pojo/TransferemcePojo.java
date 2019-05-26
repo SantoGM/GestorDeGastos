@@ -52,19 +52,18 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
         return description;
     }
     public void setDescription(String description) {
-        description = description;
+        this.description = description;
     }
 
 
     @Override
     public String[] showDetails() {
-        String[] details = {String.valueOf(this.getId()),
+        return new String[]{String.valueOf(this.getId()),
                             String.valueOf(this.date),
                             String.valueOf(this.amount),
                             this.accountOrigin.getName(),
                             this.accountDestiny.getName(),
                             this.description};
-        return details;
     }
 
     @Override

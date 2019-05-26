@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.myapplication.R;
-import com.example.myapplication.database.OpenHelper;
 import com.example.myapplication.database.dataManager.UserDataManager;
 
 import java.util.regex.Pattern;
@@ -81,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
         return ok;
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean buildError(EditText compoonent, String message) {
         compoonent.setError(message);
         compoonent.setFocusableInTouchMode(true);

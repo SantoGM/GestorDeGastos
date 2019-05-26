@@ -24,7 +24,7 @@ public class CategoryManager {
 
     public static CategoryManager getInstance() {
         if (categoryManager == null) {
-            categories = new ArrayList<CategoryPojo>();
+            categories = new ArrayList<>();
             categoryManager = new CategoryManager();
         }
         return categoryManager;
@@ -59,7 +59,7 @@ public class CategoryManager {
         int catDescriptionPos = cursor.getColumnIndex(CategoryEntry.COLUMN_DESCRIPTION);
 
         CategoryManager cm = getInstance();
-        cm.categories.clear();
+        cm.getCategories().clear();
 
         while (cursor.moveToNext()) {
             Long id = cursor.getLong(catIdPos);
@@ -67,7 +67,7 @@ public class CategoryManager {
             String description = cursor.getString(catDescriptionPos);
 
             CategoryPojo category = new CategoryPojo(id, name, description);
-            cm.categories.add(category);
+            cm.getCategories().add(category);
         }
 
         cursor.close();

@@ -51,7 +51,7 @@ public class PINActivity extends AppCompatActivity {
     }
 
     private boolean validateInput() {
-        Boolean result = true;
+        Boolean result = Boolean.TRUE;
 
         Integer pin = getIntent().getIntExtra(IntentViewConstants.PIN, INVALID_PIN);
         EditText txtComponent = findViewById(R.id.lblIngresoPin);
@@ -80,6 +80,7 @@ public class PINActivity extends AppCompatActivity {
         toast.show();
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean buildError(EditText compoonent, String message) {
         compoonent.setError(message);
         compoonent.setFocusableInTouchMode(true);

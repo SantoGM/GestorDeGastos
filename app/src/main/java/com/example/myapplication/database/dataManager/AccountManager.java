@@ -35,7 +35,7 @@ public class AccountManager {
     }
 
 
-    public static void loadFromDB(OpenHelper dbHelper) {
+    public void loadFromDB(OpenHelper dbHelper) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
