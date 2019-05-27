@@ -14,33 +14,20 @@ import static com.example.myapplication.database.DataBaseContract.CategoryEntry;
 
 public class CategoryManager {
 
-    private static CategoryManager categoryManager = null;
 
-    private static List<CategoryPojo> categories;
-
-
-    private CategoryManager() {
-    }
-
-    public static CategoryManager getInstance() {
-        if (categoryManager == null) {
-            categories = new ArrayList<>();
-            categoryManager = new CategoryManager();
-        }
-        return categoryManager;
+    public CategoryManager() {
     }
 
 
-    public List<CategoryPojo> getCategories() {
-        return categories;
-    }
-
-
-    public void loadFromDB(OpenHelper dbHelper) {
+    public List<CategoryPojo> getCategories(OpenHelper dbHelper) {
+        List<CategoryPojo> categories;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
         String[] columns = {CategoryEntry._ID,
                             CategoryEntry.COLUMN_NAME,
                             CategoryEntry.COLUMN_DESCRIPTION};
+
+        String accountOrderBy = CategoryEntry.COLUMN_NAME + " ASC";
 
         Cursor categoryCur = db.query(CategoryEntry.TABLE_NAME,
                                       columns,
@@ -48,18 +35,20 @@ public class CategoryManager {
                                       null,
                                       null,
                                       null,
-                                      null);
+                                      accountOrderBy);
 
-        loadCategories(categoryCur);
+        categories = loadCategories(categoryCur);
+        db.close();
+        return categories;
     }
 
-    private void loadCategories(Cursor cursor) {
+
+    private List<CategoryPojo> loadCategories(Cursor cursor) {
+        List<CategoryPojo> categories = new ArrayList<>();
+
         int catIdPos = cursor.getColumnIndex(CategoryEntry._ID);
         int catNamePos = cursor.getColumnIndex(CategoryEntry.COLUMN_NAME);
         int catDescriptionPos = cursor.getColumnIndex(CategoryEntry.COLUMN_DESCRIPTION);
-
-        CategoryManager cm = getInstance();
-        cm.getCategories().clear();
 
         while (cursor.moveToNext()) {
             Long id = cursor.getLong(catIdPos);
@@ -67,41 +56,80 @@ public class CategoryManager {
             String description = cursor.getString(catDescriptionPos);
 
             CategoryPojo category = new CategoryPojo(id, name, description);
-            cm.getCategories().add(category);
+            categories.add(category);
         }
 
         cursor.close();
+
+        return categories;
     }
 
 
-    public CategoryPojo findById(Long id) {
-        for (CategoryPojo category : categories) {
-            if (id.equals(category.getId()))  //TODO chk if equals works or we should change it to ==
-                return category;
-        }
-        return null;
+    public CategoryPojo findById(OpenHelper dbHelper, Long id) {
+        CategoryPojo category;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = CategoryEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(id)};
+
+        String[] columns = {CategoryEntry._ID,
+                            CategoryEntry.COLUMN_NAME,
+                            CategoryEntry.COLUMN_DESCRIPTION};
+
+        String accountOrderBy = CategoryEntry.COLUMN_NAME + " ASC";
+
+        Cursor categoryCur = db.query(CategoryEntry.TABLE_NAME,
+                                      columns,
+                                      selection,
+                                      selectionArgs,
+                                      null,
+                                      null,
+                                      accountOrderBy);
+
+        category = loadCategories(categoryCur).get(0);
+        db.close();
+        return category;
     }
 
 
-    public CategoryPojo findByName(String name) {
-        for (CategoryPojo category : categories) {
-            if (name.equals(category.getName()))
-                return category;
-        }
-        return null;
+    public CategoryPojo findByName(OpenHelper dbHelper, String name) {
+        CategoryPojo category;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = CategoryEntry._ID + " = ?";
+        String[] selectionArgs = {name};
+
+        String[] columns = {CategoryEntry._ID,
+                            CategoryEntry.COLUMN_NAME,
+                            CategoryEntry.COLUMN_DESCRIPTION};
+
+        String accountOrderBy = CategoryEntry.COLUMN_NAME + " ASC";
+
+        Cursor categoryCur = db.query(CategoryEntry.TABLE_NAME,
+                                      columns,
+                                      selection,
+                                      selectionArgs,
+                                      null,
+                                      null,
+                                      accountOrderBy);
+
+        category = loadCategories(categoryCur).get(0);
+
+        return category;
     }
 
 
-    public void insertCategory(OpenHelper dbHelper, CategoryPojo category){
+    public void insertCategory(OpenHelper dbHelper, CategoryPojo category) throws IllegalArgumentException {
+
+        if (category.getName() == null || category.getName().isEmpty() || category.getName().trim() == "")
+            throw new IllegalArgumentException("The name of the category cannot be empty");
+
         ContentValues values = new ContentValues();
-        values.put(CategoryEntry._ID, "");
-        values.put(CategoryEntry.COLUMN_NAME, "");
-        values.put(CategoryEntry.COLUMN_DESCRIPTION, "");
+        values.put(CategoryEntry.COLUMN_NAME, category.getName());
+        values.put(CategoryEntry.COLUMN_DESCRIPTION, category.getDescription());
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int newCategoryId = (int) db.insert(CategoryEntry.TABLE_NAME, null, values);
-
-        updateCategory(dbHelper, category, newCategoryId);
+        db.insert(CategoryEntry.TABLE_NAME, null, values);
     }
 
 
@@ -116,8 +144,6 @@ public class CategoryManager {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(CategoryEntry.TABLE_NAME, values, selection, selectionArgs);
-
-        loadFromDB(dbHelper);
     }
 
 }

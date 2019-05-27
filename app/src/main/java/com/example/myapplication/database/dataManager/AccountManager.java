@@ -14,33 +14,19 @@ import static com.example.myapplication.database.DataBaseContract.AccountEntry;
 
 public class AccountManager {
 
-    private static AccountManager accountManager = null;
 
-    private List<AccountPojo> accounts;
-
-    private AccountManager() {
-    }
-
-    public static AccountManager getInstance() {
-        if (accountManager == null) {
-            accountManager = new AccountManager();
-            accountManager.accounts = new ArrayList<>();
-        }
-        return accountManager;
+    public AccountManager() {
     }
 
 
-    public List<AccountPojo> getAccounts() {
-        return this.accounts;
-    }
-
-
-    public void loadFromDB(OpenHelper dbHelper) {
+    public List<AccountPojo> getAccounts(OpenHelper dbHelper) {
+        List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
                             AccountEntry.COLUMN_DESCRIPTION,
                             AccountEntry.COLUMN_BALANCE};
+
         String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
         Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
@@ -51,18 +37,19 @@ public class AccountManager {
                                      null,
                                      accountOrderBy);
 
-        loadAccounts(accountCur);
+        accounts = loadAccounts(accountCur);
+        db.close();
+        return accounts;
     }
 
 
-    private static void loadAccounts(Cursor cursor) {
+    private List<AccountPojo> loadAccounts(Cursor cursor) {
+        List<AccountPojo> accounts = new ArrayList<>();
+
         int accIdPos = cursor.getColumnIndex(AccountEntry._ID);
         int accNamePos = cursor.getColumnIndex(AccountEntry.COLUMN_NAME);
         int accDescriptionPos = cursor.getColumnIndex(AccountEntry.COLUMN_DESCRIPTION);
         int accBalancePos = cursor.getColumnIndex(AccountEntry.COLUMN_BALANCE);
-
-        AccountManager am = getInstance();
-        am.accounts.clear();
 
         while (cursor.moveToNext()) {
             Long id = cursor.getLong(accIdPos);
@@ -71,42 +58,90 @@ public class AccountManager {
             Float balance = cursor.getFloat(accBalancePos);
 
             AccountPojo account = new AccountPojo(id, name, description, balance);
-            am.accounts.add(account);
+            accounts.add(account);
         }
 
         cursor.close();
+
+        return accounts;
     }
 
 
-    public AccountPojo findById(Long id) {
-        for (AccountPojo account : accounts) {
-            if (id.equals(account.getId()))  //TODO chk if equals works or we should change it to ==
-                return account;
-        }
-        return null;
+    public AccountPojo findById(OpenHelper dbHelper, Long id) {
+        AccountPojo account;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = AccountEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(id)};
+
+        String[] columns = {AccountEntry._ID,
+                            AccountEntry.COLUMN_NAME,
+                            AccountEntry.COLUMN_DESCRIPTION,
+                            AccountEntry.COLUMN_BALANCE};
+
+        String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
+
+        Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     accountOrderBy);
+
+        account = loadAccounts(accountCur).get(0);
+        db.close();
+        return account;
     }
 
 
-    public AccountPojo findByName(String name) {
-        for (AccountPojo account : accounts) {
-            if (name.equals(account.getName()))
-                return account;
-        }
-        return null;
+    public AccountPojo findByName(OpenHelper dbHelper, String name) {
+        AccountPojo account;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = AccountEntry.COLUMN_NAME + " = ?";
+        String[] selectionArgs = {name};
+
+        String[] columns = {AccountEntry._ID,
+                            AccountEntry.COLUMN_NAME,
+                            AccountEntry.COLUMN_DESCRIPTION,
+                            AccountEntry.COLUMN_BALANCE};
+
+        String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
+
+        Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     accountOrderBy);
+
+        account = loadAccounts(accountCur).get(0);
+
+        return account;
     }
 
 
-    public void insertAccount(OpenHelper dbHelper, AccountPojo account){
+    public void insertAccount(OpenHelper dbHelper, AccountPojo account) throws IllegalArgumentException {
+
+        Float balance;
+
+        if (account.getName() == null || account.getName().isEmpty() || account.getName().trim() == "")
+            throw new IllegalArgumentException("The name of the account cannot be empty");
+
+        if (account.getBalance() == null)
+            balance = 0f;
+        else
+            balance = account.getBalance();
+
         ContentValues values = new ContentValues();
-        values.put(AccountEntry._ID, "");
-        values.put(AccountEntry.COLUMN_NAME, "");
-        values.put(AccountEntry.COLUMN_DESCRIPTION, "");
-        values.put(AccountEntry.COLUMN_BALANCE, "");
+        values.put(AccountEntry.COLUMN_NAME, account.getName());
+        values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
+        values.put(AccountEntry.COLUMN_BALANCE, balance);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int newAccountId = (int) db.insert(AccountEntry.TABLE_NAME, null, values);
-
-        updateAccount(dbHelper, account, newAccountId);
+        db.insert(AccountEntry.TABLE_NAME, null, values);
     }
 
 
@@ -122,8 +157,6 @@ public class AccountManager {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(AccountEntry.TABLE_NAME, values, selection, selectionArgs);
-
-        loadFromDB(dbHelper);
     }
 
 }

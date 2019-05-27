@@ -28,11 +28,17 @@ public class ExpenseFacade extends AbstractFacade {
     }
 
     public void saveExpense(Date date, Float amount, Long categoryID, Long accountID, String detail, Context ctx){
-        CategoryPojo cateogry = CategoryManager.getInstance().findById(categoryID);
-        AccountPojo account = AccountManager.getInstance().findById(accountID);
+        CategoryManager cm = new CategoryManager();
+        AccountManager am = new AccountManager();
+        OpenHelper oh = new OpenHelper(ctx);
+
+        CategoryPojo cateogry = cm.findById(oh, categoryID);
+        AccountPojo account = am.findById(oh, accountID);
 
         PaymenyPojo paymentToSave = new PaymenyPojo(null, date, amount, cateogry, account, detail, Boolean.FALSE);
 
-        MovementManager.getInstance().insertPayment(new OpenHelper(ctx), paymentToSave);
+        MovementManager mm  = new MovementManager();
+        mm.insertPayment(oh, paymentToSave);
+        oh.close();
     }
 }

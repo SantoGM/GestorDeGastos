@@ -25,7 +25,9 @@ public class AccountsFacade extends AbstractFacade{
 
     public ArrayList<PersistentDataModel> getAccountsSpinnerModel(Context ctx) {
         OpenHelper oh = new OpenHelper(ctx);
-        AccountManager.getInstance().loadFromDB(oh);
-        return buildDataModel(AccountManager.getInstance().getAccounts(), AccountPojo.class);
+        AccountManager am = new AccountManager();
+        ArrayList<PersistentDataModel> result = buildDataModel(am.getAccounts(oh), AccountPojo.class);
+        oh.close();
+        return result;
     }
 }

@@ -6,6 +6,7 @@ public final class DataBaseContract {
 
     private DataBaseContract() {}
 
+
     public static final class AccountEntry implements BaseColumns {
         public static final String TABLE_NAME = "accounts";
 
@@ -19,7 +20,12 @@ public final class DataBaseContract {
                         COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_BALANCE + " REAL NOT NULL )";
+
+        public static final String getQName(String columnName) {
+            return TABLE_NAME + "." + columnName;
+        }
     }
+
 
     public static final class CategoryEntry implements BaseColumns {
         public static final String TABLE_NAME = "cateogory";
@@ -32,7 +38,12 @@ public final class DataBaseContract {
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT )";
+
+        public static final String getQName(String columnName) {
+            return TABLE_NAME + "." + columnName;
+        }
     }
+
 
     public static final class PaymentEntry implements BaseColumns {
         public static final String TABLE_NAME = "payments";
@@ -53,7 +64,12 @@ public final class DataBaseContract {
                         COLUMN_ID_ACCOUNT + " INTEGER NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_IS_CREDIT_CARD + " INTEGER NOT NULL )";
+
+        public static final String getQName(String columnName) {
+            return TABLE_NAME + "." + columnName;
+        }
     }
+
 
     public static final class TransferenceEntry implements BaseColumns {
         public static final String TABLE_NAME = "transferences";
@@ -72,7 +88,12 @@ public final class DataBaseContract {
                         COLUMN_ID_ACCOUNT_ORG + " INTEGER NOT NULL, " +
                         COLUMN_ID_ACCOUNT_DEST + " INTEGER NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT )";
+
+        public static final String getQName(String columnName) {
+            return TABLE_NAME + "." + columnName;
+        }
     }
+
 
     public static final class UserDataEntry implements BaseColumns {
         public static final String TABLE_NAME = "user_data";
@@ -87,6 +108,10 @@ public final class DataBaseContract {
                         COLUMN_NAME + " TEXT NOT NULL, " +
                         COLUMN_EMAIL + " TEXT NOT NULL, " +
                         COLUMN_PIN + " INTEGER NOT NULL )";
+
+        public static final String getQName(String columnName) {
+            return TABLE_NAME + "." + columnName;
+        }
     }
 
 }

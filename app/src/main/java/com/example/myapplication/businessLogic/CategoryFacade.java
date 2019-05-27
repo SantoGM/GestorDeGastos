@@ -25,7 +25,9 @@ public class CategoryFacade extends AbstractFacade{
 
     public ArrayList<PersistentDataModel> getCategoryDataModel(Context ctx) {
         OpenHelper oh = new OpenHelper(ctx);
-        CategoryManager.getInstance().loadFromDB(oh);
-        return buildDataModel(CategoryManager.getInstance().getCategories(), CategoryPojo.class);
+        CategoryManager cm = new CategoryManager();
+        ArrayList<PersistentDataModel> result = buildDataModel(cm.getCategories(oh), CategoryPojo.class);
+        oh.close();
+        return result;
     }
 }

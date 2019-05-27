@@ -2,25 +2,25 @@ package com.example.myapplication.view.pojo;
 
 import java.util.Date;
 
-public class TransferemcePojo extends AbstractPojo implements MovementPojo {
+public class TransferencePojo extends AbstractPojo implements MovementPojo {
 
     private Date date;
     private Float amount;
     private AccountPojo accountOrigin;
     private AccountPojo accountDestiny;
-    private String description;
+    private String detail;
 
 
-    public TransferemcePojo() {
+    public TransferencePojo() {
     }
 
-    public TransferemcePojo(Long id, Date date, Float amount, AccountPojo accountOrigin, AccountPojo accountDestiny, String description) {
+    public TransferencePojo(Long id, Date date, Float amount, AccountPojo accountOrigin, AccountPojo accountDestiny, String detail) {
         this.setId(id);
         this.date = date;
         this.amount = amount;
         this.accountOrigin = accountOrigin;
         this.accountDestiny = accountDestiny;
-        this.description = description;
+        this.detail = detail;
     }
 
 
@@ -48,26 +48,27 @@ public class TransferemcePojo extends AbstractPojo implements MovementPojo {
     public void setAccountDestiny(AccountPojo accountDestiny) {
         this.accountDestiny = accountDestiny;
     }
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        detail = detail;
     }
 
 
     @Override
     public String[] showDetails() {
-        return new String[]{String.valueOf(this.getId()),
+        String[] details = {String.valueOf(this.getId()),
                             String.valueOf(this.date),
                             String.valueOf(this.amount),
                             this.accountOrigin.getName(),
                             this.accountDestiny.getName(),
-                            this.description};
+                            this.detail};
+        return details;
     }
 
     @Override
     public String nameToShow() {
-        return getDate() + "- ^[" + getAccountOrigin().getName() + ":" + getAccountDestiny().getName() + "]";
+        return getDate() +" ["+ getAccountOrigin() + "-" + getAccountDestiny() + "]";
     }
 }
