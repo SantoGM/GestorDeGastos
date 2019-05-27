@@ -52,4 +52,13 @@
     <string name="menu_op_about">Acerca de ****</string>
     <string name="txtDate">Fecha</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment1">Evolución del gasto por categoria</string>
+    <string name="hello_blank_fragment2">Hello blank fragment2</string>
+    <string name="hello_blank_fragment3">Hello blank fragment3</string>
+    <string name="report_evolution_expenses">Evolucion de Gasto</string>
+    <string name="report_expense_by_cat">Gasto por rubro</string>
+    <string name="report_expense_by_date">Gasto por Fecha</string>
+    <string name="expense_x">Gasto x</string>
+
 </resources>

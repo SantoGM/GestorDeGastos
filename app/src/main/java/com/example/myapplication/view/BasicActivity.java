@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -18,8 +20,10 @@ public class BasicActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        createMenu();
+       // Toolbar toolbar = findViewById(R.id.toolbar);
+       // setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.addExpense);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -35,6 +39,7 @@ public class BasicActivity extends BaseActivity {
         ListView listView = findViewById(R.id.basicViewList);
         listView.setAdapter(adapter);
     }
+
 
     @Override
     public void onBackPressed() {
