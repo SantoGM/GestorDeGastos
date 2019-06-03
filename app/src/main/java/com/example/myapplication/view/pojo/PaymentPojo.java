@@ -1,8 +1,10 @@
 package com.example.myapplication.view.pojo;
 
+import com.example.myapplication.view.extras.DateHelper;
+
 import java.util.Date;
 
-public class PaymenyPojo extends AbstractPojo implements MovementPojo {
+public class PaymentPojo extends AbstractPojo implements MovementPojo {
 
     private Date date;
     private Float amount;
@@ -12,10 +14,10 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
     private Boolean creditCard;
 
 
-    public PaymenyPojo() {
+    public PaymentPojo() {
     }
 
-    public PaymenyPojo(Long id, Date date, Float amount, CategoryPojo category, AccountPojo account, String detail, Boolean creditCard) {
+    public PaymentPojo(Long id, Date date, Float amount, CategoryPojo category, AccountPojo account, String detail, Boolean creditCard) {
         this.setId(id);
         this.date = date;
         this.amount = amount;
@@ -76,6 +78,6 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
 
     @Override
     public String nameToShow() {
-        return getDate() + "-" + getAmount() + "(" + getAccount() + ")";
+        return DateHelper.toStringDDMMYYYY(getDate()) + "- $ " + getAmount() + "(" + getAccount().getName() + ")";
     }
 }

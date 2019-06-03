@@ -54,14 +54,13 @@ public class PINActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String email = getIntent().getStringExtra(IntentViewConstants.EMAIL);
 
-                // TODO Logica de envio de mail
                 final UserDataPojo usuario = UserDataManager.getInstance().getUserData(getApplicationContext());
 
                 new Thread(new Runnable() {
                     @SuppressLint("SdCardPath") public void run() {
                         try {
                             GMailSender sender = new GMailSender();
-                            String body = ConfigMail.HI_PIN + usuario.getName().toString()+'\n'+'\n'+
+                            String body = ConfigMail.HI_PIN + usuario.getName()+'\n'+'\n'+
                                           ConfigMail.BODY_PIN + usuario.getPin().toString()+'\n'+'\n'+
                                           ConfigMail.SIGN;
 
@@ -69,7 +68,7 @@ public class PINActivity extends AppCompatActivity {
 
                             Log.i("Mail", "Sent");
 
-
+                            toastMe("Hemos enviado su PIN a " + email);
                         } catch (Exception e) {
                             runOnUiThread(new Runnable()
                             {
@@ -80,12 +79,11 @@ public class PINActivity extends AppCompatActivity {
                             });
 
                             Log.i("Mail", "Failed"+e);
-                            Toast.makeText(getApplicationContext(),"Error",Toast.LENGTH_LONG).show();
+                            toastMe("Error");
 
                         }
                     }
                 }).start();
-                toastMe("Hemos enviado su PIN a " + email);
             }
         });
     }

@@ -4,8 +4,8 @@
     package="com.example.myapplication"
     tools:ignore="GoogleAppIndexingWarning">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -14,9 +14,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.ReportActivity"
+        <activity
+            android:name=".view.BaseCRUDActivity"
+            android:label="@string/title_activity_base_crud"
+            android:parentActivityName=".view.BaseActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.myapplication.view.BaseActivity" />
+        </activity>
+        <activity
+            android:name=".view.ReportActivity"
             android:label="@string/title_activity_basic"
-            android:theme="@style/AppTheme.NoActionBar" ></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.AddExpenseActivity"
             android:label="@string/title_activity_add_expense" />
@@ -29,6 +39,7 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

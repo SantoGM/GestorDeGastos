@@ -11,7 +11,7 @@ import com.example.myapplication.database.OpenHelper;
 import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.CategoryPojo;
 import com.example.myapplication.view.pojo.MovementPojo;
-import com.example.myapplication.view.pojo.PaymenyPojo;
+import com.example.myapplication.view.pojo.PaymentPojo;
 import com.example.myapplication.view.pojo.TransferencePojo;
 
 import java.text.DateFormat;
@@ -35,8 +35,8 @@ public class MovementManager {
     }
 
 
-    public PaymenyPojo findPaymentById(OpenHelper dbHelper, Long id) {
-        PaymenyPojo payment;
+    public PaymentPojo findPaymentById(OpenHelper dbHelper, Long id) {
+        PaymentPojo payment;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String selection = PaymentEntry._ID + " = ?";
@@ -66,8 +66,8 @@ public class MovementManager {
 
 
 
-    public List<PaymenyPojo> getAllPayments(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
-        List<PaymenyPojo> payments;
+    public List<PaymentPojo> getAllPayments(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
+        List<PaymentPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String from = dateToString(dateFrom);
@@ -99,8 +99,8 @@ public class MovementManager {
     }
 
 
-    private List<PaymenyPojo> loadPayments(OpenHelper dbHelper, Cursor cursor) {
-        List<PaymenyPojo> payments = new ArrayList<>();
+    private List<PaymentPojo> loadPayments(OpenHelper dbHelper, Cursor cursor) {
+        List<PaymentPojo> payments = new ArrayList<>();
 
         int payIdPos = cursor.getColumnIndex(PaymentEntry._ID);
         int payDatePos = cursor.getColumnIndex(PaymentEntry.COLUMN_DATE);
@@ -124,7 +124,7 @@ public class MovementManager {
             AccountPojo account = am.findById(dbHelper, accountId);
             Boolean creditCard = intToBoolean(creditCardInt);
 
-            PaymenyPojo payment = new PaymenyPojo(id, date, amount, category, account, description, creditCard);
+            PaymentPojo payment = new PaymentPojo(id, date, amount, category, account, description, creditCard);
 
             payments.add(payment);
         }
@@ -263,7 +263,7 @@ public class MovementManager {
     }
 
 
-    public void insertPayment(OpenHelper dbHelper, PaymenyPojo payment) {
+    public void insertPayment(OpenHelper dbHelper, PaymentPojo payment) {
 
         AccountPojo account;
         CategoryPojo category;
@@ -310,7 +310,7 @@ public class MovementManager {
     }
 
 
-    public void updatePayment(OpenHelper dbHelper, PaymenyPojo payment, Long paymentId) {
+    public void updatePayment(OpenHelper dbHelper, PaymentPojo payment, Long paymentId) {
         String selection = PaymentEntry._ID + " = ?";
         String[] selectionArgs = {Long.toString(paymentId)};
 
@@ -400,7 +400,7 @@ public class MovementManager {
             }
         };
 
-        List<PaymenyPojo> payments = getAllPayments(dbHelper, dateFrom, dateTo);
+        List<PaymentPojo> payments = getAllPayments(dbHelper, dateFrom, dateTo);
         List<TransferencePojo> transferences = getAllTransferences(dbHelper, dateFrom, dateTo);
 
         List<MovementPojo> movements = new ArrayList<>();
@@ -452,8 +452,8 @@ public class MovementManager {
     }
 
 
-    public List<PaymenyPojo> getPaymentByCategoryName(OpenHelper dbHelper, String categoryName, Date dateFrom, Date dateTo) {
-        List<PaymenyPojo> payments;
+    public List<PaymentPojo> getPaymentByCategoryName(OpenHelper dbHelper, String categoryName, Date dateFrom, Date dateTo) {
+        List<PaymentPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String from = dateToString(dateFrom);
@@ -495,8 +495,8 @@ public class MovementManager {
     }
 
 
-    public List<PaymenyPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId, Date dateFrom, Date dateTo) {
-        List<PaymenyPojo> payments;
+    public List<PaymentPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId, Date dateFrom, Date dateTo) {
+        List<PaymentPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String from = dateToString(dateFrom);
@@ -535,8 +535,8 @@ public class MovementManager {
     }
 
 
-    public List<PaymenyPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId) {
-        List<PaymenyPojo> payments;
+    public List<PaymentPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId) {
+        List<PaymentPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String table = PaymentEntry.TABLE_NAME;
@@ -568,7 +568,6 @@ public class MovementManager {
 
         return payments;
     }
-
 
 
 }

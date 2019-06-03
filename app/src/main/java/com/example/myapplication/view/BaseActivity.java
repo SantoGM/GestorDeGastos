@@ -33,7 +33,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         // Handle item selection
         switch (item.getItemId()) {
             case 3:
-                // newGame();
+                goToActivity(BaseCRUDActivity.class);
                 return true;
             case R.id.menu_action_report:
 
@@ -71,10 +71,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
     }
+
     private Intent createIntent(Class className){
         return new Intent(getApplicationContext(),className);
-
     }
+
     private void goToActivity(Class className){
         startActivity(createIntent(className));
     }
@@ -82,12 +83,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        DrawerLayout mDrawerLayout;
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //sdsd
+        DrawerLayout mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
-
-
         return onOptionsItemSelected(menuItem);
     }
 }

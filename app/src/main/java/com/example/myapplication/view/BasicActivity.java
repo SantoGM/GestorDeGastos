@@ -3,18 +3,21 @@ package com.example.myapplication.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
 import com.example.myapplication.R;
-import com.example.myapplication.businessLogic.AccountsFacade;
+import com.example.myapplication.businessLogic.ExpenseFacade;
 import com.example.myapplication.businessLogic.PersistentDataModel;
+import com.example.myapplication.view.extras.ExpensesListAdapter;
+import com.example.myapplication.view.pojo.PaymentPojo;
 
-public class BasicActivity extends BaseActivity {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+public class BasicActivity extends BaseActivity implements Observer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +25,6 @@ public class BasicActivity extends BaseActivity {
         setContentView(R.layout.activity_basic);
 
         createMenu();
-       // Toolbar toolbar = findViewById(R.id.toolbar);
-       // setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.addExpense);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -34,15 +35,27 @@ public class BasicActivity extends BaseActivity {
             }
         });
 
-        ArrayAdapter<PersistentDataModel> adapter = new ArrayAdapter(getApplicationContext(), R.layout.activity_listview, AccountsFacade.getInstance().getAccountsSpinnerModel(getApplicationContext()));
+        ExpenseFacade.getInstance().addObserver(this);
+        fetchData();
+    }
 
+    private void fetchData() {
+
+        List<PaymentPojo> data = ExpenseFacade.getInstance().obtainLastFiveMovements(getApplicationContext());
+        ExpensesListAdapter adapter2 = new ExpensesListAdapter(getApplicationContext(), data);
+        
         ListView listView = findViewById(R.id.basicViewList);
-        listView.setAdapter(adapter);
+        listView.setAdapter(adapter2);
     }
 
 
     @Override
     public void onBackPressed() {
         // Do nothing
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        fetchData();
     }
 }

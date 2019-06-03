@@ -60,5 +60,6 @@
     <string name="report_expense_by_cat">Gasto por rubro</string>
     <string name="report_expense_by_date">Gasto por Fecha</string>
     <string name="expense_x">Gasto x</string>
+    <string name="title_activity_base_crud">BaseCRUDActivity</string>
 
 </resources>

@@ -8,9 +8,11 @@ import com.example.myapplication.database.dataManager.CategoryManager;
 import com.example.myapplication.database.dataManager.MovementManager;
 import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.CategoryPojo;
-import com.example.myapplication.view.pojo.PaymenyPojo;
+import com.example.myapplication.view.pojo.PaymentPojo;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class ExpenseFacade extends AbstractFacade {
 
@@ -35,10 +37,28 @@ public class ExpenseFacade extends AbstractFacade {
         CategoryPojo cateogry = cm.findById(oh, categoryID);
         AccountPojo account = am.findById(oh, accountID);
 
-        PaymenyPojo paymentToSave = new PaymenyPojo(null, date, amount, cateogry, account, detail, Boolean.FALSE);
+        PaymentPojo paymentToSave = new PaymentPojo(null, date, amount, cateogry, account, detail, Boolean.FALSE);
 
         MovementManager mm  = new MovementManager();
         mm.insertPayment(oh, paymentToSave);
         oh.close();
+        setChanged();
+        notifyObservers();
+    }
+
+    public ArrayList<PersistentDataModel> getExpensesListrModel(Context ctx) {
+        ArrayList<PersistentDataModel> result = buildDataModel(obtainLastFiveMovements(ctx), PaymentPojo.class);
+        return result;
+    }
+
+    public List<PaymentPojo> obtainLastFiveMovements(Context ctx) {
+        OpenHelper oh = new OpenHelper(ctx);
+        MovementManager mm = new MovementManager();
+        List<PaymentPojo> result = mm.getAllPayments(oh, new Date(0, 0, 1), new Date(2020-1900, 11, 31));
+        if (result.size()>5){
+            result = result.subList(0, 5);
+        }
+        oh.close();
+        return result;
     }
 }
