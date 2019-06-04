@@ -34,7 +34,7 @@
         completions."
     </string>
     <string name="title_activity_basic">Gestor de Gastos</string>
-    <string name="title_activity_add_expense">AddExpenseActivity</string>
+    <string name="title_activity_add_expense">Agregar Gasto</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -46,10 +46,10 @@
     <string name="lblCategory">Categoría</string>
 
     <!--Menu -->
-    <string name="menu_op_check">Registrar Gasto</string>
+    <string name="menu_op_categories">Categorías</string>
     <string name="menu_op_report">Reportes</string>
     <string name="menu_op_logout">Salir</string>
-    <string name="menu_op_about">Acerca de ****</string>
+    <string name="menu_op_about">Acerca de GdG</string>
     <string name="txtDate">Fecha</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -60,6 +60,6 @@
     <string name="report_expense_by_cat">Gasto por rubro</string>
     <string name="report_expense_by_date">Gasto por Fecha</string>
     <string name="expense_x">Gasto x</string>
-    <string name="title_activity_base_crud">BaseCRUDActivity</string>
+    <string name="title_activity_category_crud">Categorías</string>
 
 </resources>

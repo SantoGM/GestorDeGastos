@@ -1,5 +1,6 @@
 package com.example.myapplication.view.extras;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateHelper {
@@ -20,5 +21,9 @@ public class DateHelper {
 
     public static String toStringDDMM(Date date) {
         return (date.getDate()) + F_SLASH + (date.getMonth()+1);
+    }
+
+    public static String getTodayDate() {
+        return toStringDDMMYYYY(Calendar.getInstance().getTime());
     }
 }

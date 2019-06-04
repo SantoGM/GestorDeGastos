@@ -1,20 +1,12 @@
 package com.example.myapplication.view;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.myapplication.R;
 
@@ -32,8 +24,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case 3:
-                goToActivity(BaseCRUDActivity.class);
+            case R.id.menu_categories:
+                goToActivity(CategoryCRUDActivity.class);
                 return true;
             case R.id.menu_action_report:
 

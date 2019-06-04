@@ -8,12 +8,12 @@ import android.view.View;
 
 import com.example.myapplication.R;
 
-public class BaseCRUDActivity extends BaseActivity {
+public class CategoryCRUDActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_base_crud);
+        setContentView(R.layout.activity_category_crud);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

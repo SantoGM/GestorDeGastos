@@ -15,8 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.BaseCRUDActivity"
-            android:label="@string/title_activity_base_crud"
+            android:name=".view.CategoryCRUDActivity"
+            android:label="@string/title_activity_category_crud"
             android:parentActivityName=".view.BaseActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

@@ -2,6 +2,7 @@ package com.example.myapplication.view;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -53,9 +54,12 @@ public class AddExpenseActivity extends BaseActivity {
                     Long accountID = (Long) inputData.get(FIELD_PAYED_WITH);
                     String detail = (String) inputData.get(FIELD_DETAIL);
                     ExpenseFacade.getInstance().saveExpense(date, amount, categoryID, accountID, detail, getApplicationContext());
+
+                    toastMe("Se guardó el gasto");
+                    onBackPressed();
+                } else {
+                    Snackbar.make(v, "Complete los campos obligatorios", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
-                toastMe("Se guardó el gasto");
-                onBackPressed();
             }
         });
     }
@@ -118,8 +122,7 @@ public class AddExpenseActivity extends BaseActivity {
                 }
             }
         });
-
-        // TODO Set listeners
+        txtDate.setText(DateHelper.getTodayDate());
     }
 
     private void showDatePickerDialog(final EditText txtDate) {
