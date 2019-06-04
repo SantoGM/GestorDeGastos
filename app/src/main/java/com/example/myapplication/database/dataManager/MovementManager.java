@@ -25,6 +25,8 @@ import java.util.List;
 
 public class MovementManager {
 
+    private final int DISABLE = 1;
+
     private AccountManager am;
     private CategoryManager cm;
 
@@ -35,12 +37,12 @@ public class MovementManager {
     }
 
 
-    public PaymenyPojo findPaymentById(OpenHelper dbHelper, Long id) {
+    public PaymenyPojo findPaymentById(OpenHelper dbHelper, Long paymentId) {
         PaymenyPojo payment;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String selection = PaymentEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(id)};
+        String[] selectionArgs = {Long.toString(paymentId)};
 
         String[] columns = {PaymentEntry._ID,
                 PaymentEntry.COLUMN_DATE,
@@ -570,5 +572,27 @@ public class MovementManager {
     }
 
 
+    public void deletePayment(OpenHelper dbHelper, Long paymentId) {
+        String selection = CategoryEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(paymentId)};
+
+        ContentValues values = new ContentValues();
+        values.put(PaymentEntry.COLUMN_DISABLE, DISABLE);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(PaymentEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+
+    public void deleteTransference(OpenHelper dbHelper, Long transferenceId) {
+        String selection = CategoryEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(transferenceId)};
+
+        ContentValues values = new ContentValues();
+        values.put(TransferenceEntry.COLUMN_DISABLE, DISABLE);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(TransferenceEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
 
 }

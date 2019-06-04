@@ -14,6 +14,8 @@ import static com.example.myapplication.database.DataBaseContract.AccountEntry;
 
 public class AccountManager {
 
+    private final int DISABLE = 1;
+
 
     public AccountManager() {
     }
@@ -154,6 +156,18 @@ public class AccountManager {
         values.put(AccountEntry.COLUMN_NAME, account.getName());
         values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
         values.put(AccountEntry.COLUMN_BALANCE, account.getBalance());
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(AccountEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+
+    public void deleteAccount(OpenHelper dbHelper, Long accountId) {
+        String selection = AccountEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(accountId)};
+
+        ContentValues values = new ContentValues();
+        values.put(AccountEntry.COLUMN_DISABLE, DISABLE);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(AccountEntry.TABLE_NAME, values, selection, selectionArgs);

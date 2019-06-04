@@ -14,6 +14,8 @@ import static com.example.myapplication.database.DataBaseContract.CategoryEntry;
 
 public class CategoryManager {
 
+    private final int DISABLE = 1;
+
 
     public CategoryManager() {
     }
@@ -65,12 +67,12 @@ public class CategoryManager {
     }
 
 
-    public CategoryPojo findById(OpenHelper dbHelper, Long id) {
+    public CategoryPojo findById(OpenHelper dbHelper, Long idCategory) {
         CategoryPojo category;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String selection = CategoryEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(id)};
+        String[] selectionArgs = {Long.toString(idCategory)};
 
         String[] columns = {CategoryEntry._ID,
                             CategoryEntry.COLUMN_NAME,
@@ -133,14 +135,26 @@ public class CategoryManager {
     }
 
 
-    public void updateCategory(OpenHelper dbHelper, CategoryPojo category, int categoryId) {
+    public void updateCategory(OpenHelper dbHelper, CategoryPojo category, Long categoryId) {
         String selection = CategoryEntry._ID + " = ?";
-        String[] selectionArgs = {Integer.toString(categoryId)};
+        String[] selectionArgs = {Long.toString(categoryId)};
 
         ContentValues values = new ContentValues();
         values.put(CategoryEntry._ID, categoryId);
         values.put(CategoryEntry.COLUMN_NAME, category.getName());
         values.put(CategoryEntry.COLUMN_DESCRIPTION, category.getDescription());
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(CategoryEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+
+    public void deleteCategory(OpenHelper dbHelper, Long categoryId) {
+        String selection = CategoryEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(categoryId)};
+
+        ContentValues values = new ContentValues();
+        values.put(CategoryEntry.COLUMN_DISABLE, DISABLE);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(CategoryEntry.TABLE_NAME, values, selection, selectionArgs);

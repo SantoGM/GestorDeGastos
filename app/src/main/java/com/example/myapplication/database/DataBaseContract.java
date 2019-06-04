@@ -13,13 +13,15 @@ public final class DataBaseContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_BALANCE = "balance";
+        public static final String COLUMN_DISABLE = "disable";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT, " +
-                        COLUMN_BALANCE + " REAL NOT NULL )";
+                        COLUMN_BALANCE + " REAL NOT NULL, " +
+                        COLUMN_DISABLE + " INTEGER DEFAULT 0 )";
 
         public static final String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
@@ -32,12 +34,14 @@ public final class DataBaseContract {
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_DESCRIPTION = "description";
+        public static final String COLUMN_DISABLE = "disable";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE  IF NOT EXISTS " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
-                        COLUMN_DESCRIPTION + " TEXT )";
+                        COLUMN_DESCRIPTION + " TEXT, " +
+                        COLUMN_DISABLE + " INTEGER DEFAULT 0 )";
 
         public static final String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
@@ -54,6 +58,7 @@ public final class DataBaseContract {
         public static final String COLUMN_ID_ACCOUNT = "id_account";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_IS_CREDIT_CARD = "is_credit_card";
+        public static final String COLUMN_DISABLE = "disable";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE  IF NOT EXISTS " + TABLE_NAME + " (" +
@@ -63,7 +68,8 @@ public final class DataBaseContract {
                         COLUMN_ID_CATEGORY + " INTEGER NOT NULL, " +
                         COLUMN_ID_ACCOUNT + " INTEGER NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT, " +
-                        COLUMN_IS_CREDIT_CARD + " INTEGER NOT NULL )";
+                        COLUMN_IS_CREDIT_CARD + " INTEGER NOT NULL, " +
+                        COLUMN_DISABLE + " INTEGER DEFAULT 0 )";
 
         public static final String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
@@ -79,6 +85,7 @@ public final class DataBaseContract {
         public static final String COLUMN_ID_ACCOUNT_ORG = "id_account_origin";
         public static final String COLUMN_ID_ACCOUNT_DEST = "id_account_destination";
         public static final String COLUMN_DESCRIPTION = "description";
+        public static final String COLUMN_DISABLE = "disable";
 
         public static final String SQL_CREATE_TABLE =
                 "CREATE TABLE  IF NOT EXISTS " + TABLE_NAME + " (" +
@@ -87,7 +94,8 @@ public final class DataBaseContract {
                         COLUMN_AMOUNT + " REAL NOT NULL, " +
                         COLUMN_ID_ACCOUNT_ORG + " INTEGER NOT NULL, " +
                         COLUMN_ID_ACCOUNT_DEST + " INTEGER NOT NULL, " +
-                        COLUMN_DESCRIPTION + " TEXT )";
+                        COLUMN_DESCRIPTION + " TEXT, " +
+                        COLUMN_DISABLE + " INTEGER DEFAULT 0 )";
 
         public static final String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
