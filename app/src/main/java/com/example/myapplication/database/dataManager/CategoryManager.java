@@ -15,6 +15,7 @@ import static com.example.myapplication.database.DataBaseContract.CategoryEntry;
 public class CategoryManager {
 
     private final int DISABLE = 1;
+    private final int ENABLE  = 0;
 
 
     public CategoryManager() {
@@ -25,6 +26,10 @@ public class CategoryManager {
         List<CategoryPojo> categories;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        String selection = CategoryEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Integer.toString(ENABLE)};
+
         String[] columns = {CategoryEntry._ID,
                             CategoryEntry.COLUMN_NAME,
                             CategoryEntry.COLUMN_DESCRIPTION};
@@ -33,8 +38,8 @@ public class CategoryManager {
 
         Cursor categoryCur = db.query(CategoryEntry.TABLE_NAME,
                                       columns,
-                                      null,
-                                      null,
+                                      selection,
+                                      selectionArgs,
                                       null,
                                       null,
                                       accountOrderBy);
@@ -71,8 +76,9 @@ public class CategoryManager {
         CategoryPojo category;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = CategoryEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(idCategory)};
+        String selection = CategoryEntry._ID + " = ? AND " + CategoryEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(idCategory), Integer.toString(ENABLE)};
 
         String[] columns = {CategoryEntry._ID,
                             CategoryEntry.COLUMN_NAME,
@@ -98,8 +104,9 @@ public class CategoryManager {
         CategoryPojo category;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = CategoryEntry._ID + " = ?";
-        String[] selectionArgs = {name};
+        String selection = CategoryEntry._ID + " = ? AND " + CategoryEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {name, Integer.toString(ENABLE)};
 
         String[] columns = {CategoryEntry._ID,
                             CategoryEntry.COLUMN_NAME,
@@ -123,12 +130,13 @@ public class CategoryManager {
 
     public void insertCategory(OpenHelper dbHelper, CategoryPojo category) throws IllegalArgumentException {
 
-        if (category.getName() == null || category.getName().isEmpty() || category.getName().trim() == "")
+        if (category.getName() == null || category.getName().isEmpty() || category.getName().trim().equals(""))
             throw new IllegalArgumentException("The name of the category cannot be empty");
 
         ContentValues values = new ContentValues();
         values.put(CategoryEntry.COLUMN_NAME, category.getName());
         values.put(CategoryEntry.COLUMN_DESCRIPTION, category.getDescription());
+        values.put(CategoryEntry.COLUMN_DISABLE, ENABLE);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.insert(CategoryEntry.TABLE_NAME, null, values);
@@ -136,8 +144,9 @@ public class CategoryManager {
 
 
     public void updateCategory(OpenHelper dbHelper, CategoryPojo category, Long categoryId) {
-        String selection = CategoryEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(categoryId)};
+        String selection = CategoryEntry._ID + " = ? AND " + CategoryEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(categoryId), Integer.toString(ENABLE)};
 
         ContentValues values = new ContentValues();
         values.put(CategoryEntry._ID, categoryId);
@@ -150,8 +159,8 @@ public class CategoryManager {
 
 
     public void deleteCategory(OpenHelper dbHelper, Long categoryId) {
-        String selection = CategoryEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(categoryId)};
+        String selection = CategoryEntry._ID + " = ? AND " + CategoryEntry.COLUMN_DISABLE + " = ?";
+        String[] selectionArgs = {Long.toString(categoryId), Integer.toString(ENABLE)};
 
         ContentValues values = new ContentValues();
         values.put(CategoryEntry.COLUMN_DISABLE, DISABLE);

@@ -15,6 +15,7 @@ import static com.example.myapplication.database.DataBaseContract.AccountEntry;
 public class AccountManager {
 
     private final int DISABLE = 1;
+    private final int ENABLE  = 0;
 
 
     public AccountManager() {
@@ -24,6 +25,11 @@ public class AccountManager {
     public List<AccountPojo> getAccounts(OpenHelper dbHelper) {
         List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = AccountEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Integer.toString(ENABLE)};
+
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
                             AccountEntry.COLUMN_DESCRIPTION,
@@ -33,8 +39,8 @@ public class AccountManager {
 
         Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
                                      columns,
-                                     null,
-                                     null,
+                                     selection,
+                                     selectionArgs,
                                      null,
                                      null,
                                      accountOrderBy);
@@ -73,8 +79,9 @@ public class AccountManager {
         AccountPojo account;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = AccountEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(id)};
+        String selection = AccountEntry._ID + " = ? AND " + AccountEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(id), Integer.toString(ENABLE)};
 
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
@@ -101,8 +108,9 @@ public class AccountManager {
         AccountPojo account;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = AccountEntry.COLUMN_NAME + " = ?";
-        String[] selectionArgs = {name};
+        String selection = AccountEntry.COLUMN_NAME + " = ? AND " + AccountEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {name, Integer.toString(ENABLE)};
 
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
@@ -129,7 +137,7 @@ public class AccountManager {
 
         Float balance;
 
-        if (account.getName() == null || account.getName().isEmpty() || account.getName().trim() == "")
+        if (account.getName() == null || account.getName().isEmpty() || account.getName().trim().equals(""))
             throw new IllegalArgumentException("The name of the account cannot be empty");
 
         if (account.getBalance() == null)
@@ -141,15 +149,17 @@ public class AccountManager {
         values.put(AccountEntry.COLUMN_NAME, account.getName());
         values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
         values.put(AccountEntry.COLUMN_BALANCE, balance);
+        values.put(AccountEntry.COLUMN_DISABLE, ENABLE);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.insert(AccountEntry.TABLE_NAME, null, values);
     }
 
 
-    public void updateAccount(OpenHelper dbHelper, AccountPojo account, int accountId) {
-        String selection = AccountEntry._ID + " = ?";
-        String[] selectionArgs = {Integer.toString(accountId)};
+    public void updateAccount(OpenHelper dbHelper, AccountPojo account, Long accountId) {
+        String selection = AccountEntry._ID + " = ? AND " + AccountEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(accountId), Integer.toString(ENABLE)};
 
         ContentValues values = new ContentValues();
         values.put(AccountEntry._ID, accountId);
@@ -163,8 +173,9 @@ public class AccountManager {
 
 
     public void deleteAccount(OpenHelper dbHelper, Long accountId) {
-        String selection = AccountEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(accountId)};
+        String selection = AccountEntry._ID + " = ? AND " + AccountEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(accountId), Integer.toString(ENABLE)};
 
         ContentValues values = new ContentValues();
         values.put(AccountEntry.COLUMN_DISABLE, DISABLE);
