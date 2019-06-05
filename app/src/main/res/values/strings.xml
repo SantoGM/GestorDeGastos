@@ -26,13 +26,12 @@
     <string name="action_sign_in_short">Sign in</string>
 
     <!--Error -->
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_email">Ingrese una dirección de email válida</string>
     <string name="error_invalid_password">This password is too short</string>
+    <string name="error_invalid_name">Ingrese el nombre (al menos 3 caracteres)</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_basic">Gestor de Gastos</string>
     <string name="title_activity_add_expense">Agregar Gasto</string>
     <string name="title_home">Home</string>
@@ -52,7 +51,7 @@
     <string name="menu_op_about">Acerca de GdG</string>
     <string name="txtDate">Fecha</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- -->
     <string name="hello_blank_fragment1">Evolución del gasto por categoria</string>
     <string name="hello_blank_fragment2">Hello blank fragment2</string>
     <string name="hello_blank_fragment3">Hello blank fragment3</string>
@@ -61,5 +60,19 @@
     <string name="report_expense_by_date">Gasto por Fecha</string>
     <string name="expense_x">Gasto x</string>
     <string name="title_activity_category_crud">Categorías</string>
+
+    <!--Messages -->
+    <string name="expense_saved_successfuly">Se guardó correctamente el gasto</string>
+    <string name="message_complete_mandatory_fields">Complete los campos obligatorios</string>
+    <string name="error_amount_required">Ingrese el monto del gasto</string>
+    <string name="error_amount_must_be_greater_than_zero">El monto ingresado debe ser mayor a cero</string>
+    <string name="error_unable_to_send_pin_by_mail">Se produjo un error al intentar enviar el mail con el PIN</string>
+    <string name="success_pin_sent_to_mail">Hemos enviado el PIN a su dirección de correo</string>
+    <string name="error_complete_pin">Complete el PIN</string>
+    <string name="error_wrong_pin">PIN incorrecto</string>
+    <string name="message_greet_user">Hola</string>
+    <string name="error_invalid_pin">Ingrese un PIN de 4 dígitos</string>
+    <string name="error_repeat_pin">Reingrese el pin para verificar</string>
+    <string name="error_pin_not_match">El PIN ingresado no coincide</string>
 
 </resources>

@@ -12,15 +12,39 @@ import java.util.Objects;
 public class DatePickerFragment extends DialogFragment {
 
     private DatePickerDialog.OnDateSetListener listener;
+    private Boolean nfd;
 
-    public static DatePickerFragment newInstance(DatePickerDialog.OnDateSetListener listener) {
+    /***
+     * Crea una nueva instancia de DatePickerFragment con su correspondiente DatePickerDialog para seleccionar una fecha
+     * que será asignada a un TextView
+     * @param listener
+     *      El Listener para mi DatePickerDialog que se relacionará con el TextView, ejemplo de como declararlo:
+     *      new DatePickerDialog.OnDateSetListener() {
+     *             @Override
+     *             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+     *                 final String selectedDate = DateHelper.toStringDDMMYYYY(day, month, year);
+     *                 txtDate.setText(selectedDate);
+     *             }
+     *         }
+     * @param noFutureDates
+     *      Indica si el diálogo debe permitir agregar fechas futuras o no
+     *      TRUE -> No se pueden elegir fechas postareiores a la actual
+     *      FALSE -> Se puede seleccionar cualquier fecha
+     * @return
+     */
+    public static DatePickerFragment newInstance(DatePickerDialog.OnDateSetListener listener, Boolean noFutureDates) {
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setListener(listener);
+        fragment.setNoFutureDates(noFutureDates);
         return fragment;
     }
 
     public void setListener(DatePickerDialog.OnDateSetListener listener) {
         this.listener = listener;
+    }
+
+    public void setNoFutureDates(Boolean noFutureDates){
+        nfd = noFutureDates;
     }
 
     @Override
@@ -33,7 +57,10 @@ public class DatePickerFragment extends DialogFragment {
         int day = c.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(Objects.requireNonNull(getActivity()), listener, year, month, day);
+        Dialog result = new DatePickerDialog(Objects.requireNonNull(getActivity()), listener, year, month, day);
+        if (nfd){
+            ((DatePickerDialog) result).getDatePicker().setMaxDate(System.currentTimeMillis());
+        }
+        return result;
     }
-
 }

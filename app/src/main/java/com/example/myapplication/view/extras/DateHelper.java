@@ -5,7 +5,8 @@ import java.util.Date;
 
 public class DateHelper {
 
-    private static final String F_SLASH = "/";
+    public static final String F_SLASH = "/";
+    public static final String ZERO = "0";
 
     public static Date obtainDateFromString(String date){
         String[] ddmmyyyy = date.split(F_SLASH);
@@ -25,5 +26,13 @@ public class DateHelper {
 
     public static String getTodayDate() {
         return toStringDDMMYYYY(Calendar.getInstance().getTime());
+    }
+
+    public static String toStringDDMMYYYY(int day, int month, int year) {
+        return twoDigits(day) + F_SLASH + twoDigits( (month+1) ) + F_SLASH + year;
+    }
+
+    private static String twoDigits(int n) {
+        return (n<=9) ? (ZERO + n) : String.valueOf(n);
     }
 }

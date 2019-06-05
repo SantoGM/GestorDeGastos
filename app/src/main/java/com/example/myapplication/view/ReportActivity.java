@@ -30,11 +30,11 @@ public class ReportActivity extends BaseActivity  {
         setContentView(R.layout.activity_report);
         createMenu();
 
-        ViewPager vp_pages= (ViewPager) findViewById(R.id.vp_pages);
+        ViewPager vp_pages= findViewById(R.id.vp_pages);
         PagerAdapter pagerAdapter=new FragmentAdapter(getSupportFragmentManager());
         vp_pages.setAdapter(pagerAdapter);
 
-        TabLayout tbl_pages= (TabLayout) findViewById(R.id.tab_menu);
+        TabLayout tbl_pages= findViewById(R.id.tab_menu);
         tbl_pages.setupWithViewPager(vp_pages);
 
 
@@ -63,7 +63,7 @@ public class ReportActivity extends BaseActivity  {
         */
 
     }
-
+/*
     private void initLineView(LineView lineView) {
         ArrayList<String> test = new ArrayList<>();
         for (int i = 0; i < randomint; i++) {
@@ -142,7 +142,7 @@ public class ReportActivity extends BaseActivity  {
     }
         return dataListF;
 
-    }
+    }*/
 
 
     class FragmentAdapter extends FragmentPagerAdapter {

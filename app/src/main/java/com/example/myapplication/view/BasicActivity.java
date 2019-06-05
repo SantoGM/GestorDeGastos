@@ -4,15 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
 import com.example.myapplication.R;
 import com.example.myapplication.businessLogic.ExpenseFacade;
-import com.example.myapplication.businessLogic.PersistentDataModel;
 import com.example.myapplication.view.extras.ExpensesListAdapter;
 import com.example.myapplication.view.pojo.PaymentPojo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;

@@ -54,11 +54,10 @@ public class AddExpenseActivity extends BaseActivity {
                     Long accountID = (Long) inputData.get(FIELD_PAYED_WITH);
                     String detail = (String) inputData.get(FIELD_DETAIL);
                     ExpenseFacade.getInstance().saveExpense(date, amount, categoryID, accountID, detail, getApplicationContext());
-
-                    toastMe("Se guardó el gasto");
+                    toastMe(getString(R.string.expense_saved_successfuly));
                     onBackPressed();
                 } else {
-                    Snackbar.make(v, "Complete los campos obligatorios", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(v, getString(R.string.message_complete_mandatory_fields), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
         });
@@ -129,15 +128,10 @@ public class AddExpenseActivity extends BaseActivity {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                // +1 because january is zero
-                final String selectedDate = twoDigits(day) + "/" + twoDigits(month+1) + "/" + year;
+                final String selectedDate = DateHelper.toStringDDMMYYYY(day, month, year);
                 txtDate.setText(selectedDate);
             }
-
-            private String twoDigits(int n) {
-                return (n<=9) ? ("0"+n) : String.valueOf(n);
-            }
-        });
+        }, Boolean.TRUE);
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
@@ -147,14 +141,14 @@ public class AddExpenseActivity extends BaseActivity {
         EditText nmbAmount = findViewById(R.id.nmbAmount);
         Editable input = nmbAmount.getText();
 
-        if (input == null || input.toString().trim().equals("")) {
-            result = buildError(nmbAmount, "Ingrese el monto gastado");
+        if (input == null || input.toString().isEmpty()) {
+            result = buildError(nmbAmount, getString(R.string.error_amount_required));
         } else {
 
             Double value = Double.parseDouble(input.toString());
 
             if (value <= 0) {
-                result = buildError(nmbAmount, "El monto ingresado debe ser mayor a cero");
+                result = buildError(nmbAmount, getString(R.string.error_amount_must_be_greater_than_zero));
             }
         }
         return result;

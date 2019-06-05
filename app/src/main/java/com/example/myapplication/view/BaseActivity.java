@@ -16,27 +16,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private NavigationView navigationView;
 
-    private void reportes(){
-        // TODO que hace este método?
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
+            // Category CRUD
             case R.id.menu_categories:
                 goToActivity(CategoryCRUDActivity.class);
                 return true;
+            // Reports View
             case R.id.menu_action_report:
-
                 goToActivity(ReportActivity.class);
-                //showHelp();
                 return true;
             case R.id.menu_action_out:
-                //showHelp();
                 return true;
             case R.id.menu_action_about:
-                //showHelp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
