@@ -16,6 +16,8 @@ public class AccountManager {
 
     private final int DISABLE = 1;
     private final int ENABLE  = 0;
+    private final int BANK_ACCOUNT = 0;
+    private final int CREDIT_CARD_ACCOUNT = 1;
 
 
     public AccountManager() {
@@ -31,19 +33,20 @@ public class AccountManager {
         String[] selectionArgs = {Integer.toString(ENABLE)};
 
         String[] columns = {AccountEntry._ID,
-                            AccountEntry.COLUMN_NAME,
-                            AccountEntry.COLUMN_DESCRIPTION,
-                            AccountEntry.COLUMN_BALANCE};
+                AccountEntry.COLUMN_NAME,
+                AccountEntry.COLUMN_CREDIT_CARD,
+                AccountEntry.COLUMN_DESCRIPTION,
+                AccountEntry.COLUMN_BALANCE};
 
         String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
         Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
-                                     columns,
-                                     selection,
-                                     selectionArgs,
-                                     null,
-                                     null,
-                                     accountOrderBy);
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                accountOrderBy);
 
         accounts = loadAccounts(accountCur);
         db.close();
@@ -51,26 +54,62 @@ public class AccountManager {
     }
 
 
-    private List<AccountPojo> loadAccounts(Cursor cursor) {
-        List<AccountPojo> accounts = new ArrayList<>();
+    public List<AccountPojo> getBankAccounts(OpenHelper dbHelper) {
+        List<AccountPojo> accounts;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        int accIdPos = cursor.getColumnIndex(AccountEntry._ID);
-        int accNamePos = cursor.getColumnIndex(AccountEntry.COLUMN_NAME);
-        int accDescriptionPos = cursor.getColumnIndex(AccountEntry.COLUMN_DESCRIPTION);
-        int accBalancePos = cursor.getColumnIndex(AccountEntry.COLUMN_BALANCE);
+        String selection = AccountEntry.COLUMN_DISABLE + " = ? AND " + AccountEntry.COLUMN_CREDIT_CARD + " = ?";
 
-        while (cursor.moveToNext()) {
-            Long id = cursor.getLong(accIdPos);
-            String name = cursor.getString(accNamePos);
-            String description = cursor.getString(accDescriptionPos);
-            Float balance = cursor.getFloat(accBalancePos);
+        String[] selectionArgs = {Integer.toString(ENABLE), Integer.toString(BANK_ACCOUNT)};
 
-            AccountPojo account = new AccountPojo(id, name, description, balance);
-            accounts.add(account);
-        }
+        String[] columns = {AccountEntry._ID,
+                AccountEntry.COLUMN_NAME,
+                AccountEntry.COLUMN_CREDIT_CARD,
+                AccountEntry.COLUMN_DESCRIPTION,
+                AccountEntry.COLUMN_BALANCE};
 
-        cursor.close();
+        String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
+        Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                accountOrderBy);
+
+        accounts = loadAccounts(accountCur);
+        db.close();
+        return accounts;
+    }
+
+
+    public List<AccountPojo> getCreditCardAccounts(OpenHelper dbHelper) {
+        List<AccountPojo> accounts;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = AccountEntry.COLUMN_DISABLE + " = ? AND " + AccountEntry.COLUMN_CREDIT_CARD + " = ?";
+
+        String[] selectionArgs = {Integer.toString(ENABLE), Integer.toString(CREDIT_CARD_ACCOUNT)};
+
+        String[] columns = {AccountEntry._ID,
+                AccountEntry.COLUMN_NAME,
+                AccountEntry.COLUMN_CREDIT_CARD,
+                AccountEntry.COLUMN_DESCRIPTION,
+                AccountEntry.COLUMN_BALANCE};
+
+        String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
+
+        Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                accountOrderBy);
+
+        accounts = loadAccounts(accountCur);
+        db.close();
         return accounts;
     }
 
@@ -85,6 +124,7 @@ public class AccountManager {
 
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
+                            AccountEntry.COLUMN_CREDIT_CARD,
                             AccountEntry.COLUMN_DESCRIPTION,
                             AccountEntry.COLUMN_BALANCE};
 
@@ -114,6 +154,7 @@ public class AccountManager {
 
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
+                            AccountEntry.COLUMN_CREDIT_CARD,
                             AccountEntry.COLUMN_DESCRIPTION,
                             AccountEntry.COLUMN_BALANCE};
 
@@ -140,6 +181,9 @@ public class AccountManager {
         if (account.getName() == null || account.getName().isEmpty() || account.getName().trim().equals(""))
             throw new IllegalArgumentException("The name of the account cannot be empty");
 
+        if (account.getCreditCard() != BANK_ACCOUNT && account.getCreditCard() != CREDIT_CARD_ACCOUNT)
+            throw new IllegalArgumentException("It has to be a Bank Account or a Credit Card Account");
+
         if (account.getBalance() == null)
             balance = 0f;
         else
@@ -147,6 +191,7 @@ public class AccountManager {
 
         ContentValues values = new ContentValues();
         values.put(AccountEntry.COLUMN_NAME, account.getName());
+        values.put(AccountEntry.COLUMN_CREDIT_CARD, account.getCreditCard());
         values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
         values.put(AccountEntry.COLUMN_BALANCE, balance);
         values.put(AccountEntry.COLUMN_DISABLE, ENABLE);
@@ -164,6 +209,7 @@ public class AccountManager {
         ContentValues values = new ContentValues();
         values.put(AccountEntry._ID, accountId);
         values.put(AccountEntry.COLUMN_NAME, account.getName());
+        values.put(AccountEntry.COLUMN_CREDIT_CARD, account.getCreditCard());
         values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
         values.put(AccountEntry.COLUMN_BALANCE, account.getBalance());
 
@@ -182,6 +228,32 @@ public class AccountManager {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(AccountEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+
+    private List<AccountPojo> loadAccounts(Cursor cursor) {
+        List<AccountPojo> accounts = new ArrayList<>();
+
+        int accIdPos = cursor.getColumnIndex(AccountEntry._ID);
+        int accNamePos = cursor.getColumnIndex(AccountEntry.COLUMN_NAME);
+        int accCreditCard = cursor.getColumnIndex(AccountEntry.COLUMN_CREDIT_CARD);
+        int accDescriptionPos = cursor.getColumnIndex(AccountEntry.COLUMN_DESCRIPTION);
+        int accBalancePos = cursor.getColumnIndex(AccountEntry.COLUMN_BALANCE);
+
+        while (cursor.moveToNext()) {
+            Long id = cursor.getLong(accIdPos);
+            String name = cursor.getString(accNamePos);
+            Integer creditCard = cursor.getInt(accCreditCard);
+            String description = cursor.getString(accDescriptionPos);
+            Float balance = cursor.getFloat(accBalancePos);
+
+            AccountPojo account = new AccountPojo(id, name, creditCard, description, balance);
+            accounts.add(account);
+        }
+
+        cursor.close();
+
+        return accounts;
     }
 
 }
