@@ -27,6 +27,8 @@ public class MovementManager {
 
     private final int DISABLE = 1;
     private final int ENABLE  = 0;
+    private final int BANK_ACCOUNT = 0;
+    private final int CREDIT_CARD_ACCOUNT = 1;
 
     private AccountManager am;
     private CategoryManager cm;
@@ -196,6 +198,10 @@ public class MovementManager {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {String.valueOf(categoryId), Integer.toString(ENABLE)};
+
         String table = PaymentEntry.TABLE_NAME;
 
         String[] columns = {PaymentEntry._ID,
@@ -205,10 +211,6 @@ public class MovementManager {
                 PaymentEntry.COLUMN_ID_ACCOUNT,
                 PaymentEntry.COLUMN_DESCRIPTION,
                 PaymentEntry.COLUMN_IS_CREDIT_CARD};
-
-        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
-
-        String[] selectionArgs = {String.valueOf(categoryId), Integer.toString(ENABLE)};
 
         String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
 
@@ -267,6 +269,9 @@ public class MovementManager {
         AccountPojo account;
         CategoryPojo category;
 
+        if ( (payment.getAccount().getCreditCard() == BANK_ACCOUNT) && (payment.getAmount() > payment.getAccount().getBalance()) )
+            throw new IllegalArgumentException("The account " + payment.getAccount().getName() + " has not enough funds");
+
         if (payment.getDate() == null)
             throw new IllegalArgumentException("The date of the payment cannot be empty");
 
@@ -306,11 +311,16 @@ public class MovementManager {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.insert(PaymentEntry.TABLE_NAME, null, values);
+
+        account.setBalance(account.getBalance() - payment.getAmount());
+        am.updateAccount(dbHelper, account, account.getId());
+
         db.close();
     }
 
 
     public void updatePayment(OpenHelper dbHelper, PaymenyPojo payment, Long paymentId) {
+
         String selection = PaymentEntry._ID + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
 
         String[] selectionArgs = {Long.toString(paymentId), Integer.toString(ENABLE)};
@@ -333,14 +343,24 @@ public class MovementManager {
 
 
     public void deletePayment(OpenHelper dbHelper, Long paymentId) {
-        String selection = CategoryEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(paymentId)};
+
+        PaymenyPojo payment;
+        AccountPojo account;
+
+        payment = findPaymentById(dbHelper, paymentId);
+        account = payment.getAccount();
+
+        String selection = CategoryEntry._ID + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+        String[] selectionArgs = {Long.toString(paymentId), Integer.toString(ENABLE)};
 
         ContentValues values = new ContentValues();
         values.put(PaymentEntry.COLUMN_DISABLE, DISABLE);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(PaymentEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        account.setBalance(account.getBalance() + payment.getAmount());
+        am.updateAccount(dbHelper, account, account.getId());
     }
 
 
@@ -446,7 +466,8 @@ public class MovementManager {
 
     public void insertTransference(OpenHelper dbHelper, TransferencePojo transference) {
 
-        AccountPojo account;
+        AccountPojo accountOrigin;
+        AccountPojo accountDestiny;
 
         if (transference.getDate() == null)
             throw new IllegalArgumentException("The date of the transference cannot be empty");
@@ -457,16 +478,25 @@ public class MovementManager {
         if (transference.getAccountOrigin() == null)
             throw new IllegalArgumentException("The account origin of the transference cannot be empty");
 
+        if (transference.getAccountOrigin().getCreditCard() == CREDIT_CARD_ACCOUNT)
+            throw new IllegalArgumentException("Cannot be transfered from a credit card account");
+
         if (transference.getAccountDestiny() == null)
             throw new IllegalArgumentException("The account destiny of the transference cannot be empty");
 
+        if (transference.getAccountDestiny().getCreditCard() == CREDIT_CARD_ACCOUNT)
+            throw new IllegalArgumentException("Cannot be transfered to a credit card account");
 
-        account = am.findById(dbHelper, transference.getAccountOrigin().getId());
-        if (account == null)
+        if (transference.getAmount() > transference.getAccountOrigin().getBalance())
+            throw new IllegalArgumentException("The account " + transference.getAccountOrigin().getName() + " has not enough funds");
+
+
+        accountOrigin = am.findById(dbHelper, transference.getAccountOrigin().getId());
+        if (accountOrigin == null)
             throw new IllegalArgumentException("The account origin does not exist");
 
-        account = am.findById(dbHelper, transference.getAccountDestiny().getId());
-        if (account == null)
+        accountDestiny = am.findById(dbHelper, transference.getAccountDestiny().getId());
+        if (accountDestiny == null)
             throw new IllegalArgumentException("The account destiny does not exist");
 
 
@@ -482,6 +512,12 @@ public class MovementManager {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.insert(TransferenceEntry.TABLE_NAME, null, values);
+
+        accountOrigin.setBalance(accountOrigin.getBalance() - transference.getAmount());
+        accountDestiny.setBalance(accountDestiny.getBalance() + transference.getAmount());
+
+        am.updateAccount(dbHelper, accountOrigin, accountOrigin.getId());
+        am.updateAccount(dbHelper, accountDestiny, accountDestiny.getId());
     }
 
 
@@ -507,14 +543,29 @@ public class MovementManager {
 
 
     public void deleteTransference(OpenHelper dbHelper, Long transferenceId) {
-        String selection = CategoryEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(transferenceId)};
+
+        TransferencePojo transference;
+        AccountPojo accountOrigin;
+        AccountPojo accountDestiny;
+
+        transference = findTransferenceById(dbHelper, transferenceId);
+        accountOrigin = transference.getAccountOrigin();
+        accountDestiny = transference.getAccountDestiny();
+
+        String selection = CategoryEntry._ID + " = ? AND " + TransferenceEntry.COLUMN_DISABLE + " = ?";
+        String[] selectionArgs = {Long.toString(transferenceId), Integer.toString(ENABLE)};
 
         ContentValues values = new ContentValues();
         values.put(TransferenceEntry.COLUMN_DISABLE, DISABLE);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(TransferenceEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        accountOrigin.setBalance(accountOrigin.getBalance() + transference.getAmount());
+        accountDestiny.setBalance(accountDestiny.getBalance() - transference.getAmount());
+
+        am.updateAccount(dbHelper, accountOrigin, accountOrigin.getId());
+        am.updateAccount(dbHelper, accountDestiny, accountDestiny.getId());
     }
 
 
