@@ -29,6 +29,7 @@ public class MovementManager {
     private final int ENABLE  = 0;
     private final int BANK_ACCOUNT = 0;
     private final int CREDIT_CARD_ACCOUNT = 1;
+    private final int CREDIT_CARD_ACCOUNT_ID = 1;
 
     private AccountManager am;
     private CategoryManager cm;
@@ -44,9 +45,11 @@ public class MovementManager {
         PaymenyPojo payment;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = PaymentEntry._ID + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+        String selection = PaymentEntry._ID + " = ? " +
+                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
 
-        String[] selectionArgs = {Long.toString(paymentId), Integer.toString(ENABLE)};
+        String[] selectionArgs = {Long.toString(paymentId),
+                                  Integer.toString(ENABLE)};
 
         String[] columns = {PaymentEntry._ID,
                             PaymentEntry.COLUMN_DATE,
@@ -72,7 +75,6 @@ public class MovementManager {
     }
 
 
-
     public List<PaymenyPojo> getAllPayments(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -82,9 +84,13 @@ public class MovementManager {
 
         String selection = PaymentEntry.COLUMN_DATE + " >= ? " +
                  " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
+                 " AND " + PaymentEntry.COLUMN_ID_CATEGORY + " != ? " +
                  " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
 
-        String[] selectionArgs = {from, to, Integer.toString(ENABLE)};
+        String[] selectionArgs = {from,
+                                  to,
+                                  Integer.toString(CREDIT_CARD_ACCOUNT_ID),
+                                  Integer.toString(ENABLE)};
 
         String[] columns = {PaymentEntry._ID,
                             PaymentEntry.COLUMN_DATE,
@@ -103,6 +109,47 @@ public class MovementManager {
                                      null,
                                      null,
                                       paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    public List<PaymenyPojo> getAllExpenses(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
+        List<PaymenyPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String selection = PaymentEntry.COLUMN_DATE + " >= ? " +
+                 " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
+                 " AND " + PaymentEntry.COLUMN_IS_CREDIT_CARD + " = ? " +
+                 " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {from,
+                                  to,
+                                  Integer.toString(BANK_ACCOUNT),
+                                  Integer.toString(ENABLE)};
+
+        String[] columns = {PaymentEntry._ID,
+                            PaymentEntry.COLUMN_DATE,
+                            PaymentEntry.COLUMN_AMOUNT,
+                            PaymentEntry.COLUMN_ID_CATEGORY,
+                            PaymentEntry.COLUMN_ID_ACCOUNT,
+                            PaymentEntry.COLUMN_DESCRIPTION,
+                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+        Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                paymentOrderBy);
 
         payments = loadPayments(dbHelper, paymentCur);
 
@@ -269,7 +316,7 @@ public class MovementManager {
         AccountPojo account;
         CategoryPojo category;
 
-        if ( (payment.getAccount().getCreditCard() == BANK_ACCOUNT) && (payment.getAmount() > payment.getAccount().getBalance()) )
+        if ( (payment.getAccount().getType() == BANK_ACCOUNT) && (payment.getAmount() > payment.getAccount().getBalance()) )
             throw new IllegalArgumentException("The account " + payment.getAccount().getName() + " has not enough funds");
 
         if (payment.getDate() == null)
@@ -478,13 +525,13 @@ public class MovementManager {
         if (transference.getAccountOrigin() == null)
             throw new IllegalArgumentException("The account origin of the transference cannot be empty");
 
-        if (transference.getAccountOrigin().getCreditCard() == CREDIT_CARD_ACCOUNT)
+        if (transference.getAccountOrigin().getType() == CREDIT_CARD_ACCOUNT)
             throw new IllegalArgumentException("Cannot be transfered from a credit card account");
 
         if (transference.getAccountDestiny() == null)
             throw new IllegalArgumentException("The account destiny of the transference cannot be empty");
 
-        if (transference.getAccountDestiny().getCreditCard() == CREDIT_CARD_ACCOUNT)
+        if (transference.getAccountDestiny().getType() == CREDIT_CARD_ACCOUNT)
             throw new IllegalArgumentException("Cannot be transfered to a credit card account");
 
         if (transference.getAmount() > transference.getAccountOrigin().getBalance())
