@@ -31,4 +31,12 @@ public class DataWorker {
 
         long newRowId = mDb.insert(DataBaseContract.UserDataEntry.TABLE_NAME, null, values);
     }
+
+    public void insertCategory() {
+        ContentValues values = new ContentValues();
+        values.put(DataBaseContract.CategoryEntry.COLUMN_NAME, "Servicios");
+        values.put(DataBaseContract.CategoryEntry.COLUMN_DESCRIPTION, "Luz, gas, cable, etc.");
+
+        long newRowId = mDb.insert(DataBaseContract.CategoryEntry.TABLE_NAME, null, values);
+    }
 }

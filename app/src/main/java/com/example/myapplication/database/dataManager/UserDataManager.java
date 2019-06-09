@@ -55,7 +55,7 @@ public class UserDataManager {
         int usrMailPos = cursor.getColumnIndex(DataBaseContract.UserDataEntry.COLUMN_EMAIL);
         int usrPinPos = cursor.getColumnIndex(DataBaseContract.UserDataEntry.COLUMN_PIN);
 
-        if(cursor != null && cursor.getCount() > 0) {
+        if(cursor.getCount() > 0) {
             cursor.moveToNext();
             String name = cursor.getString(usrNamePos);
             String email = cursor.getString(usrMailPos);

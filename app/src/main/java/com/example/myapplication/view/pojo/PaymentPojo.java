@@ -1,27 +1,29 @@
 package com.example.myapplication.view.pojo;
 
+import com.example.myapplication.view.extras.DateHelper;
+
 import java.util.Date;
 
-public class PaymenyPojo extends AbstractPojo implements MovementPojo {
+public class PaymentPojo extends AbstractPojo implements MovementPojo {
 
     private Date date;
     private Float amount;
     private CategoryPojo category;
     private AccountPojo account;
-    private String Detail;
+    private String detail;
     private Boolean creditCard;
 
 
-    public PaymenyPojo() {
+    public PaymentPojo() {
     }
 
-    public PaymenyPojo(Long id, Date date, Float amount, CategoryPojo category, AccountPojo account, String detail, Boolean creditCard) {
+    public PaymentPojo(Long id, Date date, Float amount, CategoryPojo category, AccountPojo account, String detail, Boolean creditCard) {
         this.setId(id);
         this.date = date;
         this.amount = amount;
         this.category = category;
         this.account = account;
-        Detail = detail;
+        this.detail = detail;
         this.creditCard = creditCard;
     }
 
@@ -50,10 +52,10 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
         this.account = account;
     }
     public String getDetail() {
-        return Detail;
+        return detail;
     }
     public void setDetail(String detail) {
-        Detail = detail;
+        this.detail = detail;
     }
     public Boolean getCreditCard() {
         return creditCard;
@@ -62,4 +64,20 @@ public class PaymenyPojo extends AbstractPojo implements MovementPojo {
         this.creditCard = creditCard;
     }
 
+
+    @Override
+    public String[] showDetails() {
+        return new String[]{String.valueOf(this.getId()),
+                            String.valueOf(this.date),
+                            String.valueOf(this.amount),
+                            this.category.getName(),
+                            this.account.getName(),
+                            this.detail,
+                            String.valueOf(this.creditCard)};
+    }
+
+    @Override
+    public String nameToShow() {
+        return DateHelper.toStringDDMMYYYY(getDate()) + "- $ " + getAmount() + "(" + getAccount().getName() + ")";
+    }
 }

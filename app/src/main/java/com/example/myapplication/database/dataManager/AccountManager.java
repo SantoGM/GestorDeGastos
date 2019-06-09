@@ -1,10 +1,11 @@
 package com.example.myapplication.database.dataManager;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.myapplication.database.OpenHelper;
-import com.example.myapplication.database.dao.AccountDAO;
+import com.example.myapplication.view.pojo.AccountPojo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,33 +14,19 @@ import static com.example.myapplication.database.DataBaseContract.AccountEntry;
 
 public class AccountManager {
 
-    private static AccountManager accountManager = null;
 
-    private List<AccountDAO> accounts;
-
-    private AccountManager() {
-    }
-
-    public static AccountManager getInstance() {
-        if (accountManager == null) {
-            accountManager = new AccountManager();
-            accountManager.accounts = new ArrayList<>();
-        }
-        return accountManager;
+    public AccountManager() {
     }
 
 
-    public List<AccountDAO> getAccounts() {
-        return this.accounts;
-    }
-
-
-    public static void loadFromDB(OpenHelper dbHelper) {
+    public List<AccountPojo> getAccounts(OpenHelper dbHelper) {
+        List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
                             AccountEntry.COLUMN_DESCRIPTION,
                             AccountEntry.COLUMN_BALANCE};
+
         String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
         Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
@@ -50,18 +37,19 @@ public class AccountManager {
                                      null,
                                      accountOrderBy);
 
-        loadAccounts(accountCur);
+        accounts = loadAccounts(accountCur);
+        db.close();
+        return accounts;
     }
 
 
-    private static void loadAccounts(Cursor cursor) {
+    private List<AccountPojo> loadAccounts(Cursor cursor) {
+        List<AccountPojo> accounts = new ArrayList<>();
+
         int accIdPos = cursor.getColumnIndex(AccountEntry._ID);
         int accNamePos = cursor.getColumnIndex(AccountEntry.COLUMN_NAME);
         int accDescriptionPos = cursor.getColumnIndex(AccountEntry.COLUMN_DESCRIPTION);
         int accBalancePos = cursor.getColumnIndex(AccountEntry.COLUMN_BALANCE);
-
-        AccountManager am = getInstance();
-        am.accounts.clear();
 
         while (cursor.moveToNext()) {
             Long id = cursor.getLong(accIdPos);
@@ -69,29 +57,106 @@ public class AccountManager {
             String description = cursor.getString(accDescriptionPos);
             Float balance = cursor.getFloat(accBalancePos);
 
-            AccountDAO accountDAO = new AccountDAO(id, name, description, balance);
-            am.accounts.add(accountDAO);
+            AccountPojo account = new AccountPojo(id, name, description, balance);
+            accounts.add(account);
         }
 
         cursor.close();
+
+        return accounts;
     }
 
 
-    public AccountDAO findById(Long id) {
-        for (AccountDAO account : accounts) {
-            if (id.equals(account.getId()))  //TODO chk if equals works or we should change it to ==
-                return account;
-        }
-        return null;
+    public AccountPojo findById(OpenHelper dbHelper, Long id) {
+        AccountPojo account;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = AccountEntry._ID + " = ?";
+        String[] selectionArgs = {Long.toString(id)};
+
+        String[] columns = {AccountEntry._ID,
+                            AccountEntry.COLUMN_NAME,
+                            AccountEntry.COLUMN_DESCRIPTION,
+                            AccountEntry.COLUMN_BALANCE};
+
+        String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
+
+        Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     accountOrderBy);
+
+        account = loadAccounts(accountCur).get(0);
+        db.close();
+        return account;
     }
 
 
-    public AccountDAO findByName(String name) {
-        for (AccountDAO account : accounts) {
-            if (name.equals(account.getName()))
-                return account;
-        }
-        return null;
+    public AccountPojo findByName(OpenHelper dbHelper, String name) {
+        AccountPojo account;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = AccountEntry.COLUMN_NAME + " = ?";
+        String[] selectionArgs = {name};
+
+        String[] columns = {AccountEntry._ID,
+                            AccountEntry.COLUMN_NAME,
+                            AccountEntry.COLUMN_DESCRIPTION,
+                            AccountEntry.COLUMN_BALANCE};
+
+        String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
+
+        Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     accountOrderBy);
+
+        account = loadAccounts(accountCur).get(0);
+
+        return account;
+    }
+
+
+    public void insertAccount(OpenHelper dbHelper, AccountPojo account) throws IllegalArgumentException {
+
+        Float balance;
+
+        if (account.getName() == null || account.getName().isEmpty() || account.getName().trim() == "")
+            throw new IllegalArgumentException("The name of the account cannot be empty");
+
+        if (account.getBalance() == null)
+            balance = 0f;
+        else
+            balance = account.getBalance();
+
+        ContentValues values = new ContentValues();
+        values.put(AccountEntry.COLUMN_NAME, account.getName());
+        values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
+        values.put(AccountEntry.COLUMN_BALANCE, balance);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.insert(AccountEntry.TABLE_NAME, null, values);
+    }
+
+
+    public void updateAccount(OpenHelper dbHelper, AccountPojo account, int accountId) {
+        String selection = AccountEntry._ID + " = ?";
+        String[] selectionArgs = {Integer.toString(accountId)};
+
+        ContentValues values = new ContentValues();
+        values.put(AccountEntry._ID, accountId);
+        values.put(AccountEntry.COLUMN_NAME, account.getName());
+        values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
+        values.put(AccountEntry.COLUMN_BALANCE, account.getBalance());
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(AccountEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
 }

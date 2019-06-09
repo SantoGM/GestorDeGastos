@@ -28,4 +28,8 @@ public class CategoryPojo extends AbstractPojo{
         this.description = description;
     }
 
+    @Override
+    public String nameToShow() {
+        return getName();
+    }
 }

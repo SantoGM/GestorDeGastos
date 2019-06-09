@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip" >
+
+    <TextView
+        android:id="@+id/expenseListItemDate"
+        android:layout_width="100dp"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="6dip"
+        android:gravity="center"
+        android:text="31/12"
+        android:textSize="35sp"
+        android:background="#00A090"
+        android:textColor="#E0E0E0"
+        />
+
+    <TextView
+        android:id="@+id/expenseListItemDetail"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/expenseListItemDate"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:text="Description"
+        android:textSize="12sp" />
+
+    <android.support.design.circularreveal.CircularRevealRelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_toRightOf="@id/expenseListItemDate"
+        android:layout_above="@id/expenseListItemDetail">
+
+        <TextView
+            android:id="@+id/expenseListItemCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="105dp"
+            android:layout_toStartOf="@+id/expenseListItemAmount"
+            android:gravity="center_vertical"
+            android:text="Category"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/expenseListItemAmount"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:text="$0,00"
+            android:textSize="16sp"
+            />
+    </android.support.design.circularreveal.CircularRevealRelativeLayout>
+</RelativeLayout>
+

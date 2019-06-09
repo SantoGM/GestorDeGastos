@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.AddExpenseActivity">
+
+
+    <TextView
+        android:id="@+id/lblCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/lblCategory"
+        app:layout_constraintEnd_toEndOf="@+id/lblDescription"
+        app:layout_constraintTop_toBottomOf="@+id/lblDate" />
+
+    <TextView
+        android:id="@+id/lblDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/lblDescription"
+        app:layout_constraintEnd_toEndOf="@+id/lblAmount"
+        app:layout_constraintTop_toBottomOf="@+id/lblCategory" />
+
+    <TextView
+        android:id="@+id/lblAmount"
+        android:layout_width="43dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/lblAmount"
+        app:layout_constraintEnd_toEndOf="@+id/lblPayedWith"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription" />
+
+    <TextView
+        android:id="@+id/lblPayedWith"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="44dp"
+        android:text="@string/lblPayedWith"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblAmount" />
+
+    <Spinner
+        android:id="@+id/spnCateogry"
+        android:layout_width="252dp"
+        android:layout_height="25dp"
+        android:layout_marginEnd="8dp"
+        android:entries="@android:array/organizationTypes"
+        app:layout_constraintBottom_toBottomOf="@+id/lblCategory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/lblCategory" />
+
+    <Spinner
+        android:id="@+id/spnPayedWith"
+        android:layout_width="252dp"
+        android:layout_height="25dp"
+        android:entries="@android:array/imProtocols"
+        app:layout_constraintBottom_toBottomOf="@+id/lblPayedWith"
+        app:layout_constraintStart_toStartOf="@+id/nmbAmount"
+        app:layout_constraintTop_toTopOf="@+id/lblPayedWith" />
+
+    <EditText
+        android:id="@+id/txtDescripttion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/hintDescriptionExpense"
+        app:layout_constraintBottom_toBottomOf="@+id/lblDescription"
+        app:layout_constraintStart_toStartOf="@+id/spnCateogry"
+        app:layout_constraintTop_toTopOf="@+id/lblDescription" />
+
+    <EditText
+        android:id="@+id/nmbAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/lblAmount"
+        app:layout_constraintStart_toEndOf="@+id/lblAmount"
+        app:layout_constraintStart_toStartOf="@+id/txtDescripttion"
+        app:layout_constraintTop_toTopOf="@+id/lblAmount"
+        app:layout_constraintVertical_bias="0.482"
+        android:hint="0.00"
+        android:importantForAutofill="no" />
+
+    <Button
+        android:id="@+id/bntAddExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/lblAddExpense"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblPayedWith"
+        app:layout_constraintVertical_bias="0.215" />
+
+    <TextView
+        android:id="@+id/lblDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="@string/txtDate"
+        app:layout_constraintEnd_toEndOf="@+id/lblCategory"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="date"
+        android:focusable="false"
+        android:clickable="true"
+        android:maxLines="1"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/lblDate"
+        app:layout_constraintStart_toStartOf="@+id/spnCateogry"
+        app:layout_constraintTop_toTopOf="@+id/lblDate"
+        android:importantForAutofill="no" />
+
+</android.support.constraint.ConstraintLayout>
