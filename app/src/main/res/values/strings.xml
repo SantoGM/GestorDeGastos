@@ -13,6 +13,7 @@
     <string name="btnSignIn">SingIn</string>
     <string name="btnRegistrarse">Registrarse</string>
     <string name="btnIngresar">Ingresar</string>
+    <string name="btnAgregar">Agregar</string>
 
     <!--Titles -->
     <string name="app_name">Gestor de Gastos</string>
@@ -25,7 +26,7 @@
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
 
-    <!--Error -->
+   Error -->
     <string name="error_invalid_email">Ingrese una dirección de email válida</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_invalid_name">Ingrese el nombre (al menos 3 caracteres)</string>
@@ -33,6 +34,7 @@
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_basic">Gestor de Gastos</string>
+    <string name="title_activity_add_category">Agregar categoría</string>
     <string name="title_activity_add_expense">Agregar Gasto</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -52,7 +54,7 @@
     <string name="txtDate">Fecha</string>
 
     <!-- -->
-    <string name="hello_blank_fragment1">Evolución del gasto por categoria</string>
+    <string name="hello_blank_fragment1">Evolución del gasto por categoría</string>
     <string name="hello_blank_fragment2">Hello blank fragment2</string>
     <string name="hello_blank_fragment3">Hello blank fragment3</string>
     <string name="report_evolution_expenses">Evolucion de Gasto</string>
@@ -63,7 +65,9 @@
 
     <!--Messages -->
     <string name="expense_saved_successfuly">Se guardó correctamente el gasto</string>
+    <string name="category_saved_successfuly">Se guardó correctamente la categoría</string>
     <string name="message_complete_mandatory_fields">Complete los campos obligatorios</string>
+    <string name="error_category_name_required">Ingrese el nombre de la categoría</string>
     <string name="error_amount_required">Ingrese el monto del gasto</string>
     <string name="error_amount_must_be_greater_than_zero">El monto ingresado debe ser mayor a cero</string>
     <string name="error_unable_to_send_pin_by_mail">Se produjo un error al intentar enviar el mail con el PIN</string>

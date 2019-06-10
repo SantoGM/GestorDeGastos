@@ -3,6 +3,7 @@ package com.example.myapplication.view.pojo;
 public class AccountPojo extends AbstractPojo{
 
     private String name;
+    private Integer type;
     private String description;
     private Float balance;
 
@@ -10,9 +11,10 @@ public class AccountPojo extends AbstractPojo{
     public AccountPojo() {
     }
 
-    public AccountPojo(Long id, String name, String description, Float balance) {
+    public AccountPojo(Long id, String name, Integer type, String description, Float balance) {
         setId(id);
         this.name = name;
+        this.type = type;
         this.description = description;
         this.balance = balance;
     }
@@ -22,6 +24,12 @@ public class AccountPojo extends AbstractPojo{
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public Integer getType() {
+        return type;
+    }
+    public void setType(Integer type) {
+        this.type = type;
     }
     public String getDescription() {
         return description;

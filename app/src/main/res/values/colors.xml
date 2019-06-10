@@ -2,9 +2,10 @@
 <resources>
     <color name="colorPrimary">#FF5722</color>
     <color name="colorPrimaryDark">#61210E</color>
-    <color name="colorAccent">#FFC4B0</color>
-    <color name="colorBack">#FFF2EF</color>
+    <color name="colorAccent">#FFB04F</color>
+    <color name="colorBack">#FCE0BF</color>
     <color name="colorEditableText">#B3B3B3</color>
+    <color name="VERDE">#4CAF50</color>
 
 
     <color name="primaryColor">#ff9100</color>

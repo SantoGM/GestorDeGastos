@@ -25,6 +25,12 @@ import java.util.List;
 
 public class MovementManager {
 
+    private final int DISABLE = 1;
+    private final int ENABLE  = 0;
+    private final int BANK_ACCOUNT = 0;
+    private final int CREDIT_CARD_ACCOUNT = 1;
+    private final int CREDIT_CARD_ACCOUNT_ID = 1;
+
     private AccountManager am;
     private CategoryManager cm;
 
@@ -35,20 +41,24 @@ public class MovementManager {
     }
 
 
-    public PaymentPojo findPaymentById(OpenHelper dbHelper, Long id) {
+    public PaymentPojo findPaymentById(OpenHelper dbHelper, Long paymentId) {
         PaymentPojo payment;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = PaymentEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(id)};
+        String selection = PaymentEntry._ID + " = ? " +
+                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(paymentId),
+                                  Integer.toString(ENABLE)};
 
         String[] columns = {PaymentEntry._ID,
-                PaymentEntry.COLUMN_DATE,
-                PaymentEntry.COLUMN_AMOUNT,
-                PaymentEntry.COLUMN_ID_CATEGORY,
-                PaymentEntry.COLUMN_ID_ACCOUNT,
-                PaymentEntry.COLUMN_DESCRIPTION,
-                PaymentEntry.COLUMN_IS_CREDIT_CARD};
+                            PaymentEntry.COLUMN_DATE,
+                            PaymentEntry.COLUMN_AMOUNT,
+                            PaymentEntry.COLUMN_ID_CATEGORY,
+                            PaymentEntry.COLUMN_ID_ACCOUNT,
+                            PaymentEntry.COLUMN_DESCRIPTION,
+                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
         String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
 
         Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
@@ -65,7 +75,6 @@ public class MovementManager {
     }
 
 
-
     public List<PaymentPojo> getAllPayments(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
         List<PaymentPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -73,8 +82,15 @@ public class MovementManager {
         String from = dateToString(dateFrom);
         String to   = dateToString(dateTo);
 
-        String selection = PaymentEntry.COLUMN_DATE + " >= ? and " + PaymentEntry.COLUMN_DATE + " <= ?";
-        String[] selectionArgs = {from, to};
+        String selection = PaymentEntry.COLUMN_DATE + " >= ? " +
+                 " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
+                 " AND " + PaymentEntry.COLUMN_ID_CATEGORY + " != ? " +
+                 " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {from,
+                                  to,
+                                  Integer.toString(CREDIT_CARD_ACCOUNT_ID),
+                                  Integer.toString(ENABLE)};
 
         String[] columns = {PaymentEntry._ID,
                             PaymentEntry.COLUMN_DATE,
@@ -83,6 +99,7 @@ public class MovementManager {
                             PaymentEntry.COLUMN_ID_ACCOUNT,
                             PaymentEntry.COLUMN_DESCRIPTION,
                             PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
         String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
 
         Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
@@ -92,6 +109,165 @@ public class MovementManager {
                                      null,
                                      null,
                                       paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    public List<PaymentPojo> getAllExpenses(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
+        List<PaymentPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String selection = PaymentEntry.COLUMN_DATE + " >= ? " +
+                 " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
+                 " AND " + PaymentEntry.COLUMN_IS_CREDIT_CARD + " = ? " +
+                 " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {from,
+                                  to,
+                                  Integer.toString(BANK_ACCOUNT),
+                                  Integer.toString(ENABLE)};
+
+        String[] columns = {PaymentEntry._ID,
+                            PaymentEntry.COLUMN_DATE,
+                            PaymentEntry.COLUMN_AMOUNT,
+                            PaymentEntry.COLUMN_ID_CATEGORY,
+                            PaymentEntry.COLUMN_ID_ACCOUNT,
+                            PaymentEntry.COLUMN_DESCRIPTION,
+                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+        Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                paymentOrderBy);
+
+         payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    public List<PaymentPojo> getPaymentByCategoryName(OpenHelper dbHelper, String categoryName, Date dateFrom, Date dateTo) {
+        List<PaymentPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String tablesWithJoin = PaymentEntry.TABLE_NAME
+                + " JOIN " + CategoryEntry.TABLE_NAME
+                + " ON " + PaymentEntry.getQName(PaymentEntry.COLUMN_ID_CATEGORY)
+                + " = " + CategoryEntry.getQName(CategoryEntry._ID);
+
+        String[] columns = {PaymentEntry.getQName(PaymentEntry._ID),
+                PaymentEntry.getQName(PaymentEntry.COLUMN_DATE),
+                PaymentEntry.getQName(PaymentEntry.COLUMN_AMOUNT),
+                PaymentEntry.getQName(PaymentEntry.COLUMN_ID_CATEGORY),
+                PaymentEntry.getQName(PaymentEntry.COLUMN_ID_ACCOUNT),
+                PaymentEntry.getQName(PaymentEntry.COLUMN_DESCRIPTION),
+                PaymentEntry.getQName(PaymentEntry.COLUMN_IS_CREDIT_CARD)};
+
+        String selection = CategoryEntry.getQName(CategoryEntry.COLUMN_NAME) + " = ? "
+                + " AND " + PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " >= ? "
+                + " AND " + PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " <= ? "
+                + " AND " + PaymentEntry.getQName(PaymentEntry.COLUMN_DISABLE) + " = ?";
+
+        String[] selectionArgs = {categoryName, from, to, Integer.toString(ENABLE), Integer.toString(ENABLE)};
+
+        String paymentOrderBy = PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " ASC";
+
+
+        Cursor paymentCur = db.query(tablesWithJoin,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    public List<PaymentPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId, Date dateFrom, Date dateTo) {
+        List<PaymentPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String table = PaymentEntry.TABLE_NAME;
+
+        String[] columns = {PaymentEntry._ID,
+                PaymentEntry.COLUMN_DATE,
+                PaymentEntry.COLUMN_AMOUNT,
+                PaymentEntry.COLUMN_ID_CATEGORY,
+                PaymentEntry.COLUMN_ID_ACCOUNT,
+                PaymentEntry.COLUMN_DESCRIPTION,
+                PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ? "
+                + " AND " + PaymentEntry.COLUMN_DATE + " >= ? "
+                + " AND " + PaymentEntry.COLUMN_DATE + " <= ? "
+                + " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {String.valueOf(categoryId), from, to, Integer.toString(ENABLE)};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+        Cursor paymentCur = db.query(table,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    public List<PaymentPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId) {
+        List<PaymentPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {String.valueOf(categoryId), Integer.toString(ENABLE)};
+
+        String table = PaymentEntry.TABLE_NAME;
+
+        String[] columns = {PaymentEntry._ID,
+                PaymentEntry.COLUMN_DATE,
+                PaymentEntry.COLUMN_AMOUNT,
+                PaymentEntry.COLUMN_ID_CATEGORY,
+                PaymentEntry.COLUMN_ID_ACCOUNT,
+                PaymentEntry.COLUMN_DESCRIPTION,
+                PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+        Cursor paymentCur = db.query(table,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                paymentOrderBy);
 
         payments = loadPayments(dbHelper, paymentCur);
 
@@ -135,46 +311,113 @@ public class MovementManager {
     }
 
 
-    private Date stringToDate(String dateString) {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date;
-        try {
-            date = format.parse(dateString);
-        }
-        catch (ParseException ex) {
-            date = null;
-        }
-        return date;
+    public void insertPayment(OpenHelper dbHelper, PaymentPojo payment) {
+
+        AccountPojo account;
+        CategoryPojo category;
+
+        if ( (payment.getAccount().getType() == BANK_ACCOUNT) && (payment.getAmount() > payment.getAccount().getBalance()) )
+            throw new IllegalArgumentException("The account " + payment.getAccount().getName() + " has not enough funds");
+
+        if (payment.getDate() == null)
+            throw new IllegalArgumentException("The date of the payment cannot be empty");
+
+        if (payment.getAmount() == null | payment.getAmount() == 0)
+            throw new IllegalArgumentException("The amount of the payment cannot be empty");
+
+        if (payment.getAccount() == null)
+            throw new IllegalArgumentException("The acount of the payment cannot be empty");
+
+        if (payment.getCategory() == null)
+            throw new IllegalArgumentException("The category of the payment cannot be empty");
+
+        if (payment.getCreditCard() == null)
+            throw new IllegalArgumentException("The credit card field of the payment cannot be empty");
+
+
+        account = am.findById(dbHelper, payment.getAccount().getId());
+        if (account == null)
+            throw new IllegalArgumentException("The account does not exist");
+
+        category = cm.findById(dbHelper, payment.getCategory().getId());
+        if (category == null)
+            throw new IllegalArgumentException("The category does not exist");
+
+
+        String date = dateToString(payment.getDate());
+        Integer creditCard = booleanToInt(payment.getCreditCard());
+
+        ContentValues values = new ContentValues();
+        values.put(PaymentEntry.COLUMN_DATE, date);
+        values.put(PaymentEntry.COLUMN_AMOUNT, payment.getAmount());
+        values.put(PaymentEntry.COLUMN_ID_CATEGORY, payment.getCategory().getId());
+        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, payment.getAccount().getId());
+        values.put(PaymentEntry.COLUMN_DESCRIPTION, payment.getDetail());
+        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, creditCard);
+        values.put(PaymentEntry.COLUMN_DISABLE, ENABLE);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.insert(PaymentEntry.TABLE_NAME, null, values);
+
+        account.setBalance(account.getBalance() - payment.getAmount());
+        am.updateAccount(dbHelper, account, account.getId());
+
+        db.close();
     }
 
 
-    private String dateToString(Date dateDate) {
-        String pattern = "yyyy-MM-dd";
+    public void updatePayment(OpenHelper dbHelper, PaymentPojo payment, Long paymentId) {
 
-        DateFormat df = new SimpleDateFormat(pattern);
+        String selection = PaymentEntry._ID + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
 
-        String date = df.format(dateDate);
+        String[] selectionArgs = {Long.toString(paymentId), Integer.toString(ENABLE)};
 
-        return date;
+        String date = dateToString(payment.getDate());
+        Integer creditCard = booleanToInt(payment.getCreditCard());
+
+        ContentValues values = new ContentValues();
+        values.put(PaymentEntry._ID, paymentId);
+        values.put(PaymentEntry.COLUMN_DATE, date);
+        values.put(PaymentEntry.COLUMN_AMOUNT, payment.getAmount());
+        values.put(PaymentEntry.COLUMN_ID_CATEGORY, payment.getCategory().getId());
+        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, payment.getAccount().getId());
+        values.put(PaymentEntry.COLUMN_DESCRIPTION, payment.getDetail());
+        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, creditCard);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(PaymentEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
 
-    private Boolean intToBoolean(Integer creditCardInt) {
-        return creditCardInt > 0;
+    public void deletePayment(OpenHelper dbHelper, Long paymentId) {
+
+        PaymentPojo payment;
+        AccountPojo account;
+
+        payment = findPaymentById(dbHelper, paymentId);
+        account = payment.getAccount();
+
+        String selection = CategoryEntry._ID + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+        String[] selectionArgs = {Long.toString(paymentId), Integer.toString(ENABLE)};
+
+        ContentValues values = new ContentValues();
+        values.put(PaymentEntry.COLUMN_DISABLE, DISABLE);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(PaymentEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        account.setBalance(account.getBalance() + payment.getAmount());
+        am.updateAccount(dbHelper, account, account.getId());
     }
 
 
-    private Integer booleanToInt(Boolean creditCardBool) {
-        return creditCardBool ? 1 : 0;
-    }
-
-
-    public TransferencePojo findTransferenceById(OpenHelper dbHelper, Long id) {
+    public TransferencePojo findTransferenceById(OpenHelper dbHelper, Long transferenceId) {
         TransferencePojo transference;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = TransferenceEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(id)};
+        String selection = TransferenceEntry._ID + " = ? AND " + TransferenceEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(transferenceId), Integer.toString(ENABLE)};
 
         String[] columns = {TransferenceEntry._ID,
                             TransferenceEntry.COLUMN_DATE,
@@ -182,6 +425,7 @@ public class MovementManager {
                             TransferenceEntry.COLUMN_ID_ACCOUNT_ORG,
                             TransferenceEntry.COLUMN_ID_ACCOUNT_DEST,
                             TransferenceEntry.COLUMN_DESCRIPTION};
+
         String transferenceOrderBy = TransferenceEntry.COLUMN_DATE + " ASC";
 
         Cursor transferenceCur = db.query(TransferenceEntry.TABLE_NAME,
@@ -205,8 +449,11 @@ public class MovementManager {
         String from = dateToString(dateFrom);
         String to   = dateToString(dateTo);
 
-        String selection = TransferenceEntry.COLUMN_DATE + " >= ? and " + TransferenceEntry.COLUMN_DATE + " <= ?";
-        String[] selectionArgs = {from, to};
+        String selection = TransferenceEntry.COLUMN_DATE + " >= ? " +
+                 " AND " + TransferenceEntry.COLUMN_DATE + " <= ? " +
+                 " AND " + TransferenceEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {from, to, Integer.toString(ENABLE)};
 
         String[] columns = {TransferenceEntry._ID,
                             TransferenceEntry.COLUMN_DATE,
@@ -214,6 +461,7 @@ public class MovementManager {
                             TransferenceEntry.COLUMN_ID_ACCOUNT_ORG,
                             TransferenceEntry.COLUMN_ID_ACCOUNT_DEST,
                             TransferenceEntry.COLUMN_DESCRIPTION};
+
         String transferenceOrderBy = TransferenceEntry.COLUMN_DATE + " ASC";
 
         Cursor transferenceCur = db.query(TransferenceEntry.TABLE_NAME,
@@ -263,77 +511,10 @@ public class MovementManager {
     }
 
 
-    public void insertPayment(OpenHelper dbHelper, PaymentPojo payment) {
-
-        AccountPojo account;
-        CategoryPojo category;
-
-        if (payment.getDate() == null)
-            throw new IllegalArgumentException("The date of the payment cannot be empty");
-
-        if (payment.getAmount() == null | payment.getAmount() == 0)
-            throw new IllegalArgumentException("The amount of the payment cannot be empty");
-
-        if (payment.getAccount() == null)
-            throw new IllegalArgumentException("The acount of the payment cannot be empty");
-
-        if (payment.getCategory() == null)
-            throw new IllegalArgumentException("The category of the payment cannot be empty");
-
-        if (payment.getCreditCard() == null)
-            throw new IllegalArgumentException("The credit card field of the payment cannot be empty");
-
-
-        account = am.findById(dbHelper, payment.getAccount().getId());
-        if (account == null)
-            throw new IllegalArgumentException("The account does not exist");
-
-        category = cm.findById(dbHelper, payment.getCategory().getId());
-        if (category == null)
-            throw new IllegalArgumentException("The category does not exist");
-
-
-        String date = dateToString(payment.getDate());
-        Integer creditCard = booleanToInt(payment.getCreditCard());
-
-        ContentValues values = new ContentValues();
-        values.put(PaymentEntry.COLUMN_DATE, date);
-        values.put(PaymentEntry.COLUMN_AMOUNT, payment.getAmount());
-        values.put(PaymentEntry.COLUMN_ID_CATEGORY, payment.getCategory().getId());
-        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, payment.getAccount().getId());
-        values.put(PaymentEntry.COLUMN_DESCRIPTION, payment.getDetail());
-        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, creditCard);
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Long result = db.insert(PaymentEntry.TABLE_NAME, null, values);
-        db.close();
-    }
-
-
-    public void updatePayment(OpenHelper dbHelper, PaymentPojo payment, Long paymentId) {
-        String selection = PaymentEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(paymentId)};
-
-        String date = dateToString(payment.getDate());
-        Integer creditCard = booleanToInt(payment.getCreditCard());
-
-        ContentValues values = new ContentValues();
-        values.put(PaymentEntry._ID, paymentId);
-        values.put(PaymentEntry.COLUMN_DATE, date);
-        values.put(PaymentEntry.COLUMN_AMOUNT, payment.getAmount());
-        values.put(PaymentEntry.COLUMN_ID_CATEGORY, payment.getCategory().getId());
-        values.put(PaymentEntry.COLUMN_ID_ACCOUNT, payment.getAccount().getId());
-        values.put(PaymentEntry.COLUMN_DESCRIPTION, payment.getDetail());
-        values.put(PaymentEntry.COLUMN_IS_CREDIT_CARD, creditCard);
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.update(PaymentEntry.TABLE_NAME, values, selection, selectionArgs);
-    }
-
-
     public void insertTransference(OpenHelper dbHelper, TransferencePojo transference) {
 
-        AccountPojo account;
+        AccountPojo accountOrigin;
+        AccountPojo accountDestiny;
 
         if (transference.getDate() == null)
             throw new IllegalArgumentException("The date of the transference cannot be empty");
@@ -344,16 +525,25 @@ public class MovementManager {
         if (transference.getAccountOrigin() == null)
             throw new IllegalArgumentException("The account origin of the transference cannot be empty");
 
+        if (transference.getAccountOrigin().getType() == CREDIT_CARD_ACCOUNT)
+            throw new IllegalArgumentException("Cannot be transfered from a credit card account");
+
         if (transference.getAccountDestiny() == null)
             throw new IllegalArgumentException("The account destiny of the transference cannot be empty");
 
+        if (transference.getAccountDestiny().getType() == CREDIT_CARD_ACCOUNT)
+            throw new IllegalArgumentException("Cannot be transfered to a credit card account");
 
-        account = am.findById(dbHelper, transference.getAccountOrigin().getId());
-        if (account == null)
+        if (transference.getAmount() > transference.getAccountOrigin().getBalance())
+            throw new IllegalArgumentException("The account " + transference.getAccountOrigin().getName() + " has not enough funds");
+
+
+        accountOrigin = am.findById(dbHelper, transference.getAccountOrigin().getId());
+        if (accountOrigin == null)
             throw new IllegalArgumentException("The account origin does not exist");
 
-        account = am.findById(dbHelper, transference.getAccountDestiny().getId());
-        if (account == null)
+        accountDestiny = am.findById(dbHelper, transference.getAccountDestiny().getId());
+        if (accountDestiny == null)
             throw new IllegalArgumentException("The account destiny does not exist");
 
 
@@ -365,16 +555,24 @@ public class MovementManager {
         values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_ORG, transference.getAccountOrigin().getId());
         values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_DEST, transference.getAccountDestiny().getId());
         values.put(TransferenceEntry.COLUMN_DESCRIPTION, transference.getDetail());
+        values.put(TransferenceEntry.COLUMN_DISABLE, ENABLE);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.insert(TransferenceEntry.TABLE_NAME, null, values);
+
+        accountOrigin.setBalance(accountOrigin.getBalance() - transference.getAmount());
+        accountDestiny.setBalance(accountDestiny.getBalance() + transference.getAmount());
+
+        am.updateAccount(dbHelper, accountOrigin, accountOrigin.getId());
+        am.updateAccount(dbHelper, accountDestiny, accountDestiny.getId());
     }
 
 
     public void updateTransference(OpenHelper dbHelper, TransferencePojo transference, Long transferenceId) {
 
-        String selection = TransferenceEntry._ID + " = ?";
-        String[] selectionArgs = {Long.toString(transferenceId)};
+        String selection = TransferenceEntry._ID + " = ? AND " + TransferenceEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(transferenceId), Integer.toString(ENABLE)};
 
         String date = dateToString(transference.getDate());
 
@@ -388,6 +586,33 @@ public class MovementManager {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(TransferenceEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+
+
+    public void deleteTransference(OpenHelper dbHelper, Long transferenceId) {
+
+        TransferencePojo transference;
+        AccountPojo accountOrigin;
+        AccountPojo accountDestiny;
+
+        transference = findTransferenceById(dbHelper, transferenceId);
+        accountOrigin = transference.getAccountOrigin();
+        accountDestiny = transference.getAccountDestiny();
+
+        String selection = CategoryEntry._ID + " = ? AND " + TransferenceEntry.COLUMN_DISABLE + " = ?";
+        String[] selectionArgs = {Long.toString(transferenceId), Integer.toString(ENABLE)};
+
+        ContentValues values = new ContentValues();
+        values.put(TransferenceEntry.COLUMN_DISABLE, DISABLE);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(TransferenceEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        accountOrigin.setBalance(accountOrigin.getBalance() + transference.getAmount());
+        accountDestiny.setBalance(accountDestiny.getBalance() - transference.getAmount());
+
+        am.updateAccount(dbHelper, accountOrigin, accountOrigin.getId());
+        am.updateAccount(dbHelper, accountDestiny, accountDestiny.getId());
     }
 
 
@@ -452,122 +677,37 @@ public class MovementManager {
     }
 
 
-    public List<PaymentPojo> getPaymentByCategoryName(OpenHelper dbHelper, String categoryName, Date dateFrom, Date dateTo) {
-        List<PaymentPojo> payments;
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String from = dateToString(dateFrom);
-        String to   = dateToString(dateTo);
-
-        String tablesWithJoin = PaymentEntry.TABLE_NAME
-                              + " JOIN " + CategoryEntry.TABLE_NAME
-                                         + " ON " + PaymentEntry.getQName(PaymentEntry.COLUMN_ID_CATEGORY)
-                                                  + " = " + CategoryEntry.getQName(CategoryEntry._ID);
-
-        String[] columns = {PaymentEntry.getQName(PaymentEntry._ID),
-                            PaymentEntry.getQName(PaymentEntry.COLUMN_DATE),
-                            PaymentEntry.getQName(PaymentEntry.COLUMN_AMOUNT),
-                            PaymentEntry.getQName(PaymentEntry.COLUMN_ID_CATEGORY),
-                            PaymentEntry.getQName(PaymentEntry.COLUMN_ID_ACCOUNT),
-                            PaymentEntry.getQName(PaymentEntry.COLUMN_DESCRIPTION),
-                            PaymentEntry.getQName(PaymentEntry.COLUMN_IS_CREDIT_CARD)};
-
-        String selection = CategoryEntry.getQName(CategoryEntry.COLUMN_NAME) + " = ? "
-                         + " and " + PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " >= ? "
-                         + " and " + PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " <= ?";
-
-        String[] selectionArgs = {categoryName, from, to};
-
-        String paymentOrderBy = PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " ASC";
-
-
-        Cursor paymentCur = db.query(tablesWithJoin,
-                                     columns,
-                                     selection,
-                                     selectionArgs,
-                                     null,
-                                     null,
-                                     paymentOrderBy);
-
-        payments = loadPayments(dbHelper, paymentCur);
-
-        return payments;
+    private Date stringToDate(String dateString) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date;
+        try {
+            date = format.parse(dateString);
+        }
+        catch (ParseException ex) {
+            date = null;
+        }
+        return date;
     }
 
 
-    public List<PaymentPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId, Date dateFrom, Date dateTo) {
-        List<PaymentPojo> payments;
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
+    private String dateToString(Date dateDate) {
+        String pattern = "yyyy-MM-dd";
 
-        String from = dateToString(dateFrom);
-        String to   = dateToString(dateTo);
+        DateFormat df = new SimpleDateFormat(pattern);
 
-        String table = PaymentEntry.TABLE_NAME;
+        String date = df.format(dateDate);
 
-        String[] columns = {PaymentEntry._ID,
-                            PaymentEntry.COLUMN_DATE,
-                            PaymentEntry.COLUMN_AMOUNT,
-                            PaymentEntry.COLUMN_ID_CATEGORY,
-                            PaymentEntry.COLUMN_ID_ACCOUNT,
-                            PaymentEntry.COLUMN_DESCRIPTION,
-                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
-
-        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ? "
-                + " and " + PaymentEntry.COLUMN_DATE + " >= ? "
-                + " and " + PaymentEntry.COLUMN_DATE + " <= ?";
-
-        String[] selectionArgs = {String.valueOf(categoryId), from, to};
-
-        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
-
-
-        Cursor paymentCur = db.query(table,
-                                     columns,
-                                     selection,
-                                     selectionArgs,
-                                     null,
-                                     null,
-                                     paymentOrderBy);
-
-        payments = loadPayments(dbHelper, paymentCur);
-
-        return payments;
+        return date;
     }
 
 
-    public List<PaymentPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId) {
-        List<PaymentPojo> payments;
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        String table = PaymentEntry.TABLE_NAME;
-
-        String[] columns = {PaymentEntry._ID,
-                            PaymentEntry.COLUMN_DATE,
-                            PaymentEntry.COLUMN_AMOUNT,
-                            PaymentEntry.COLUMN_ID_CATEGORY,
-                            PaymentEntry.COLUMN_ID_ACCOUNT,
-                            PaymentEntry.COLUMN_DESCRIPTION,
-                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
-
-        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ?";
-
-        String[] selectionArgs = {String.valueOf(categoryId)};
-
-        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
-
-
-        Cursor paymentCur = db.query(table,
-                                     columns,
-                                     selection,
-                                     selectionArgs,
-                                     null,
-                                     null,
-                                     paymentOrderBy);
-
-        payments = loadPayments(dbHelper, paymentCur);
-
-        return payments;
+    private Boolean intToBoolean(Integer creditCardInt) {
+        return creditCardInt > 0;
     }
 
+
+    private Integer booleanToInt(Boolean creditCardBool) {
+        return creditCardBool ? 1 : 0;
+    }
 
 }
