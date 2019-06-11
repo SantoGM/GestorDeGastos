@@ -74,5 +74,6 @@
     <string name="error_invalid_pin">Ingrese un PIN de 4 dígitos</string>
     <string name="error_repeat_pin">Reingrese el pin para verificar</string>
     <string name="error_pin_not_match">El PIN ingresado no coincide</string>
+    <string name="title_activity_test">TestActivity</string>
 
 </resources>

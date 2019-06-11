@@ -83,7 +83,7 @@ public class MovementManager {
                             PaymentEntry.COLUMN_ID_ACCOUNT,
                             PaymentEntry.COLUMN_DESCRIPTION,
                             PaymentEntry.COLUMN_IS_CREDIT_CARD};
-        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " DESC";
 
         Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
                                      columns,
