@@ -8,11 +8,16 @@
     <string name="lblPinRepeat">Reingrese Pin</string>
     <string name="lblGreet">Hola!</string>
     <string name="lblRequestPin">Olvidaste el pin?</string>
+    <string name="lblNameAcount">Cuenta</string>
+    <string name="lblDescripAcount">Descripcion</string>
+    <string name="lblBalanceAcount">Balance</string>
 
     <!--Botton -->
     <string name="btnSignIn">SingIn</string>
     <string name="btnRegistrarse">Registrarse</string>
     <string name="btnIngresar">Ingresar</string>
+    <string name="btnAddAcount">Agregar Cuenta</string>
+    <string name="btnAddCard">Agregar Tarjeta</string>
 
     <!--Titles -->
     <string name="app_name">Gestor de Gastos</string>
@@ -20,6 +25,11 @@
     <string name="title_activity_login">Login</string>
     <string name="pin_activity">PIN</string>
     <string name="register_activity">Registrarse</string>
+    <string name="Cuentas">Cuentas</string>
+    <string name="Alta_Cuentas">Alta de cuentas</string>
+    <string name="Alta_Tarjetas">Alta de tarjetas</string>
+    <string name="Lista_Cuentas">Cuentas</string>
+
 
     <!-- Strings related to login -->
     <string name="action_sign_in">Sign in or register</string>
@@ -47,6 +57,7 @@
 
     <!--Menu -->
     <string name="menu_op_categories">Categorías</string>
+    <string name="menu_op_account">Cuentas</string>
     <string name="menu_op_report">Reportes</string>
     <string name="menu_op_logout">Salir</string>
     <string name="menu_op_about">Acerca de GdG</string>
@@ -61,5 +72,9 @@
     <string name="report_expense_by_date">Gasto por Fecha</string>
     <string name="expense_x">Gasto x</string>
     <string name="title_activity_category_crud">Categorías</string>
+    <string name="title_activity_account_crud">AccountCRUDActivity</string>
+    <string name="title_activity_accouts">Accouts</string>
+    <string name="title_activity_accounts">AccountsActivity</string>
+    <string name="title_activity_card_crud">CardCRUDActivity</string>
 
 </resources>
