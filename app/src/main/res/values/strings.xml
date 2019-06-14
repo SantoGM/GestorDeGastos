@@ -60,5 +60,7 @@
     <string name="report_expense_by_cat">Gasto por rubro</string>
     <string name="report_expense_by_date">Gasto por Fecha</string>
     <string name="expense_x">Gasto x</string>
-
+    <string name="report_lin_from_date">Fecha Desde</string>
+    <string name="report_lin_to_date">Fecha Hasta</string>
+    <string name="report_expense_label">Gasto</string>
 </resources>

@@ -38,30 +38,6 @@ public class ReportActivity extends BaseActivity  {
         tbl_pages.setupWithViewPager(vp_pages);
 
 
-        //final LineView lineView = findViewById(R.id.line_view);
-        //final LineView lineViewFloat = findViewById(R.id.line_view_float);
-
-        //initLineView(lineView);
-        //initLineView(lineViewFloat);
-        /*
-        Button lineButton = (Button) findViewById(R.id.line_button);
-        lineButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-               // randomSet(lineView, lineViewFloat);
-            }
-        });
-
-       // randomSet(lineView, lineViewFloat);
-
-        android.app.Fragment fragment = new ReportCakeFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-
-        fragmentTransaction.add(R.id.reportFragment,fragment);
-        fragmentTransaction.commit();
-        */
-
     }
 
     private void initLineView(LineView lineView) {

@@ -10,7 +10,11 @@ import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.CategoryPojo;
 import com.example.myapplication.view.pojo.PaymenyPojo;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class ExpenseFacade extends AbstractFacade {
 
@@ -40,5 +44,17 @@ public class ExpenseFacade extends AbstractFacade {
         MovementManager mm  = new MovementManager();
         mm.insertPayment(oh, paymentToSave);
         oh.close();
+    }
+
+    public List<PaymenyPojo> getExpensesBetween(Date since, Date until, Context ctx) {
+
+        OpenHelper oh = new OpenHelper(ctx);
+        MovementManager mmg = new MovementManager();
+
+        List<PaymenyPojo> payments = mmg.getAllExpenses(oh,since,until);
+
+        oh.close();
+
+        return payments;
     }
 }

@@ -11,7 +11,7 @@ public class DataWorker {
     }
 
     public void insertAccounts() {
-        insertAccount("Cuenta Base", "-",0.00);
+        insertAccount("Cuenta Base", "-",500.00);
     }
 
     private void insertAccount(String accName, String accDesc, Double accBalance) {
@@ -19,7 +19,8 @@ public class DataWorker {
         values.put(DataBaseContract.AccountEntry.COLUMN_NAME, accName);
         values.put(DataBaseContract.AccountEntry.COLUMN_DESCRIPTION, accDesc);
         values.put(DataBaseContract.AccountEntry.COLUMN_BALANCE, accBalance);
-
+        values.put(DataBaseContract.AccountEntry.COLUMN_DISABLE, 0);
+        values.put(DataBaseContract.AccountEntry.TYPE, 0);
         long newRowId = mDb.insert(DataBaseContract.AccountEntry.TABLE_NAME, null, values);
     }
 

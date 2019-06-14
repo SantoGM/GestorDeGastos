@@ -69,7 +69,7 @@ public class AddExpenseActivity extends BaseActivity {
         HashMap result = new HashMap<String, Object>();
 
         // Date
-        EditText input = findViewById(R.id.txtDate);
+        EditText input = findViewById(R.id.txtDateTo);
         String ddmmyyyy = input.getText().toString();
         result.put(FIELD_DATE, DateHelper.obtainDateFromString(ddmmyyyy));
 
@@ -107,12 +107,12 @@ public class AddExpenseActivity extends BaseActivity {
         payedWith.setAdapter(payedWithAdapter);
 
         // Set up DatePicker
-        final EditText txtDate = findViewById(R.id.txtDate);
+        final EditText txtDate = findViewById(R.id.txtDateTo);
         txtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.txtDate:
+                    case R.id.txtDateTo:
                         showDatePickerDialog(txtDate);
                         break;
                 }
