@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.AccountsActivity">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+        </android.support.design.widget.AppBarLayout>
+
+        <include layout="@layout/content_accounts" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <com.github.clans.fab.FloatingActionMenu
+                    android:id="@+id/fab_menu"
+                    android:layout_width="410dp"
+                    android:layout_height="686dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginBottom="0dp"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingBottom="@dimen/activity_horizontal_margin"
+                    fab:fab_colorNormal="#DA4336"
+                    fab:fab_colorPressed="#E75043"
+                    fab:fab_colorRipple="#99FFFFFF"
+                    fab:fab_shadowColor="#66000000"
+                    fab:fab_showShadow="true"
+                    fab:menu_backgroundColor="#ccffffff"
+                    fab:menu_fab_label="Menu"
+                    fab:menu_labels_colorNormal="#333333"
+                    fab:menu_labels_colorPressed="#444444"
+                    fab:menu_labels_colorRipple="#66FFFFFF"
+                    fab:menu_labels_ellipsize="end"
+                    fab:menu_labels_maxLines="-1"
+                    fab:menu_labels_position="left"
+                    fab:menu_labels_showShadow="true"
+                    fab:menu_labels_singleLine="true"
+                    fab:menu_openDirection="up">
+
+                    <com.github.clans.fab.FloatingActionButton
+                        android:id="@+id/btnAddAcount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_menu_add"
+                        fab:fab_label="Crear cuenta"
+                        fab:fab_size="mini" />
+
+                    <com.github.clans.fab.FloatingActionButton
+                        android:id="@+id/btnAddCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@android:drawable/ic_menu_add"
+                        fab:fab_label="Crear tarjeta"
+                        fab:fab_size="mini" />
+
+
+                </com.github.clans.fab.FloatingActionMenu>
+
+            </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true" />
+
+</android.support.v4.widget.DrawerLayout>
+
