@@ -27,6 +27,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             case R.id.menu_categories:
                 goToActivity(CategoryCRUDActivity.class);
                 return true;
+            case R.id.menu_account:
+                goToActivity(AccountsActivity.class);
+                return true;
             case R.id.menu_action_report:
 
                 goToActivity(ReportActivity.class);
