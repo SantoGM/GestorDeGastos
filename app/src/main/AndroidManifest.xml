@@ -15,6 +15,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".view.CardCRUDActivity"
+            android:label="@string/Alta_Tarjetas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.AccountCRUDActivity"
+            android:label="@string/Alta_Cuentas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.AccountsActivity"
+            android:label="@string/Lista_Cuentas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".view.CategoryCRUDActivity"
             android:label="@string/title_activity_category_crud"
             android:parentActivityName=".view.BaseActivity"
