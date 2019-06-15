@@ -19,6 +19,7 @@ public class DataWorker {
         values.put(DataBaseContract.AccountEntry.COLUMN_NAME, accName);
         values.put(DataBaseContract.AccountEntry.COLUMN_DESCRIPTION, accDesc);
         values.put(DataBaseContract.AccountEntry.COLUMN_BALANCE, accBalance);
+        values.put(DataBaseContract.AccountEntry.TYPE, 0);
 
         long newRowId = mDb.insert(DataBaseContract.AccountEntry.TABLE_NAME, null, values);
     }
