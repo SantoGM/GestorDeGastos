@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.CardCRUDActivity">
+
+    <TextView
+        android:id="@+id/txtCardName"
+        android:layout_width="57dp"
+        android:layout_height="22dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:text="Tarjeta"
+        app:layout_constraintBottom_toTopOf="@+id/txtCardDescrip"
+        app:layout_constraintEnd_toStartOf="@+id/lblCardName" />
+
+    <EditText
+        android:id="@+id/lblCardName"
+        android:layout_width="221dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/lblCardName"
+        app:layout_constraintTop_toTopOf="@+id/tituloCuenta" />
+
+    <TextView
+        android:id="@+id/txtCardDescrip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="60dp"
+        android:text="Decripcion"
+        app:layout_constraintBottom_toTopOf="@+id/txtCardBalance"
+        app:layout_constraintEnd_toStartOf="@+id/lblCardDescrip" />
+
+    <EditText
+        android:id="@+id/lblCardDescrip"
+        android:layout_width="221dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="48dp"
+        android:selectAllOnFocus="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/lblCardName"
+        app:layout_constraintTop_toBottomOf="@+id/lblCardName" />
+
+    <TextView
+        android:id="@+id/txtCardBalance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="64dp"
+        android:text="Balance"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddCard"
+        app:layout_constraintEnd_toStartOf="@+id/lblCardBalance" />
+
+    <EditText
+        android:id="@+id/lblCardBalance"
+        android:layout_width="222dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="59dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/lblCardDescrip"
+        app:layout_constraintTop_toBottomOf="@+id/lblCardDescrip" />
+
+    <Button
+        android:id="@+id/btnAddCard"
+        android:layout_width="188dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/btnAddCard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCardBalance"
+        app:layout_constraintVertical_bias="0.121" />
+
+
+    <TextView
+        android:id="@+id/tituloCuenta"
+        android:layout_width="215dp"
+        android:layout_height="46dp"
+        android:text="Alta de Tarjeta"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="111dp"
+        tools:layout_editor_absoluteY="57dp" />
+
+</android.support.constraint.ConstraintLayout>
