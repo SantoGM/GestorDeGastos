@@ -30,9 +30,13 @@ public class CategoryCRUDActivity extends BaseActivity {
         initButtons();
         loadListView();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadListView();
     }
 
     private void initButtons(){

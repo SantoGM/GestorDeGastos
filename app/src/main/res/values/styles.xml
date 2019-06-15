@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:background">@color/colorBack</item>
+
         <item name="colorControlHighlight">@color/colorPrimary</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="colorControlActivated">@color/colorPrimary</item>
@@ -14,6 +14,7 @@
         <item name = "colorSwitchThumbNormal">@color/secondaryDarkColor</item>
         <item name = "tooltipFrameBackground">@color/colorPrimary</item>
 
+        <!--<item name="android:background">@color/colorBack</item>-->
         <!--
                 <item name="editTextColor">@color/colorEditableText</item>
                 <item name="colorBackgroundFloating">@color/colorPrimaryDark</item>
@@ -39,7 +40,6 @@
     <style name="AppTheme.AppBarOverlay" parent="AppTheme">
         <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/secondaryDarkColor</item>
-        <item name="android:colorBackground">@color/VERDE</item>
     </style>
     <style name="AppTheme.PopupOverlay" parent="AppTheme">
         <item name="android:textColor">@color/colorPrimaryDark</item>
