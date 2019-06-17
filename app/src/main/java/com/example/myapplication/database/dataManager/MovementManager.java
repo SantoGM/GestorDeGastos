@@ -41,14 +41,14 @@ public class MovementManager {
     }
 
 
-    public List<PaymenyPojo> getExpensesByCategory(OpenHelper dbHelper, Long categoryId) {
+    public List<PaymenyPojo> getExpensesByAccount(OpenHelper dbHelper, Long accountId) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ? " +
+        String selection = PaymentEntry.COLUMN_ID_ACCOUNT1 + " = ? " +
                 " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
 
-        String[] selectionArgs = {Long.toString(categoryId),
+        String[] selectionArgs = {Long.toString(accountId),
                                   Integer.toString(ENABLE)};
 
         String[] columns = {PaymentEntry._ID,
@@ -70,7 +70,7 @@ public class MovementManager {
                                      paymentOrderBy);
 
         payments = loadPayments(dbHelper, paymentCur);
-        
+
         return payments;
     }
 
