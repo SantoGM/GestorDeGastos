@@ -41,6 +41,40 @@ public class MovementManager {
     }
 
 
+    public List<PaymenyPojo> getExpensesByCategory(OpenHelper dbHelper, Long categoryId) {
+        List<PaymenyPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = PaymentEntry.COLUMN_ID_CATEGORY + " = ? " +
+                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(categoryId),
+                                  Integer.toString(ENABLE)};
+
+        String[] columns = {PaymentEntry._ID,
+                            PaymentEntry.COLUMN_DATE,
+                            PaymentEntry.COLUMN_AMOUNT,
+                            PaymentEntry.COLUMN_ID_CATEGORY,
+                            PaymentEntry.COLUMN_ID_ACCOUNT,
+                            PaymentEntry.COLUMN_DESCRIPTION,
+                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+        Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+        
+        return payments;
+    }
+
+
     public PaymenyPojo findPaymentById(OpenHelper dbHelper, Long paymentId) {
         PaymenyPojo payment;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
