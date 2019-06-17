@@ -500,7 +500,18 @@ public class MovementManager {
     */
 
 
+    /**
+     * <h1>updatePayment</h1>
+     * <p>Method to update a payment</p>
+     * @param dbHelper - DB handler
+     * @param amount - New amount. It cannot be 0(zero)
+     * @param paymentId - ID of the payment to update
+     */
     public void updatePayment(OpenHelper dbHelper, Float amount, Long paymentId) {
+
+        if (amount == 0)
+            throw new IllegalArgumentException("The amount of the payment cannot be 0");
+
         PaymenyPojo payment = findPaymentById(dbHelper, paymentId);
         AccountPojo account = payment.getAccount();
         Float newAmount = amount - payment.getAmount();
@@ -520,6 +531,12 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>deletePayment</h1>
+     * <p>Method to perform a logical delete (disable=1)</p>
+     * @param dbHelper - DB handler
+     * @param paymentId - ID of the payment to delete
+     */
     public void deletePayment(OpenHelper dbHelper, Long paymentId) {
 
         PaymenyPojo payment;
@@ -699,7 +716,18 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>updateTransference</h1>
+     * <p>Method to update a transference</p>
+     * @param dbHelper - DB handler
+     * @param amount - New amount. It cannot be 0(zero)
+     * @param transferenceId - ID of the transference to update
+     */
     public void updateTransference(OpenHelper dbHelper, Float amount, Long transferenceId) {
+
+        if (amount == 0)
+            throw new IllegalArgumentException("The amount of the transference cannot be 0");
+
         TransferencePojo transference = findTransferenceById(dbHelper, transferenceId);
         AccountPojo accountOrigin = transference.getAccountOrigin();
         AccountPojo accountDestiny = transference.getAccountDestiny();
@@ -726,6 +754,12 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>deleteTransference</h1>
+     * <p>Method to perform a logical delete (disable=1)</p>
+     * @param dbHelper - DB handler
+     * @param transferenceId - ID of the transference to delete
+     */
     public void deleteTransference(OpenHelper dbHelper, Long transferenceId) {
 
         TransferencePojo transference;
