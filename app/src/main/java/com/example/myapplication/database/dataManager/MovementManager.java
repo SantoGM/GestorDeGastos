@@ -359,13 +359,17 @@ public class MovementManager {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.insert(PaymentEntry.TABLE_NAME, null, values);
 
-        account.setBalance(account.getBalance() - payment.getAmount());
+        account.setBalance(account.getBalance() + payment.getAmount());
         am.updateAccount(dbHelper, account, account.getId());
 
         db.close();
     }
 
 
+    /*
+     * This method is commented because only the amount can be updated
+     */
+    /*
     public void updatePayment(OpenHelper dbHelper, PaymenyPojo payment, Long paymentId) {
 
         String selection = PaymentEntry._ID + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
@@ -386,6 +390,27 @@ public class MovementManager {
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(PaymentEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
+    */
+
+
+    public void updatePayment(OpenHelper dbHelper, Float amount, Long paymentId) {
+        PaymenyPojo payment = findPaymentById(dbHelper, paymentId);
+        AccountPojo account = payment.getAccount();
+        Float newAmount = amount - payment.getAmount();
+
+        String selection = PaymentEntry._ID + " = ? AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(paymentId), Integer.toString(ENABLE)};
+
+        ContentValues values = new ContentValues();
+        values.put(PaymentEntry.COLUMN_AMOUNT, amount);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.update(PaymentEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        account.setBalance(account.getBalance() + newAmount);
+        am.updateAccount(dbHelper, account, account.getId());
     }
 
 
@@ -568,7 +593,12 @@ public class MovementManager {
     }
 
 
-    public void updateTransference(OpenHelper dbHelper, TransferencePojo transference, Long transferenceId) {
+    public void updateTransference(OpenHelper dbHelper, Float amount, Long transferenceId) {
+        TransferencePojo transference = findTransferenceById(dbHelper, transferenceId);
+        AccountPojo accountOrigin = transference.getAccountOrigin();
+        AccountPojo accountDestiny = transference.getAccountDestiny();
+
+        Float newAmount = amount - transference.getAmount();
 
         String selection = TransferenceEntry._ID + " = ? AND " + TransferenceEntry.COLUMN_DISABLE + " = ?";
 
@@ -577,15 +607,16 @@ public class MovementManager {
         String date = dateToString(transference.getDate());
 
         ContentValues values = new ContentValues();
-        values.put(TransferenceEntry._ID, transferenceId);
-        values.put(TransferenceEntry.COLUMN_DATE, date);
-        values.put(TransferenceEntry.COLUMN_AMOUNT, transference.getAmount());
-        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_ORG, transference.getAccountOrigin().getId());
-        values.put(TransferenceEntry.COLUMN_ID_ACCOUNT_DEST, transference.getAccountDestiny().getId());
-        values.put(TransferenceEntry.COLUMN_DESCRIPTION, transference.getDetail());
+        values.put(TransferenceEntry.COLUMN_AMOUNT, amount);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.update(TransferenceEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        accountOrigin.setBalance(accountOrigin.getBalance() + newAmount);
+        accountDestiny.setBalance(accountDestiny.getBalance() - newAmount);
+
+        am.updateAccount(dbHelper, accountOrigin, accountOrigin.getId());
+        am.updateAccount(dbHelper, accountDestiny, accountDestiny.getId());
     }
 
 
