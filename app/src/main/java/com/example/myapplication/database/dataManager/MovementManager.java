@@ -41,6 +41,13 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>findPaymentById</h1>
+     * <p>Method to get a payment from a payment ID</p>
+     * @param dbHelper - DB handler
+     * @param paymentId - ID of the payment you are looking for
+     * @return PaymenyPojo - The payment found or NULL if the payment doesn't exist
+     */
     public PaymenyPojo findPaymentById(OpenHelper dbHelper, Long paymentId) {
         PaymenyPojo payment;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -75,6 +82,15 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>getAllPayments</h1>
+     * <p>Method to get all the payments</p>
+     * <p>Payments are all the expenses which are paid in cash, not with credit card</p>
+     * @param dbHelper - DB handler
+     * @param dateFrom - Date since you want to get the payments
+     * @param dateTo   - Date until you want to get the payments
+     * @return List<PaymenyPojo> - List of payments
+     */
     public List<PaymenyPojo> getAllPayments(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -83,13 +99,13 @@ public class MovementManager {
         String to   = dateToString(dateTo);
 
         String selection = PaymentEntry.COLUMN_DATE + " >= ? " +
-                 " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
-                 " AND " + PaymentEntry.COLUMN_ID_CATEGORY + " != ? " +
-                 " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+                " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
+                " AND " + PaymentEntry.COLUMN_IS_CREDIT_CARD + " = ? " +
+                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
 
         String[] selectionArgs = {from,
                                   to,
-                                  Integer.toString(CREDIT_CARD_ACCOUNT_ID),
+                                  Integer.toString(BANK_ACCOUNT),
                                   Integer.toString(ENABLE)};
 
         String[] columns = {PaymentEntry._ID,
@@ -116,6 +132,15 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>getAllExpenses</h1>
+     * <p>Method to get all the expenses</p>
+     * <p>Expenses are all the expenses which are paid in cash, debit or credit card</p>
+     * @param dbHelper - DB handler
+     * @param dateFrom - Date since you want to get the expenses
+     * @param dateTo   - Date until you want to get the expenses
+     * @return List<PaymenyPojo> - List of expenses
+     */
     public List<PaymenyPojo> getAllExpenses(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -125,12 +150,10 @@ public class MovementManager {
 
         String selection = PaymentEntry.COLUMN_DATE + " >= ? " +
                  " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
-                 " AND " + PaymentEntry.COLUMN_IS_CREDIT_CARD + " = ? " +
                  " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
 
         String[] selectionArgs = {from,
                                   to,
-                                  Integer.toString(BANK_ACCOUNT),
                                   Integer.toString(ENABLE)};
 
         String[] columns = {PaymentEntry._ID,
