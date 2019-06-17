@@ -20,7 +20,7 @@ public class ExpenseFacade extends AbstractFacade {
 
     private static ExpenseFacade instance;
 
-    private ExpenseFacade(){
+    private ExpenseFacade() {
         // Singleton
     }
 
@@ -31,7 +31,7 @@ public class ExpenseFacade extends AbstractFacade {
         return instance;
     }
 
-    public void saveExpense(Date date, Float amount, Long categoryID, Long accountID, String detail, Context ctx){
+    public void saveExpense(Date date, Float amount, Long categoryID, Long accountID, String detail, Context ctx) {
         CategoryManager cm = new CategoryManager();
         AccountManager am = new AccountManager();
         OpenHelper oh = new OpenHelper(ctx);
@@ -41,7 +41,7 @@ public class ExpenseFacade extends AbstractFacade {
 
         PaymenyPojo paymentToSave = new PaymenyPojo(null, date, amount, cateogry, account, detail, Boolean.FALSE);
 
-        MovementManager mm  = new MovementManager();
+        MovementManager mm = new MovementManager();
         mm.insertPayment(oh, paymentToSave);
         oh.close();
     }
@@ -51,9 +51,21 @@ public class ExpenseFacade extends AbstractFacade {
         OpenHelper oh = new OpenHelper(ctx);
         MovementManager mmg = new MovementManager();
 
-        List<PaymenyPojo> payments = mmg.getAllExpenses(oh,since,until);
+        List<PaymenyPojo> payments = mmg.getAllExpenses(oh, since, until);
 
         oh.close();
+
+        return payments;
+    }
+
+
+    public List<PaymenyPojo> getExpensesBetweenAndCats(List<String> cats,Date since,  Date until, Context ctx) {
+        OpenHelper oh = new OpenHelper(ctx);
+        MovementManager mmg = new MovementManager();
+
+        List<PaymenyPojo> payments = mmg.getAllExpensesFilterCat(oh,cats, since, until);
+
+            oh.close();
 
         return payments;
     }

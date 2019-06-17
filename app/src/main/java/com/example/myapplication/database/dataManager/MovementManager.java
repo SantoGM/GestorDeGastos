@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MovementManager {
 
@@ -114,7 +115,71 @@ public class MovementManager {
 
         return payments;
     }
+    static public String join(List<String> list, String conjunction)
+    {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (String item : list)
+        {
+            if (first)
+                first = false;
+            else
+                sb.append(conjunction);
+            sb.append(item);
+        }
+        return sb.toString();
+    }
+    public List<PaymenyPojo> getAllExpensesFilterCat(OpenHelper dbHelper,List<String> cats, Date dateFrom, Date dateTo) {
+        List<PaymenyPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String selection = PaymentEntry.COLUMN_DATE + " >= ? " +
+                " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
+               // " AND " + PaymentEntry.COLUMN_ID_CATEGORY + " != ? " +
+
+                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+                for(String catName: cats) {
+                    selection+= " AND " + PaymentEntry.COLUMN_ID_CATEGORY + " NOT IN (SELECT _id FROM " + CategoryEntry.TABLE_NAME + " where name = (?)) ";
+                }
+
+        String[]  selectionArgs = new String[3+cats.size()];
+        selectionArgs[0] = from;
+        selectionArgs[1] = to;
+        //selectionArgs[2] = Integer.toString(CREDIT_CARD_ACCOUNT_ID);
+        selectionArgs[2] = Integer.toString(ENABLE);
+        int count=2;
+        for(String catName: cats) {
+            count++;
+            selectionArgs[count]=catName;
+        }
+
+
+        String[] columns = {PaymentEntry._ID,
+                PaymentEntry.COLUMN_DATE,
+                PaymentEntry.COLUMN_AMOUNT,
+                PaymentEntry.COLUMN_ID_CATEGORY,
+                PaymentEntry.COLUMN_ID_ACCOUNT,
+                PaymentEntry.COLUMN_DESCRIPTION,
+                PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " ASC";
+
+
+        Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
 
     public List<PaymenyPojo> getAllExpenses(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;

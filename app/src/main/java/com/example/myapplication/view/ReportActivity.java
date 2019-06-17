@@ -132,9 +132,9 @@ public class ReportActivity extends BaseActivity  {
                 case 0:
                     return new ReportLinealFragment();
                 case 1:
-                    return new ReportCakeFragment();
-                case 2:
                     return new ReportBarFragment();
+                case 2:
+                    return new ReportCakeFragment();
             }
             return null;
         }
