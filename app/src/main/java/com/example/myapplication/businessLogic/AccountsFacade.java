@@ -72,4 +72,27 @@ public class AccountsFacade extends AbstractFacade{
 
         return result;
     }
+
+    public void deleteAccount(Context ctx, Long id){
+        AccountManager am = new AccountManager();
+        OpenHelper oh = new OpenHelper(ctx);
+
+        am.deleteAccount(oh,id);
+        oh.close();
+        setChanged();
+        notifyObservers();
+
+    }
+
+    public void updateAccount(Context ctx, AccountPojo acc, Long id){
+
+        AccountManager am = new AccountManager();
+        OpenHelper oh = new OpenHelper(ctx);
+
+        am.updateAccount(oh, acc, id);
+        oh.close();
+        setChanged();
+        notifyObservers();
+
+    }
 }
