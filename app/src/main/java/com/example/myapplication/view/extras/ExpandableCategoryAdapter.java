@@ -38,11 +38,11 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
         int c4 = context.getResources().getColor(R.color.colorBckg4);
         int c5 = context.getResources().getColor(R.color.colorBckg5);
 
-        colorMap.put(1, c1);
-        colorMap.put(2, c2);
-        colorMap.put(3, c3);
-        colorMap.put(4, c4);
-        colorMap.put(5, c5);
+        colorMap.put(0, c1);
+        colorMap.put(1, c2);
+        colorMap.put(2, c3);
+        colorMap.put(3, c4);
+        colorMap.put(4, c5);
     }
 
     @Override
@@ -52,7 +52,11 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return listExpenses.get(listAccounts.get(groupPosition)).size();
+        int result = listExpenses.get(listAccounts.get(groupPosition)).size();
+        if (result == 0) {
+            result = 1;
+        }
+        return result;
     }
 
     @Override
@@ -100,15 +104,25 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
         TextView detail = convertView.findViewById(R.id.expenseListItemDetail);
         TextView amount = convertView.findViewById(R.id.expenseListItemAmount);
 
-        // Set data
-        PaymentPojo data = (PaymentPojo) getChild(groupPosition, childPosition);
+        if (listExpenses.get( listAccounts.get(groupPosition) ).size() == 0) {
+            category.setText("No registra gastos");
+            category.setTextSize(20);
+            date.setText("");
+            detail.setText("");
+            amount.setText("");
 
-        category.setText(data.getCategory().getName());
-        date.setText(DateHelper.toStringDDMM(data.getDate()));
-        detail.setText(data.getDetail());
-        amount.setText("$ " + data.getAmount());
+            date.setBackgroundResource(android.R.color.transparent);
+        } else {
+            // Set data
+            PaymentPojo data = (PaymentPojo) getChild(groupPosition, childPosition);
 
-        date.setBackgroundColor(colorMap.get(childPosition+1));
+            category.setText(data.getCategory().getName());
+            date.setText(DateHelper.toStringDDMM(data.getDate()));
+            detail.setText(data.getDetail());
+            amount.setText("$ " + data.getAmount());
+
+            date.setBackgroundColor(colorMap.get(childPosition));
+        }
 
         return convertView;
     }

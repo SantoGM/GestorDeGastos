@@ -10,4 +10,6 @@
     <color name="colorBckg4">#ff7043</color>
     <color name="colorBckg5">#ef5350</color>
 
+    <color name="colorFabLblTxt">#333333</color>
+
 </resources>

@@ -9,70 +9,65 @@
 
     <TextView
         android:id="@+id/txtAccountName"
-        android:layout_width="57dp"
-        android:layout_height="22dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="36dp"
-        android:text="Cuenta"
-        app:layout_constraintBottom_toTopOf="@+id/txtDescrip"
-        app:layout_constraintEnd_toStartOf="@+id/lblAccountName" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="4dp"
+        android:gravity="right"
+        android:text="@string/lblAccountName"
+        app:layout_constraintEnd_toEndOf="@+id/txtDescrip"
+        app:layout_constraintTop_toBottomOf="@+id/tituloCuenta" />
 
     <EditText
         android:id="@+id/lblAccountName"
-        android:layout_width="221dp"
+        android:layout_width="220dp"
         android:layout_height="48dp"
-        android:layout_marginStart="59dp"
-        android:layout_marginTop="67dp"
-        android:layout_marginEnd="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/lblAccountName"
-        app:layout_constraintTop_toTopOf="@+id/tituloCuenta" />
+        android:hint="@string/hntAccountName"
+        app:layout_constraintBottom_toBottomOf="@+id/txtAccountName"
+        app:layout_constraintStart_toStartOf="@+id/lblAccountDescrip"
+        app:layout_constraintTop_toTopOf="@+id/txtAccountName" />
 
     <TextView
         android:id="@+id/txtDescrip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="52dp"
-        android:text="Decripcion"
-        app:layout_constraintBottom_toTopOf="@+id/txtaccountBalance"
-        app:layout_constraintEnd_toStartOf="@+id/lblAccountDescrip" />
+        android:layout_marginTop="44dp"
+        android:gravity="right"
+        android:text="@string/lblDescripAcount"
+        app:layout_constraintEnd_toEndOf="@+id/txtaccountBalance"
+        app:layout_constraintTop_toBottomOf="@+id/txtAccountName" />
 
     <EditText
         android:id="@+id/lblAccountDescrip"
-        android:layout_width="219dp"
+        android:layout_width="220dp"
         android:layout_height="44dp"
-        android:layout_marginStart="59dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="48dp"
         android:selectAllOnFocus="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/lblAccountName"
-        app:layout_constraintTop_toBottomOf="@+id/lblAccountName" />
+        android:hint="@string/hntAccountDesc"
+        app:layout_constraintBottom_toBottomOf="@+id/txtDescrip"
+        app:layout_constraintStart_toStartOf="@+id/lblAccountBalance"
+        app:layout_constraintTop_toTopOf="@+id/txtDescrip" />
 
     <TextView
         android:id="@+id/txtaccountBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="17dp"
-        android:layout_marginBottom="64dp"
-        android:text="Balance"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddAcount"
-        app:layout_constraintEnd_toStartOf="@+id/lblAccountBalance" />
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="36dp"
+        android:gravity="right"
+        android:text="@string/lblBalanceAcount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDescrip" />
 
     <EditText
         android:id="@+id/lblAccountBalance"
-        android:layout_width="222dp"
+        android:layout_width="220dp"
         android:layout_height="39dp"
-        android:layout_marginStart="59dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="60dp"
+        android:inputType="numberDecimal"
+        android:hint="0.00"
+        app:layout_constraintBottom_toBottomOf="@+id/txtaccountBalance"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/lblAccountDescrip"
-        app:layout_constraintTop_toBottomOf="@+id/lblAccountDescrip" />
+        app:layout_constraintTop_toTopOf="@+id/txtaccountBalance" />
 
     <Button
         android:id="@+id/btnAddAcount"
@@ -92,10 +87,14 @@
 
     <TextView
         android:id="@+id/tituloCuenta"
-        android:layout_width="215dp"
+        android:layout_width="wrap_content"
         android:layout_height="46dp"
-        android:text="Alta de cuenta"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="96dp"
+        android:gravity="center"
+        android:text="@string/NewAccount"
         android:textSize="30dp"
-        tools:layout_editor_absoluteX="111dp"
-        tools:layout_editor_absoluteY="57dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

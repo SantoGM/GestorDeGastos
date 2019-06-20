@@ -46,16 +46,9 @@
                     android:layout_marginBottom="0dp"
                     android:paddingRight="@dimen/activity_horizontal_margin"
                     android:paddingBottom="@dimen/activity_horizontal_margin"
-                    fab:fab_colorNormal="#DA4336"
-                    fab:fab_colorPressed="#E75043"
-                    fab:fab_colorRipple="#99FFFFFF"
-                    fab:fab_shadowColor="#66000000"
-                    fab:fab_showShadow="true"
-                    fab:menu_backgroundColor="#ccffffff"
+                    fab:fab_colorNormal="@color/colorAccent"
                     fab:menu_fab_label="Menu"
-                    fab:menu_labels_colorNormal="#333333"
-                    fab:menu_labels_colorPressed="#444444"
-                    fab:menu_labels_colorRipple="#66FFFFFF"
+                    fab:menu_labels_colorNormal="@color/colorFabLblTxt"
                     fab:menu_labels_ellipsize="end"
                     fab:menu_labels_maxLines="-1"
                     fab:menu_labels_position="left"
@@ -67,7 +60,7 @@
                         android:id="@+id/btnAddAcount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_add"
+                        android:src="@drawable/ic_add_white_24dp"
                         fab:fab_label="Crear cuenta"
                         fab:fab_size="mini" />
 
@@ -75,7 +68,7 @@
                         android:id="@+id/btnAddCard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@android:drawable/ic_menu_add"
+                        android:src="@drawable/ic_add_white_24dp"
                         fab:fab_label="Crear tarjeta"
                         fab:fab_size="mini" />
 

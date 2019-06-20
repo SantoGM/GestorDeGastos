@@ -8,6 +8,11 @@
         android:title="@string/menu_op_categories"
         app:showAsAction="never" />
     <item
+        android:id="@+id/menu_account"
+        android:orderInCategory="100"
+        android:title="@string/menu_op_account"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/menu_action_report"
         android:orderInCategory="100"
         android:title="@string/menu_op_report"

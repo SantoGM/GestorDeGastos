@@ -30,18 +30,16 @@ public class AccountsActivity extends BaseActivity implements Observer {
         setContentView(R.layout.activity_accounts);
         createMenu();
 
-        fabAddAccount =  (FloatingActionButton) findViewById(R.id.btnAddAcount);
-        fabAddCard = (FloatingActionButton)findViewById(R.id.btnAddCard);
-        fam = (FloatingActionMenu) findViewById(R.id.fab_menu);
+        fabAddAccount =  findViewById(R.id.btnAddAcount);
+        fabAddCard = findViewById(R.id.btnAddCard);
+        fam = findViewById(R.id.fab_menu);
 
 
         //handling menu status (open or close)
         fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
             public void onMenuToggle(boolean opened) {
-                if (opened) {
-                    showToast("Menu");
-                }
+
             }
         });
 
@@ -58,8 +56,6 @@ public class AccountsActivity extends BaseActivity implements Observer {
             }
         });
 
-
-
         AccountsFacade.getInstance().addObserver(this);
         fetchData();
 
@@ -74,11 +70,6 @@ public class AccountsActivity extends BaseActivity implements Observer {
         listView.setAdapter(adapter);
     }
 
-
-    @Override
-    public void onBackPressed() {
-        // Do nothing
-    }
     @Override
     public void update(Observable o, Object arg) {
         fetchData();
@@ -97,9 +88,4 @@ public class AccountsActivity extends BaseActivity implements Observer {
             }
         };
     }
-
-    private void showToast(String msg) {
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-    }
-
 }

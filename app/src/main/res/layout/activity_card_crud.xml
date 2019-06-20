@@ -9,70 +9,65 @@
 
     <TextView
         android:id="@+id/txtCardName"
-        android:layout_width="57dp"
-        android:layout_height="22dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:text="Tarjeta"
-        app:layout_constraintBottom_toTopOf="@+id/txtCardDescrip"
-        app:layout_constraintEnd_toStartOf="@+id/lblCardName" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="4dp"
+        android:gravity="right"
+        android:text="@string/lblCreditCardName"
+        app:layout_constraintEnd_toEndOf="@+id/txtCardDescrip"
+        app:layout_constraintTop_toBottomOf="@+id/tituloCuenta" />
 
     <EditText
         android:id="@+id/lblCardName"
-        android:layout_width="221dp"
+        android:layout_width="220dp"
         android:layout_height="48dp"
-        android:layout_marginStart="59dp"
-        android:layout_marginTop="75dp"
-        android:layout_marginEnd="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/lblCardName"
-        app:layout_constraintTop_toTopOf="@+id/tituloCuenta" />
+        android:hint="@string/hntCrCardName"
+        app:layout_constraintBottom_toBottomOf="@+id/txtCardName"
+        app:layout_constraintStart_toStartOf="@+id/lblCardDescrip"
+        app:layout_constraintTop_toTopOf="@+id/txtCardName" />
 
     <TextView
         android:id="@+id/txtCardDescrip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="60dp"
-        android:text="Decripcion"
-        app:layout_constraintBottom_toTopOf="@+id/txtCardBalance"
-        app:layout_constraintEnd_toStartOf="@+id/lblCardDescrip" />
+        android:layout_marginTop="44dp"
+        android:gravity="right"
+        android:text="@string/lblDescripAcount"
+        app:layout_constraintEnd_toEndOf="@+id/txtCardBalance"
+        app:layout_constraintTop_toBottomOf="@+id/txtCardName" />
 
     <EditText
         android:id="@+id/lblCardDescrip"
-        android:layout_width="221dp"
-        android:layout_height="49dp"
-        android:layout_marginStart="59dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="48dp"
+        android:layout_width="220dp"
+        android:layout_height="44dp"
         android:selectAllOnFocus="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/lblCardName"
-        app:layout_constraintTop_toBottomOf="@+id/lblCardName" />
+        android:hint="@string/hntCrCardDesc"
+        app:layout_constraintBottom_toBottomOf="@+id/txtCardDescrip"
+        app:layout_constraintStart_toStartOf="@+id/lblCardBalance"
+        app:layout_constraintTop_toTopOf="@+id/txtCardDescrip" />
 
     <TextView
         android:id="@+id/txtCardBalance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="17dp"
-        android:layout_marginBottom="64dp"
-        android:text="Balance"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddCard"
-        app:layout_constraintEnd_toStartOf="@+id/lblCardBalance" />
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="36dp"
+        android:gravity="right"
+        android:text="@string/lblBalanceAcount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtCardDescrip" />
 
     <EditText
         android:id="@+id/lblCardBalance"
-        android:layout_width="222dp"
+        android:layout_width="220dp"
         android:layout_height="39dp"
-        android:layout_marginStart="59dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="60dp"
+        android:inputType="numberDecimal|numberSigned"
+        android:hint="0.00"
+        app:layout_constraintBottom_toBottomOf="@+id/txtCardBalance"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/lblCardDescrip"
-        app:layout_constraintTop_toBottomOf="@+id/lblCardDescrip" />
+        app:layout_constraintTop_toTopOf="@+id/txtCardBalance" />
 
     <Button
         android:id="@+id/btnAddCard"
@@ -88,16 +83,19 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblCardBalance"
-        app:layout_constraintVertical_bias="0.121" />
+        app:layout_constraintVertical_bias="0.121"  />
 
 
     <TextView
         android:id="@+id/tituloCuenta"
         android:layout_width="215dp"
-        android:layout_height="46dp"
-        android:text="Alta de Tarjeta"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="96dp"
+        android:gravity="center"
+        android:text="@string/lblNewCreditCard"
         android:textSize="30dp"
-        tools:layout_editor_absoluteX="111dp"
-        tools:layout_editor_absoluteY="57dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

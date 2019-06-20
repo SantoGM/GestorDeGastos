@@ -46,15 +46,10 @@ public class ExpenseFacade extends AbstractFacade {
         notifyObservers();
     }
 
-    public ArrayList<PersistentDataModel> getExpensesListrModel(Context ctx) {
-        ArrayList<PersistentDataModel> result = buildDataModel(obtainLastFiveMovements(ctx), PaymentPojo.class);
-        return result;
-    }
-
-    public List<PaymentPojo> obtainLastFiveMovements(Context ctx) {
+    public List<PaymentPojo> obtainLastFiveMovementsByAccount(Context ctx, Long accountID) {
         OpenHelper oh = new OpenHelper(ctx);
         MovementManager mm = new MovementManager();
-        List<PaymentPojo> result = mm.getAllPayments(oh, new Date(0, 0, 1), new Date(2020-1900, 11, 31));
+        List<PaymentPojo> result = mm.getAllPaymentsByAccount(oh, new Date(0, 0, 1), new Date(3000-1900, 11, 31), accountID);
         if (result.size()>5){
             result = result.subList(0, 5);
         }

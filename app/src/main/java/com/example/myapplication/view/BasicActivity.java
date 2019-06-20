@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.businessLogic.AccountsFacade;
 import com.example.myapplication.businessLogic.ExpenseFacade;
 import com.example.myapplication.view.extras.ExpandableCategoryAdapter;
+import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.PaymentPojo;
 
 import java.util.ArrayList;
@@ -37,20 +38,23 @@ public class BasicActivity extends BaseActivity implements Observer {
         });
 
         ExpenseFacade.getInstance().addObserver(this);
+        AccountsFacade.getInstance().addObserver(this);
         fetchData();
     }
 
     private void fetchData() {
-
-        List<PaymentPojo> data = ExpenseFacade.getInstance().obtainLastFiveMovements(getApplicationContext());
-
-        ArrayList<String> accounts = new ArrayList<>();
+        // Get all accounts and Credit Cars
+        List<AccountPojo> accounts = AccountsFacade.getInstance().getAllAccountsAndCards(getApplicationContext());
+        ArrayList<String> accountNames = new ArrayList<>();
         HashMap<String, List<PaymentPojo>> expenses = new HashMap<>();
 
-        accounts.add("Cuenta base");
-        expenses.put(accounts.get(0), data);
+        for(AccountPojo account : accounts){
+            List<PaymentPojo> data = ExpenseFacade.getInstance().obtainLastFiveMovementsByAccount(getApplicationContext(), account.getId());
+            accountNames.add(account.getName());
+            expenses.put(account.getName(), data);
+        }
 
-        ExpandableCategoryAdapter adapter = new ExpandableCategoryAdapter(accounts, expenses, getApplicationContext());
+        ExpandableCategoryAdapter adapter = new ExpandableCategoryAdapter(accountNames, expenses, getApplicationContext());
         
         ExpandableListView listView = findViewById(R.id.basicViewList);
         listView.setAdapter(adapter);

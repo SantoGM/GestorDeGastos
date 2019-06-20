@@ -35,5 +35,5 @@ dependencies {
     implementation files('lib/activation.jar')
     implementation files('lib/okhttp-1.2.1-jar-with-dependencies.jar')
 
-    compile 'com.github.clans:fab:1.6.4'
+    implementation 'com.github.clans:fab:1.6.4'
 }

@@ -569,5 +569,35 @@ public class MovementManager {
         return payments;
     }
 
+    public List<PaymentPojo> getAllPaymentsByAccount(OpenHelper dbHelper, Date dateFrom, Date dateTo, Long accountID) {
+        List<PaymentPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String selection = PaymentEntry.COLUMN_DATE + " >= ? and " + PaymentEntry.COLUMN_DATE + " <= ? and " + PaymentEntry.COLUMN_ID_ACCOUNT + " = ?";
+        String[] selectionArgs = {from, to, accountID.toString()};
+
+        String[] columns = {PaymentEntry._ID,
+                PaymentEntry.COLUMN_DATE,
+                PaymentEntry.COLUMN_AMOUNT,
+                PaymentEntry.COLUMN_ID_CATEGORY,
+                PaymentEntry.COLUMN_ID_ACCOUNT,
+                PaymentEntry.COLUMN_DESCRIPTION,
+                PaymentEntry.COLUMN_IS_CREDIT_CARD};
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " DESC";
+
+        Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
 }

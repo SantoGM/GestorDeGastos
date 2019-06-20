@@ -60,4 +60,16 @@ public class AccountsFacade extends AbstractFacade{
         return accounts;
 
     }
+
+    public List<AccountPojo> getAllAccountsAndCards(Context ctx) {
+        OpenHelper oh = new OpenHelper(ctx);
+
+        AccountManager am = new AccountManager();
+
+        List<AccountPojo> result = am.getAccounts(oh);
+
+        oh.close();
+
+        return result;
+    }
 }
