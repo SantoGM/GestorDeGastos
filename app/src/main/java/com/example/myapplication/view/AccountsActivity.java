@@ -4,10 +4,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Selection;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.businessLogic.AccountsFacade;
 import com.example.myapplication.view.extras.AccountsListAdapter;
@@ -19,15 +27,22 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import static android.view.ContextMenu.*;
+
 public class AccountsActivity extends BaseActivity implements Observer {
 
     private FloatingActionMenu fam;
     private FloatingActionButton fabAddAccount, fabAddCard;
+    private AdapterView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accounts);
+
+        listView = (ListView) findViewById(R.id.accountsViewList);
+        registerForContextMenu(listView);
+
         createMenu();
 
         fabAddAccount =  (FloatingActionButton) findViewById(R.id.btnAddAcount);
@@ -45,6 +60,7 @@ public class AccountsActivity extends BaseActivity implements Observer {
             }
         });
 
+
         fabAddAccount.setOnClickListener(onButtonClick());
         fabAddCard.setOnClickListener(onButtonClick());
 
@@ -59,7 +75,6 @@ public class AccountsActivity extends BaseActivity implements Observer {
         });
 
 
-
         AccountsFacade.getInstance().addObserver(this);
         fetchData();
 
@@ -72,6 +87,39 @@ public class AccountsActivity extends BaseActivity implements Observer {
 
         ListView listView = findViewById(R.id.accountsViewList);
         listView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenuInfo menuInfo)
+    {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_ctx_etiqueta, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        AccountPojo ItemList  = (AccountPojo) listView.getItemAtPosition(info.position);
+
+        switch (item.getItemId()) {
+            case R.id.CtxLblOpc1:
+
+                AccountsFacade.getInstance().deleteAccount(getApplicationContext(), ItemList.getId());
+                showToast("Se ha eliminado la cuenta");
+                return true;
+            case R.id.CtxLblOpc2:
+
+                showToast("Se ha Actualizado la cuenta");
+                return true;
+
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
 
@@ -101,5 +149,6 @@ public class AccountsActivity extends BaseActivity implements Observer {
     private void showToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
 
 }
