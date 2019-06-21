@@ -1,7 +1,5 @@
 package com.example.myapplication.view.pojo;
 
-import com.example.myapplication.view.extras.DateHelper;
-
 import java.util.Date;
 
 public class PaymentPojo extends AbstractPojo implements MovementPojo {
@@ -78,6 +76,6 @@ public class PaymentPojo extends AbstractPojo implements MovementPojo {
 
     @Override
     public String nameToShow() {
-        return DateHelper.toStringDDMMYYYY(getDate()) + "- $ " + getAmount() + "(" + getAccount().getName() + ")";
+        return getDate() + "-" + getAmount() + "(" + getAccount() + ")";
     }
 }

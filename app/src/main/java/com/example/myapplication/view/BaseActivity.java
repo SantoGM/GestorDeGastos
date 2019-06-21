@@ -28,10 +28,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 goToActivity(AccountsActivity.class);
                 return true;
             case R.id.menu_action_report:
-
                 goToActivity(ReportActivity.class);
                 return true;
             case R.id.menu_action_out:
+                finishAffinity();
                 return true;
             case R.id.menu_action_about:
                 return true;
@@ -72,7 +72,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        DrawerLayout mDrawerLayout = findViewById(R.id.drawer_layout);
+        DrawerLayout mDrawerLayout;
+        mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
         return onOptionsItemSelected(menuItem);
     }

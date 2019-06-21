@@ -11,7 +11,9 @@ import com.example.myapplication.view.pojo.CategoryPojo;
 import com.example.myapplication.view.pojo.PaymentPojo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class ExpenseFacade extends AbstractFacade {
@@ -29,7 +31,7 @@ public class ExpenseFacade extends AbstractFacade {
         return instance;
     }
 
-    public void saveExpense(Date date, Float amount, Long categoryID, Long accountID, String detail, Context ctx){
+    public void saveExpense(Date date, Float amount, Long categoryID, Long accountID, String detail, Context ctx) throws IllegalArgumentException{
         CategoryManager cm = new CategoryManager();
         AccountManager am = new AccountManager();
         OpenHelper oh = new OpenHelper(ctx);
@@ -55,5 +57,29 @@ public class ExpenseFacade extends AbstractFacade {
         }
         oh.close();
         return result;
+    }
+
+    public List<PaymentPojo> getExpensesBetween(Date since, Date until, Context ctx) {
+
+        OpenHelper oh = new OpenHelper(ctx);
+        MovementManager mmg = new MovementManager();
+
+        List<PaymentPojo> payments = mmg.getAllExpenses(oh, since, until);
+
+        oh.close();
+
+        return payments;
+    }
+
+
+    public List<PaymentPojo> getExpensesBetweenAndCats(List<String> cats,Date since,  Date until, Context ctx) {
+        OpenHelper oh = new OpenHelper(ctx);
+        MovementManager mmg = new MovementManager();
+
+        List<PaymentPojo> payments = mmg.getAllExpensesFilterCat(oh,cats, since, until);
+
+        oh.close();
+
+        return payments;
     }
 }

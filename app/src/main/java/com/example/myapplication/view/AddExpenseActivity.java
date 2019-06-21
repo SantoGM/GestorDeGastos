@@ -53,9 +53,14 @@ public class AddExpenseActivity extends BaseActivity {
                     Long categoryID = (Long) inputData.get(FIELD_CATEGORY);
                     Long accountID = (Long) inputData.get(FIELD_PAYED_WITH);
                     String detail = (String) inputData.get(FIELD_DETAIL);
-                    ExpenseFacade.getInstance().saveExpense(date, amount, categoryID, accountID, detail, getApplicationContext());
-                    toastMe(getString(R.string.expense_saved_successfuly));
-                    onBackPressed();
+                    try {
+                        ExpenseFacade.getInstance().saveExpense(date, amount, categoryID, accountID, detail, getApplicationContext());
+                        toastMe(getString(R.string.expense_saved_successfuly));
+                        onBackPressed();
+                    } catch (IllegalArgumentException e) {
+                        toastMe(e.getMessage());
+                    }
+
                 } else {
                     Snackbar.make(v, getString(R.string.message_complete_mandatory_fields), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }

@@ -37,33 +37,8 @@ public class ReportActivity extends BaseActivity  {
         TabLayout tbl_pages= findViewById(R.id.tab_menu);
         tbl_pages.setupWithViewPager(vp_pages);
 
-
-        //final LineView lineView = findViewById(R.id.line_view);
-        //final LineView lineViewFloat = findViewById(R.id.line_view_float);
-
-        //initLineView(lineView);
-        //initLineView(lineViewFloat);
-        /*
-        Button lineButton = (Button) findViewById(R.id.line_button);
-        lineButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-               // randomSet(lineView, lineViewFloat);
-            }
-        });
-
-       // randomSet(lineView, lineViewFloat);
-
-        android.app.Fragment fragment = new ReportCakeFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-
-        fragmentTransaction.add(R.id.reportFragment,fragment);
-        fragmentTransaction.commit();
-        */
-
     }
-/*
+
     private void initLineView(LineView lineView) {
         ArrayList<String> test = new ArrayList<>();
         for (int i = 0; i < randomint; i++) {
@@ -121,9 +96,6 @@ public class ReportActivity extends BaseActivity  {
         lineViewFloat.setFloatDataList(dataListFs);
     }
 
-
-
-
     private ArrayList<Integer> generarRandom(){
         ArrayList<Integer> dataList = new ArrayList<>();
         float random = (float) (Math.random() * 9 + 1);
@@ -132,8 +104,8 @@ public class ReportActivity extends BaseActivity  {
 
         }
         return dataList;
-
     }
+
     private ArrayList<Float> generarRandomFloat(){
     ArrayList<Float> dataListF = new ArrayList<>();
     float randomF = (float) (Math.random() * 9 + 1);
@@ -141,9 +113,7 @@ public class ReportActivity extends BaseActivity  {
         dataListF.add((float) (Math.random() * randomF));
     }
         return dataListF;
-
-    }*/
-
+    }
 
     class FragmentAdapter extends FragmentPagerAdapter {
         public FragmentAdapter(FragmentManager fm) {
@@ -156,9 +126,9 @@ public class ReportActivity extends BaseActivity  {
                 case 0:
                     return new ReportLinealFragment();
                 case 1:
-                    return new ReportCakeFragment();
-                case 2:
                     return new ReportBarFragment();
+                case 2:
+                    return new ReportCakeFragment();
             }
             return null;
         }
@@ -170,9 +140,6 @@ public class ReportActivity extends BaseActivity  {
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position){
-                //
-                //Your tab titles
-                //
                 case 0:return getString(R.string.report_evolution_expenses);
                 case 1:return getString(R.string.report_expense_by_cat);
                 case 2: return getString(R.string.report_expense_by_date);

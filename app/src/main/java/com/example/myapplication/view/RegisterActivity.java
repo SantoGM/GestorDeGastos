@@ -57,23 +57,23 @@ public class RegisterActivity extends AppCompatActivity {
         lblMail.setError(null);
 
         if(!validateEmail(lblMail.getText().toString())){
-            ok = buildError(lblMail, getString(R.string.error_invalid_email));
+            ok = buildError(lblMail, "Ingrese una direccion valida");
         }
 
         if (lblNombre.getText().toString().isEmpty()
                 || lblNombre.getText().toString().length()<3) {
-            ok = buildError(lblNombre, getString(R.string.error_invalid_name));
+            ok = buildError(lblNombre, "Ingrese el nombre (al menos 3 caracteres)");
         }
 
         if (lblPinInput.getText().toString().isEmpty()
                 || lblPinInput.getText().toString().length() < 4) {
-            ok = buildError(lblPinInput, getString(R.string.error_invalid_pin));
+            ok = buildError(lblPinInput, "Ingrese un PIN de 4 digitos");
         } else {
             String inputPin = lblPinInput.getText().toString();
             if (lblPinRepeat.getText().toString().isEmpty()){
-                ok = buildError(lblPinRepeat, getString(R.string.error_repeat_pin));
+                ok = buildError(lblPinRepeat, "Reingrese el pin para verificar");
             } else if (!lblPinRepeat.getText().toString().equals(inputPin)) {
-                ok = buildError(lblPinRepeat, getString(R.string.error_pin_not_match));
+                ok = buildError(lblPinRepeat, "El PIN ingresado no coincide");
             }
         }
 

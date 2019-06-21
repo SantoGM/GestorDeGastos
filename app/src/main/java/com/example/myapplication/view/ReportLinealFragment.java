@@ -1,40 +1,58 @@
 package com.example.myapplication.view;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.businessLogic.ExpenseFacade;
+import com.example.myapplication.view.extras.DateHelper;
+import com.example.myapplication.view.extras.DatePickerFragment;
+import com.example.myapplication.view.pojo.PaymentPojo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import im.dacer.androidcharts.LineView;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ReportLinealFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ReportLinealFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class ReportLinealFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private Date since = addMonth(Calendar.getInstance().getTime(),-1);
+    private Date until = Calendar.getInstance().getTime();
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     int randomint = 9;
+    private LineView lineViewFloat;
     private OnFragmentInteractionListener mListener;
+    Switch aSwitch;
 
     public ReportLinealFragment() {
         // Required empty public constructor
@@ -57,7 +75,13 @@ public class ReportLinealFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+    private Date addMonth(Date date, int amount){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, amount);
 
+        return calendar.getTime();
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,14 +92,100 @@ public class ReportLinealFragment extends Fragment {
 
     }
 
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View inflate = inflater.inflate(R.layout.fragment_report_lineal, container, false);
+        final View inflate = inflater.inflate(R.layout.fragment_report_lineal, container, false);
         // Inflate the layout for this fragment
-        final LineView lineViewFloat =  inflate.findViewById(R.id.line_view_float);
-        initLineView(lineViewFloat);
-        randomSet( lineViewFloat);
+        lineViewFloat =  inflate.findViewById(R.id.line_view_float);
+        final LinearLayout filterContainer = inflate.findViewById(R.id.filtro_cat);
+        final LinearLayout colorContainer = inflate.findViewById(R.id.colors_cont);
+        final EditText txtDateFrom = inflate.findViewById(R.id.txtDateFrom);
+        final EditText txtDateTo = inflate.findViewById(R.id.txtDateTo);
+        final Button button_filter = inflate.findViewById(R.id.button_filter);
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        txtDateFrom.setText(simpleDateFormat.format(since));
+        txtDateTo.setText(simpleDateFormat.format(until));
+
+        List<PaymentPojo> payments = ExpenseFacade.getInstance().getExpensesBetween(since, until, getContext());
+        final LinealReportAdapter Lineal = new LinealReportAdapter(payments,lineViewFloat,colorContainer);
+
+        Lineal.loadData();
+        filterContainer.removeAllViewsInLayout();
+        for  (Switch s: Lineal.getOptions())
+        {
+            filterContainer.addView(s);
+        }
+
+
+        button_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                List<String> categories = new ArrayList<>();
+                for (Switch s:Lineal.getOptions()) {
+                    if(!s.isChecked())
+                        categories.add(s.getText().toString());
+
+                }
+                try {
+                    since = simpleDateFormat.parse(txtDateFrom.getText().toString());
+                    until = simpleDateFormat.parse(txtDateTo.getText().toString());
+                    HorizontalScrollView cont = inflate.findViewById(R.id.horizontalScrollViewFloat);
+                    Log.e("since",txtDateFrom.getText().toString());
+                    Log.e("until",txtDateTo.getText().toString());
+                    lineViewFloat = new LineView(getContext());
+                    List<PaymentPojo> paymentsLocal =ExpenseFacade.getInstance().getExpensesBetweenAndCats(categories,since, until,getContext());
+                    LinealReportAdapter Lineal = new LinealReportAdapter(paymentsLocal,lineViewFloat,colorContainer);
+
+                    cont.removeAllViews();
+                    cont.addView(lineViewFloat);
+                    Lineal.loadData();
+                }catch (ParseException e){
+                    Log.e("ReportLinealFragment",e.getMessage());
+
+
+                }
+
+
+            }
+        });
+
+
+
+
+
+
+
+
+        txtDateFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.txtDateFrom:
+                        showDatePickerDialog(txtDateFrom);
+                        break;
+                }
+            }
+        });
+
+        txtDateTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.txtDateTo:
+                        showDatePickerDialog(txtDateTo);
+                        break;
+                }
+            }
+        });
+
+
+
+
         return inflate;
     }
 
@@ -118,60 +228,17 @@ public class ReportLinealFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    private void initLineView(LineView lineView) {
-        ArrayList<String> test = new ArrayList<String>();
-        for (int i = 0; i < randomint; i++) {
-            test.add(String.valueOf(i + 1));
-        }
-        lineView.setBottomTextList(test);
-        lineView.setColorArray(new int[] {
-                Color.parseColor("#F44336"), Color.parseColor("#9C27B0"),
-                Color.parseColor("#2196F3"), Color.parseColor("#009688")
-        });
-        lineView.setDrawDotLine(true);
-        lineView.setShowPopup(LineView.SHOW_POPUPS_NONE);
-    }
 
-    private void randomSet( LineView lineViewFloat) {
-        ArrayList<ArrayList<Integer>> dataLists = new ArrayList<>();
+    private void showDatePickerDialog(final EditText txtDate) {
+        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                final String selectedDate = DateHelper.toStringDDMMYYYY(day, month, year);
+                txtDate.setText(selectedDate);
 
-        ArrayList<Integer> dataList = generarRandom();
-        ArrayList<Integer> dataList2 = generarRandom();
-        ArrayList<Integer> dataList3 = generarRandom();
-        ArrayList<String> fechas = new ArrayList<>();
-        fechas.add("dia 1");
-        fechas.add("dia 2");
-        fechas.add("dia 3");
-        fechas.add("dia 4");
-        fechas.add("dia 5");
-        fechas.add("dia 6");
-        fechas.add("dia 7");
-        fechas.add("dia 8");
-        fechas.add("dia 9");
-
-
-
-
-
-        dataLists.add(dataList);
-        dataLists.add(dataList2);
-        dataLists.add(dataList3);
-
-
-
-
-        ArrayList<Float> dataListF = generarRandomFloat();
-
-        ArrayList<Float> dataListF2 = generarRandomFloat();
-
-        ArrayList<Float> dataListF3 = generarRandomFloat();
-
-        ArrayList<ArrayList<Float>> dataListFs = new ArrayList<>();
-        dataListFs.add(dataListF);
-        dataListFs.add(dataListF2);
-        dataListFs.add(dataListF3);
-        lineViewFloat.setBottomTextList(fechas);
-        lineViewFloat.setFloatDataList(dataListFs);
+            }
+        }, Boolean.FALSE);
+        newFragment.show(getFragmentManager(), "datePicker");
     }
 
 
@@ -195,5 +262,145 @@ public class ReportLinealFragment extends Fragment {
         }
         return dataListF;
 
+    }
+
+    class LinealReportAdapter implements CompoundButton.OnCheckedChangeListener {
+        private HashMap<String,DataLine> data = new HashMap<>();
+        private HashMap<String,DataLine> dataHidden = new HashMap<>();
+        private LineView lineViewFloat;
+        private List<PaymentPojo> paymentPojos;
+        private List<Switch> options = new ArrayList<>();
+        private LinearLayout containerColors;
+
+        private LinearLayout containerButtons;
+
+        private ArrayList<ArrayList<Float>> dataListFs = new ArrayList<>();
+
+        int[] colors = new int[] {Color.parseColor("#F44336"), Color.parseColor("#9C27B0"), Color.parseColor("#2196F3"), Color.parseColor("#009688"), Color.parseColor("#FFCC33"), Color.parseColor("#FF6633") };
+        public HashMap<String,DataLine> getDataArray(){
+            return data;
+        }
+        public HashMap<String,DataLine> getDataHiddenArray(){
+            return dataHidden;
+        }
+        private void fillDataHolder(){
+            data.clear();
+            dataHidden.clear();
+            Iterator it = paymentPojos.iterator();
+
+            while (it.hasNext()){
+                PaymentPojo paymentPojo = (PaymentPojo) it.next();
+
+                try{
+                    Log.e("LinealReportAdapterACA", paymentPojo.getDate().toString());
+                    this.data.get(paymentPojo.getCategory().getName()).values.add(paymentPojo.getAmount());
+                    this.data.get(paymentPojo.getCategory().getName()).fechas.add(paymentPojo.getDate().toString());
+                }catch (Exception e){
+                    Log.e("LinealReportAdapterACA", paymentPojo.getDate().toString());
+                    DataLine dataLine= new DataLine();
+                    dataLine.descripcion = paymentPojo.getCategory().getName();
+                    dataLine.values.add(paymentPojo.getAmount());
+                    dataLine.fechas.add(paymentPojo.getDate().toString());
+
+                    this.data.put(paymentPojo.getCategory().getName(),dataLine);
+                }
+
+
+
+            }
+
+        }
+        public void setPaymentPojo(List<PaymentPojo> payments){
+            this.paymentPojos =payments;
+        }
+        LinealReportAdapter(List<PaymentPojo> paymentPojos, LineView lineViewFloat, LinearLayout containerColors ){
+            setPaymentPojo(paymentPojos);
+            this.lineViewFloat=lineViewFloat;
+
+            this.containerColors=containerColors;
+            fillDataHolder();
+
+
+            for(String key : getDataArray().keySet()) {
+                Log.e("key",key);
+                aSwitch = new Switch(getContext());
+                aSwitch.setText(key);
+
+                aSwitch.setChecked(true);
+                aSwitch.setOnCheckedChangeListener(this);
+                //containerButtons.addView(aSwitch);
+                options.add(aSwitch);
+            }
+        }
+        public List<Switch> getOptions(){
+            return options;
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            Log.e("pasa color",buttonView.getText().toString());
+
+        }
+        private void initLineView() {
+
+            lineViewFloat.setColorArray(colors);
+            lineViewFloat.setDrawDotLine(true);
+            lineViewFloat.setShowPopup(LineView.SHOW_POPUPS_All
+            );
+        }
+        private void addColor(int color, String tipo){
+
+            TextView color_desc = new TextView(getContext());
+            color_desc.setTextColor(colors[color]);
+            color_desc.setText(tipo);
+            color_desc.setPadding(20,0,0,0);
+            containerColors.addView(color_desc);
+
+        }
+        private void loadData() {
+
+            initLineView();
+            dataListFs = new ArrayList<>();
+            containerColors.removeAllViewsInLayout();
+
+
+            ArrayList<String> dates = new ArrayList<>();
+            int j = 0;
+            for(String key : getDataArray().keySet()) {
+                Log.e("key",key);
+
+                dataListFs.add(getDataArray().get(key).values);
+                addColor(j,key);
+                j++;
+            }
+
+
+            //int dias=(int) ((since.getTime()-until.getTime())/86400000)*-1;
+            int mayor=0;
+            for (ArrayList<Float> expense:dataListFs){
+                if(mayor<expense.size()){
+                    mayor=expense.size();
+                }
+            }
+
+            for(int i=1;i<=mayor+5;i++){
+                dates.add(String.valueOf(i));
+
+            }
+
+
+            lineViewFloat.setBottomTextList(dates);
+           // lineViewFloat.setDataList(null);
+            lineViewFloat.setFloatDataList(dataListFs,true);
+
+
+        }
+
+
+        class DataLine{
+            public String descripcion;
+            public ArrayList<Float> values = new ArrayList<>();
+            public ArrayList<String> fechas = new ArrayList<>();
+        }
     }
 }

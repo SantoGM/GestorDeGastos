@@ -3,34 +3,135 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="60dp"
     tools:context=".view.ReportLinealFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/report_padding"
+        android:gravity="center_horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:paddingTop="60dp"
-            android:text="@string/hello_blank_fragment1" />
-
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollViewFloat"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/line_view_float"
-            android:layout_alignParentRight="true">
+            android:orientation="vertical">
 
-            <view
-                android:id="@+id/line_view_float"
-                class="im.dacer.androidcharts.LineView"
-                android:layout_width="fill_parent"
-                android:layout_height="200dp" />
-        </HorizontalScrollView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:text="@string/hello_blank_fragment1" />
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollViewFloat"
+                android:layout_width="match_parent"
+                android:layout_height="203dp"
+                android:layout_above="@+id/line_view_float"
+                android:layout_alignParentRight="true">
+
+                <view
+                    android:id="@+id/line_view_float"
+                    class="im.dacer.androidcharts.LineView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp" />
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/colors_cont"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:gravity="center|center_horizontal"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="@string/filtros_txt_title"
+                android:textAlignment="center" />
+
+            <LinearLayout
+                android:id="@+id/filtro_cat"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lblDateTo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/report_lin_from_date"
+                    app:layout_constraintEnd_toEndOf="@+id/lblCategory"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/txtDateFrom"
+                    android:layout_width="96dp"
+                    android:layout_height="35dp"
+                    android:clickable="true"
+
+                    android:focusable="false"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/lblDateTo"
+                    app:layout_constraintStart_toStartOf="@+id/spnCateogry"
+                    app:layout_constraintTop_toTopOf="@+id/lblDateTo" />
+
+                <TextView
+                    android:id="@+id/lblDateFrom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/report_lin_to_date"
+                    app:layout_constraintEnd_toEndOf="@+id/lblCategory"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/txtDateTo"
+                    android:layout_width="96dp"
+                    android:layout_height="35dp"
+                    android:clickable="true"
+
+                    android:focusable="false"
+                    android:importantForAutofill="no"
+                    android:inputType="date"
+                    android:maxLines="1"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/lblDateTo"
+                    app:layout_constraintStart_toStartOf="@+id/spnCateogry"
+                    app:layout_constraintTop_toTopOf="@+id/lblDateTo" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_filter"
+            android:layout_width="@dimen/report_btn_width"
+            android:layout_height="wrap_content"
+            android:text="@string/filters_accept_button"/>
+
     </LinearLayout>
+
 
 </FrameLayout>
