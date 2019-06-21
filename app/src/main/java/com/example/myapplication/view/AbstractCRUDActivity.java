@@ -1,11 +1,8 @@
 package com.example.myapplication.view;
 
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.myapplication.R;
 
 import java.util.HashMap;
 

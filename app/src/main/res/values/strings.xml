@@ -91,7 +91,7 @@
     <string name="success_pin_sent_to_mail">Hemos enviado el PIN a su dirección de correo</string>
     <string name="error_complete_pin">Complete el PIN</string>
     <string name="error_wrong_pin">PIN incorrecto</string>
-    <string name="message_greet_user">Hola</string>
+    <string name="message_greet_user">Hola %1$s!</string>
     <string name="error_invalid_pin">Ingrese un PIN de 4 dígitos</string>
     <string name="error_repeat_pin">Reingrese el pin para verificar</string>
     <string name="error_pin_not_match">El PIN ingresado no coincide</string>
@@ -101,9 +101,9 @@
     <string name="lblCreditCardName">Tarjeta</string>
     <string name="lblNewCreditCard">Nueva Tarjeta de Crédito</string>
     <string name="hntAccountName">Nombre de la Cuenta</string>
-    <string name="hntAccountDesc">Sueldo, ahorros, etc...</string>
+    <string name="hntAccountDesc">Sueldo, ahorros, etc…</string>
     <string name="hntCrCardName">Nombre de la tarjeta</string>
-    <string name="hntCrCardDesc">Master del banco X...</string>
+    <string name="hntCrCardDesc">Master del banco X…</string>
     <string name="msg_account_added">Se guardó la nueva cuenta</string>
     <string name="msg_account_deleted">Se ha eliminado la cuenta</string>
     <string name="msg_account_modifyed">Se ha modificado la cuenta</string>
@@ -117,4 +117,9 @@
     <string name="cat_header">Categoria</string>
     <string name="desc_header">Descripción</string>
     <string name="monto_header">Monto</string>
+    <string name="menu_ctx_eliminate">Eliminar</string>
+    <string name="menu_ctx_modify">Modificar</string>
+
+    <string name="msg_no_expenses_recorded">No registra gastos</string>
+    <string name="preffix_cash">$ %1$s</string>
 </resources>

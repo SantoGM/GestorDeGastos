@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 public class DataWorker {
-    private SQLiteDatabase mDb;
+    private final SQLiteDatabase mDb;
 
     public DataWorker(SQLiteDatabase db) {
         mDb = db;
@@ -21,7 +21,7 @@ public class DataWorker {
         values.put(DataBaseContract.AccountEntry.COLUMN_BALANCE, accBalance);
         values.put(DataBaseContract.AccountEntry.COLUMN_DISABLE, 0);
         values.put(DataBaseContract.AccountEntry.TYPE, 0);
-        long newRowId = mDb.insert(DataBaseContract.AccountEntry.TABLE_NAME, null, values);
+        mDb.insert(DataBaseContract.AccountEntry.TABLE_NAME, null, values);
     }
 
     private void insertUser() {
@@ -38,12 +38,11 @@ public class DataWorker {
         values.put(DataBaseContract.CategoryEntry.COLUMN_NAME, "Servicios");
         values.put(DataBaseContract.CategoryEntry.COLUMN_DESCRIPTION, "Luz, gas, cable, etc.");
 
-        long newRowId = mDb.insert(DataBaseContract.CategoryEntry.TABLE_NAME, null, values);
-
+        mDb.insert(DataBaseContract.CategoryEntry.TABLE_NAME, null, values);
 
         values.put(DataBaseContract.CategoryEntry.COLUMN_NAME, "Morfi");
         values.put(DataBaseContract.CategoryEntry.COLUMN_DESCRIPTION, "Almuerzo, Cena");
 
-        newRowId = mDb.insert(DataBaseContract.CategoryEntry.TABLE_NAME, null, values);
+        mDb.insert(DataBaseContract.CategoryEntry.TABLE_NAME, null, values);
     }
 }

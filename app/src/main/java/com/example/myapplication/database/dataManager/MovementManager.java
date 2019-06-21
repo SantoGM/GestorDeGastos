@@ -23,30 +23,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
-import com.example.myapplication.database.DataBaseContract.PaymentEntry;
-import com.example.myapplication.database.DataBaseContract.TransferenceEntry;
-import com.example.myapplication.database.DataBaseContract.CategoryEntry;
-import com.example.myapplication.database.OpenHelper;
-import com.example.myapplication.view.pojo.AccountPojo;
-import com.example.myapplication.view.pojo.CategoryPojo;
-import com.example.myapplication.view.pojo.MovementPojo;
-import com.example.myapplication.view.pojo.PaymentPojo;
-import com.example.myapplication.view.pojo.TransferencePojo;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class MovementManager {
 
     private final int DISABLE = 1;
@@ -55,8 +31,8 @@ public class MovementManager {
     private final int CREDIT_CARD_ACCOUNT = 1;
     private final int CREDIT_CARD_ACCOUNT_ID = 1;
 
-    private AccountManager am;
-    private CategoryManager cm;
+    private final AccountManager am;
+    private final CategoryManager cm;
 
 
     public MovementManager() {
@@ -105,13 +81,13 @@ public class MovementManager {
         String from = dateToString(dateFrom);
         String to   = dateToString(dateTo);
 
-        String selection = PaymentEntry.COLUMN_DATE + " >= ? " +
+        StringBuilder selection = new StringBuilder(PaymentEntry.COLUMN_DATE + " >= ? " +
                 " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
                 // " AND " + PaymentEntry.COLUMN_ID_CATEGORY + " != ? " +
 
-                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?");
         for(String catName: cats) {
-            selection+= " AND " + PaymentEntry.COLUMN_ID_CATEGORY + " NOT IN (SELECT _id FROM " + CategoryEntry.TABLE_NAME + " where name = (?)) ";
+            selection.append(" AND " + PaymentEntry.COLUMN_ID_CATEGORY + " NOT IN (SELECT _id FROM " + CategoryEntry.TABLE_NAME + " where name = (?)) ");
         }
 
         String[]  selectionArgs = new String[3+cats.size()];
@@ -139,7 +115,7 @@ public class MovementManager {
 
         Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
                 columns,
-                selection,
+                selection.toString(),
                 selectionArgs,
                 null,
                 null,
@@ -792,9 +768,7 @@ public class MovementManager {
 
         DateFormat df = new SimpleDateFormat(pattern);
 
-        String date = df.format(dateDate);
-
-        return date;
+        return df.format(dateDate);
     }
 
 

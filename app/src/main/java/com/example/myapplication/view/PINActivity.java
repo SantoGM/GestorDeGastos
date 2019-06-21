@@ -133,10 +133,11 @@ public class PINActivity extends AppCompatActivity {
         String user = getIntent().getStringExtra(IntentViewConstants.USER);
         if (user != null && !user.isEmpty()) {
             TextView text = findViewById(R.id.lblGreet);
-            text.setText(getString(R.string.message_greet_user) + " " + user + "!");
+            text.setText(getString(R.string.message_greet_user, user));
         }
     }
 
+    @SuppressWarnings("SameReturnValue")
     private boolean buildError(EditText compoonent, String message) {
         compoonent.setError(message);
         compoonent.setFocusableInTouchMode(true);

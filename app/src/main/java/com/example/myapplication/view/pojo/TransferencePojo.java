@@ -51,20 +51,20 @@ public class TransferencePojo extends AbstractPojo implements MovementPojo {
     public String getDetail() {
         return detail;
     }
+
     public void setDetail(String detail) {
-        detail = detail;
+        this.detail = detail;
     }
 
 
     @Override
     public String[] showDetails() {
-        String[] details = {String.valueOf(this.getId()),
+        return new String[]{String.valueOf(this.getId()),
                             String.valueOf(this.date),
                             String.valueOf(this.amount),
                             this.accountOrigin.getName(),
                             this.accountDestiny.getName(),
                             this.detail};
-        return details;
     }
 
     @Override

@@ -74,7 +74,7 @@ public class AddExpenseActivity extends BaseActivity {
     }
 
     private HashMap<String, Object> extractInputData() {
-        HashMap result = new HashMap<String, Object>();
+        HashMap<String, Object> result = new HashMap<>();
 
         // Date
         EditText input = findViewById(R.id.txtDate);
@@ -119,10 +119,8 @@ public class AddExpenseActivity extends BaseActivity {
         txtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.txtDate:
-                        showDatePickerDialog(txtDate);
-                        break;
+                if (v.getId() == R.id.txtDate) {
+                    showDatePickerDialog(txtDate);
                 }
             }
         });
@@ -150,7 +148,7 @@ public class AddExpenseActivity extends BaseActivity {
             result = buildError(nmbAmount, getString(R.string.error_amount_required));
         } else {
 
-            Double value = Double.parseDouble(input.toString());
+            double value = Double.parseDouble(input.toString());
 
             if (value <= 0) {
                 result = buildError(nmbAmount, getString(R.string.error_amount_must_be_greater_than_zero));

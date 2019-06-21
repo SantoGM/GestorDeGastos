@@ -2,12 +2,10 @@ package com.example.myapplication.view;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.myapplication.R;
 import com.example.myapplication.businessLogic.AccountsFacade;
@@ -48,7 +46,7 @@ public class AccountCRUDActivity extends AbstractCRUDActivity {
     }
 
     protected HashMap<String, Object> extractInputData() {
-        HashMap result = new HashMap<String, Object>();
+        HashMap<String, Object> result = new HashMap<>();
 
         // Account Name
         EditText input = findViewById(R.id.lblAccountName);

@@ -1,6 +1,7 @@
 package com.example.myapplication.view.extras;
 
 import android.content.Context;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
 
-    private ArrayList<String> listAccounts;
-    private Map<String, List<PaymentPojo>> listExpenses;
-    private Context context;
-    private Map<Integer, Integer> colorMap;
+    private final ArrayList<String> listAccounts;
+    private final Map<String, List<PaymentPojo>> listExpenses;
+    private final Context context;
+    private SparseIntArray colorMap;
 
     public ExpandableCategoryAdapter(ArrayList<String> listAccounts, Map<String, List<PaymentPojo>> listExpenses, Context context) {
         this.listAccounts = listAccounts;
@@ -30,7 +32,7 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
     }
 
     private void buildColorMap() {
-        colorMap = new HashMap<>();
+        colorMap = new SparseIntArray();
 
         int c1 = context.getResources().getColor(R.color.colorBckg1);
         int c2 = context.getResources().getColor(R.color.colorBckg2);
@@ -52,7 +54,7 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        int result = listExpenses.get(listAccounts.get(groupPosition)).size();
+        int result = Objects.requireNonNull(listExpenses.get(listAccounts.get(groupPosition))).size();
         if (result == 0) {
             result = 1;
         }
@@ -66,7 +68,7 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return listExpenses.get( listAccounts.get(groupPosition) ).get(childPosition);
+        return Objects.requireNonNull(listExpenses.get(listAccounts.get(groupPosition))).get(childPosition);
     }
 
     @Override
@@ -87,7 +89,7 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         String account = (String) getGroup(groupPosition);
-        convertView = LayoutInflater.from(context).inflate(R.layout.elv_parent_account, null);
+        convertView = LayoutInflater.from(context).inflate(R.layout.elv_parent_account, parent, Boolean.FALSE);
         TextView tv = convertView.findViewById(R.id.tvParentAccount);
         tv.setText(account);
         return convertView;
@@ -96,7 +98,7 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         // Inflate View
-        convertView = LayoutInflater.from(context).inflate(R.layout.composte_line_adapter, null);
+        convertView = LayoutInflater.from(context).inflate(R.layout.composte_line_adapter, parent, Boolean.FALSE);
 
         // Obtain Text Views
         TextView category = convertView.findViewById(R.id.expenseListItemCategory);
@@ -104,8 +106,8 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
         TextView detail = convertView.findViewById(R.id.expenseListItemDetail);
         TextView amount = convertView.findViewById(R.id.expenseListItemAmount);
 
-        if (listExpenses.get( listAccounts.get(groupPosition) ).size() == 0) {
-            category.setText("No registra gastos");
+        if (Objects.requireNonNull(listExpenses.get(listAccounts.get(groupPosition))).size() == 0) {
+            category.setText(R.string.msg_no_expenses_recorded);
             category.setTextSize(20);
             date.setText("");
             detail.setText("");
@@ -119,8 +121,7 @@ public class ExpandableCategoryAdapter extends BaseExpandableListAdapter {
             category.setText(data.getCategory().getName());
             date.setText(DateHelper.toStringDDMM(data.getDate()));
             detail.setText(data.getDetail());
-            amount.setText("$ " + data.getAmount());
-
+            amount.setText(context.getResources().getString(R.string.preffix_cash, data.getAmount().toString()));
             date.setBackgroundColor(colorMap.get(childPosition));
         }
 

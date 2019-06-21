@@ -1,6 +1,7 @@
 package com.example.myapplication.view.extras;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,32 +10,37 @@ import android.widget.TextView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.view.pojo.AccountPojo;
-import com.example.myapplication.view.pojo.PaymentPojo;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static com.example.myapplication.R.layout.composte_line_account;
 
 public class AccountsListAdapter extends ArrayAdapter {
     private final Context context;
     private final List<AccountPojo> values;
 
-    public AccountsListAdapter(Context context, List<AccountPojo> values) {
-        super(context, -1, values.toArray());
+    @SuppressWarnings("unchecked")
+    public AccountsListAdapter(Context context, @NonNull List<AccountPojo> values) {
+        super(context, -1, Objects.requireNonNull(values.toArray()));
         this.context = context;
         this.values = values;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Inflate View
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = inflater.inflate(R.layout.composte_line_account, parent, false);
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+
+        if (convertView == null) {
+            // Inflate View
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(composte_line_account, parent, Boolean.FALSE);
+        }
 
         // Obtain Text Views
-        TextView name = rowView.findViewById(R.id.accountListItemName);
-        TextView descrip = rowView.findViewById(R.id.accountListItemDescrip);
-        TextView balance = rowView.findViewById(R.id.accountListItemBalance);
+        TextView name = convertView.findViewById(R.id.accountListItemName);
+        TextView descrip = convertView.findViewById(R.id.accountListItemDescrip);
+        TextView balance = convertView.findViewById(R.id.accountListItemBalance);
 
 
         // Set the values
@@ -42,8 +48,8 @@ public class AccountsListAdapter extends ArrayAdapter {
 
         name.setText(data.getName());
         descrip.setText(data.getDescription());
-        balance.setText("$ " + data.getBalance());
+        balance.setText(context.getString(R.string.preffix_cash, data.getBalance().toString()));
 
-        return rowView;
+        return convertView;
     }
 }

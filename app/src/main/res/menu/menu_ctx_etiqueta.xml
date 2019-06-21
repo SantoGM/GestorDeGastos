@@ -2,9 +2,11 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/CtxLblOpc1"
-        android:title="Eliminar"></item>
-    <item android:id="@+id/CtxLblOpc2"
-        android:title="Modificar"></item>
+    <item
+        android:id="@+id/CtxLblOpc1"
+        android:title="@string/menu_ctx_eliminate" />
+    <item
+        android:id="@+id/CtxLblOpc2"
+        android:title="@string/menu_ctx_modify" />
 
 </menu>

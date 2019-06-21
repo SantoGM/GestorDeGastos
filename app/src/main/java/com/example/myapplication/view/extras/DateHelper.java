@@ -3,6 +3,8 @@ package com.example.myapplication.view.extras;
 import java.util.Calendar;
 import java.util.Date;
 
+
+@SuppressWarnings({"deprecation"})
 public class DateHelper {
 
     public static final String F_SLASH = "/";

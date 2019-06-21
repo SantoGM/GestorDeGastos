@@ -86,7 +86,7 @@ public class GMailSender extends javax.mail.Authenticator
 
     public class ByteArrayDataSource implements DataSource
     {
-        private byte[] data;
+        private final byte[] data;
         private String type;
 
         public ByteArrayDataSource(byte[] data, String type)
@@ -115,8 +115,7 @@ public class GMailSender extends javax.mail.Authenticator
                 return type;
         }
 
-        public InputStream getInputStream() throws IOException
-        {
+        public InputStream getInputStream() {
             return new ByteArrayInputStream(data);
         }
 

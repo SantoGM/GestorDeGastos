@@ -10,12 +10,10 @@ import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.CategoryPojo;
 import com.example.myapplication.view.pojo.PaymentPojo;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class ExpenseFacade extends AbstractFacade {
 
     private static ExpenseFacade instance;

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,29 +34,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import im.dacer.androidcharts.PieView;
 
 
 public class ReportCakeFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private Date since = addMonth(Calendar.getInstance().getTime(),-1);
     private Date until = Calendar.getInstance().getTime();
 
-
     private ListView listview;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    int randomint = 9;
-    //private LineView lineViewFloat;
-
     private OnFragmentInteractionListener mListener;
     Switch aSwitch;
 
@@ -91,8 +82,8 @@ public class ReportCakeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
     }
@@ -101,7 +92,7 @@ public class ReportCakeFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View inflate = inflater.inflate(R.layout.fragment_report_cake, container, false);
         // Inflate the layout for this fragment
@@ -125,7 +116,7 @@ public class ReportCakeFragment extends Fragment {
 
 
         final ResumeReportAdapter Lineal = new ResumeReportAdapter(payments,colorContainer,getContext(), R.layout.list_item);
-        listview = (ListView) inflate.findViewById(R.id.list_view);
+        listview = inflate.findViewById(R.id.list_view);
         Lineal.loadData();
 
         listview.setAdapter(Lineal);
@@ -161,7 +152,7 @@ public class ReportCakeFragment extends Fragment {
 //                    cont.removeAllViews();
  ///                   cont.addView(pieView);
 
-                    listview = (ListView) inflate.findViewById(R.id.list_view);
+                    listview = inflate.findViewById(R.id.list_view);
                     Lineal.loadData();
 
                     listview.setAdapter(Lineal);
@@ -186,10 +177,8 @@ public class ReportCakeFragment extends Fragment {
         txtDateFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.txtDateFrom:
-                        showDatePickerDialog(txtDateFrom);
-                        break;
+                if (v.getId() == R.id.txtDateFrom) {
+                    showDatePickerDialog(txtDateFrom);
                 }
             }
         });
@@ -197,10 +186,8 @@ public class ReportCakeFragment extends Fragment {
         txtDateTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.txtDateTo:
-                        showDatePickerDialog(txtDateTo);
-                        break;
+                if (v.getId() == R.id.txtDateTo) {
+                    showDatePickerDialog(txtDateTo);
                 }
             }
         });
@@ -221,12 +208,8 @@ public class ReportCakeFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-        } else {
-//            throw new RuntimeException(context.toString()
-            //                  + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -268,12 +251,12 @@ public class ReportCakeFragment extends Fragment {
 
 
     class ResumeReportAdapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
-        private HashMap<String,DataLine> data = new HashMap<>();
-        private HashMap<String,DataLine> dataHidden = new HashMap<>();
+        private final HashMap<String,DataLine> data = new HashMap<>();
+        private final HashMap<String,DataLine> dataHidden = new HashMap<>();
 
-        private ArrayList<PaymentPojo> paymentPojos;
-        private List<Switch> options = new ArrayList<>();
-        private LinearLayout containerColors;
+        private final ArrayList<PaymentPojo> paymentPojos;
+        private final List<Switch> options = new ArrayList<>();
+        private final LinearLayout containerColors;
 
         private LinearLayout containerButtons;
         private PieView pieViewAdap;
@@ -292,25 +275,21 @@ public class ReportCakeFragment extends Fragment {
         private void fillDataHolder(){
             data.clear();
             dataHidden.clear();
-            Iterator it = paymentPojos.iterator();
 
-            while (it.hasNext()){
-                PaymentPojo paymentPojo = (PaymentPojo) it.next();
-
-                try{
+            for (PaymentPojo paymentPojo : paymentPojos) {
+                try {
                     Log.e("LinealReportAdapterACA", paymentPojo.getDate().toString());
                     this.data.get(paymentPojo.getCategory().getName()).values.add(paymentPojo.getAmount());
                     this.data.get(paymentPojo.getCategory().getName()).fechas.add(paymentPojo.getDate().toString());
-                }catch (Exception e){
+                } catch (Exception e) {
                     Log.e("LinealReportAdapterACA", paymentPojo.getDate().toString());
-                    DataLine dataLine= new DataLine();
+                    DataLine dataLine = new DataLine();
                     dataLine.descripcion = paymentPojo.getCategory().getName();
                     dataLine.values.add(paymentPojo.getAmount());
                     dataLine.fechas.add(paymentPojo.getDate().toString());
 
-                    this.data.put(paymentPojo.getCategory().getName(),dataLine);
+                    this.data.put(paymentPojo.getCategory().getName(), dataLine);
                 }
-
 
 
             }
@@ -355,23 +334,20 @@ public class ReportCakeFragment extends Fragment {
         }
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
-            // Copiamos la vista
-            View v = convertView;
-
             //Inflamos la vista con nuestro propio layout
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
 
-            v= layoutInflater.inflate(R.layout.list_item, null);
+            View v = layoutInflater.inflate(R.layout.list_item, null);
             // Valor actual según la posición
 
             PaymentPojo currentPayment  = paymentPojos.get(position);
 
             // Referenciamos el elemento a modificar y lo rellenamos
-            TextView text_date = (TextView) v.findViewById(R.id.txt_fecha);
+            TextView text_date = v.findViewById(R.id.txt_fecha);
             final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            TextView text_cat = (TextView) v.findViewById(R.id.text_cat);
-            TextView text_desc = (TextView) v.findViewById(R.id.text_desc);
-            TextView text_mount = (TextView) v.findViewById(R.id.text_mount);
+            TextView text_cat = v.findViewById(R.id.text_cat);
+            TextView text_desc = v.findViewById(R.id.text_desc);
+            TextView text_mount = v.findViewById(R.id.text_mount);
 
             text_date.setText(simpleDateFormat.format(currentPayment.getDate()));
             text_cat.setText(currentPayment.getCategory().getName().trim());
@@ -401,8 +377,8 @@ public class ReportCakeFragment extends Fragment {
 
         class DataLine{
             public String descripcion;
-            public ArrayList<Float> values = new ArrayList<>();
-            public ArrayList<String> fechas = new ArrayList<>();
+            public final ArrayList<Float> values = new ArrayList<>();
+            public final ArrayList<String> fechas = new ArrayList<>();
         }
     }
 }

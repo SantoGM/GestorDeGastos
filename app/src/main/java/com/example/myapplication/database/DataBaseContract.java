@@ -25,7 +25,7 @@ public final class DataBaseContract {
                         COLUMN_BALANCE + " REAL NOT NULL, " +
                         COLUMN_DISABLE + " INTEGER DEFAULT 0 )";
 
-        public static final String getQName(String columnName) {
+        public static String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
         }
     }
@@ -45,7 +45,7 @@ public final class DataBaseContract {
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_DISABLE + " INTEGER DEFAULT 0 )";
 
-        public static final String getQName(String columnName) {
+        public static String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
         }
     }
@@ -73,7 +73,7 @@ public final class DataBaseContract {
                         COLUMN_IS_CREDIT_CARD + " INTEGER NOT NULL, " +
                         COLUMN_DISABLE + " INTEGER DEFAULT 0 )";
 
-        public static final String getQName(String columnName) {
+        public static String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
         }
     }
@@ -99,7 +99,7 @@ public final class DataBaseContract {
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_DISABLE + " INTEGER DEFAULT 0 )";
 
-        public static final String getQName(String columnName) {
+        public static String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
         }
     }
@@ -119,7 +119,7 @@ public final class DataBaseContract {
                         COLUMN_EMAIL + " TEXT NOT NULL, " +
                         COLUMN_PIN + " INTEGER NOT NULL )";
 
-        public static final String getQName(String columnName) {
+        public static String getQName(String columnName) {
             return TABLE_NAME + "." + columnName;
         }
     }

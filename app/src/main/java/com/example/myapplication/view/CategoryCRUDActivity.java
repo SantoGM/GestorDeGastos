@@ -8,6 +8,8 @@ import android.view.View;
 
 import com.example.myapplication.R;
 
+import java.util.Objects;
+
 public class CategoryCRUDActivity extends BaseActivity {
 
     @Override
@@ -25,7 +27,7 @@ public class CategoryCRUDActivity extends BaseActivity {
                         .setAction("Action", null).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
 }

@@ -3,13 +3,8 @@ package com.example.myapplication.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.businessLogic.AccountsFacade;
@@ -17,7 +12,6 @@ import com.example.myapplication.businessLogic.ExpenseFacade;
 import com.example.myapplication.view.extras.ExpandableCategoryAdapter;
 import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.PaymentPojo;
-import com.example.myapplication.businessLogic.PersistentDataModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
