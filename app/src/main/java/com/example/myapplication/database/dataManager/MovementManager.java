@@ -48,7 +48,7 @@ public class MovementManager {
      * <p>Method to get the expenses by account</p>
      * @param dbHelper - DB Handler
      * @param accountId - ID of the account you want to get the expenses from
-     * @return List<PaymenyPojo> - List of the expenses
+     * @return {@link List}<{@link PaymenyPojo}> - List of the expenses
      */
     public List<PaymenyPojo> getExpensesByAccount(OpenHelper dbHelper, Long accountId) {
         List<PaymenyPojo> payments;
@@ -90,7 +90,7 @@ public class MovementManager {
      * @param dbHelper - DB Handler
      * @param accountId - ID of the account you want to get the expenses from
      * @param limit - Number of rows you want to get
-     * @return List<PaymenyPojo> - List of the expenses
+     * @return {@link List}<{@link PaymenyPojo}> - List of the expenses
      */
     public List<PaymenyPojo> getExpensesByAccount(OpenHelper dbHelper, Long accountId, Integer limit) {
         List<PaymenyPojo> payments;
@@ -134,7 +134,7 @@ public class MovementManager {
      * @param accountId - ID of the account you want to get the expenses from
      * @param dateFrom - Date from
      * @param dateTo - Date to
-     * @returnList<PaymenyPojo> - List of the expenses
+     * @return {@link List}<{@link PaymenyPojo}> - List of the expenses
      */
     public List<PaymenyPojo> getExpensesByAccountByDate(OpenHelper dbHelper, Long accountId, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;
@@ -185,7 +185,7 @@ public class MovementManager {
      * @param dateFrom - Date from
      * @param dateTo - Date to
      * @param limit - Number of rows you want to get
-     * @returnList<PaymenyPojo> - List of the expenses
+     * @return {@link List}<{@link PaymenyPojo}> - List of the expenses
      */
     public List<PaymenyPojo> getExpensesByAccountByDate(OpenHelper dbHelper, Long accountId, Date dateFrom, Date dateTo, Integer limit) {
         List<PaymenyPojo> payments;
@@ -531,8 +531,8 @@ public class MovementManager {
             Integer creditCardInt = cursor.getInt(payCCPos);
 
             Date date = stringToDate(dateString);
-            CategoryPojo category = cm.findById(dbHelper, categoryId);
-            AccountPojo account = am.findById(dbHelper, accountId);
+            CategoryPojo category = cm.findByIdWithDisabled(dbHelper, categoryId);
+            AccountPojo account = am.findByIdWithDisabled(dbHelper, accountId);
             Boolean creditCard = intToBoolean(creditCardInt);
 
             PaymenyPojo payment = new PaymenyPojo(id, date, amount, category, account, description, creditCard);
