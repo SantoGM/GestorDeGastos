@@ -23,6 +23,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Class to handle all the operations related with Movements: Payments, Expenses and Transferences
+ */
 public class MovementManager {
 
     private final int DISABLE = 1;
@@ -125,11 +128,113 @@ public class MovementManager {
 
 
     /**
+     * <h1>getExpensesByAccountByDate</h1>
+     * <p>Method to get the expenses by account</p>
+     * @param dbHelper - DB Handler
+     * @param accountId - ID of the account you want to get the expenses from
+     * @param dateFrom - Date from
+     * @param dateTo - Date to
+     * @returnList<PaymenyPojo> - List of the expenses
+     */
+    public List<PaymenyPojo> getExpensesByAccountByDate(OpenHelper dbHelper, Long accountId, Date dateFrom, Date dateTo) {
+        List<PaymenyPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String selection = PaymentEntry.COLUMN_ID_ACCOUNT + " = ? " +
+                " AND " + PaymentEntry.COLUMN_DATE + " >= ? " +
+                " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
+                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(accountId),
+                                  from,
+                                  to,
+                                  Integer.toString(ENABLE)};
+
+        String[] columns = {PaymentEntry._ID,
+                PaymentEntry.COLUMN_DATE,
+                PaymentEntry.COLUMN_AMOUNT,
+                PaymentEntry.COLUMN_ID_CATEGORY,
+                PaymentEntry.COLUMN_ID_ACCOUNT,
+                PaymentEntry.COLUMN_DESCRIPTION,
+                PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " DESC";
+
+        Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                paymentOrderBy);
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    /**
+     * <h1>getExpensesByAccountByDate</h1>
+     * <p>Method to get the expenses by account</p>
+     * @param dbHelper - DB Handler
+     * @param accountId - ID of the account you want to get the expenses from
+     * @param dateFrom - Date from
+     * @param dateTo - Date to
+     * @param limit - Number of rows you want to get
+     * @returnList<PaymenyPojo> - List of the expenses
+     */
+    public List<PaymenyPojo> getExpensesByAccountByDate(OpenHelper dbHelper, Long accountId, Date dateFrom, Date dateTo, Integer limit) {
+        List<PaymenyPojo> payments;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String from = dateToString(dateFrom);
+        String to   = dateToString(dateTo);
+
+        String selection = PaymentEntry.COLUMN_ID_ACCOUNT + " = ? " +
+                " AND " + PaymentEntry.COLUMN_DATE + " >= ? " +
+                " AND " + PaymentEntry.COLUMN_DATE + " <= ? " +
+                " AND " + PaymentEntry.COLUMN_DISABLE + " = ?";
+
+        String[] selectionArgs = {Long.toString(accountId),
+                from,
+                to,
+                Integer.toString(ENABLE)};
+
+        String[] columns = {PaymentEntry._ID,
+                            PaymentEntry.COLUMN_DATE,
+                            PaymentEntry.COLUMN_AMOUNT,
+                            PaymentEntry.COLUMN_ID_CATEGORY,
+                            PaymentEntry.COLUMN_ID_ACCOUNT,
+                            PaymentEntry.COLUMN_DESCRIPTION,
+                            PaymentEntry.COLUMN_IS_CREDIT_CARD};
+
+        String paymentOrderBy = PaymentEntry.COLUMN_DATE + " DESC";
+
+        Cursor paymentCur = db.query(PaymentEntry.TABLE_NAME,
+                                     columns,
+                                     selection,
+                                     selectionArgs,
+                                     null,
+                                     null,
+                                     paymentOrderBy,
+                                     Integer.toString(limit));
+
+        payments = loadPayments(dbHelper, paymentCur);
+
+        return payments;
+    }
+
+
+    /**
      * <h1>findPaymentById</h1>
      * <p>Method to get a payment from a payment ID</p>
      * @param dbHelper - DB handler
      * @param paymentId - ID of the payment you are looking for
-     * @return PaymenyPojo - The payment found or NULL if the payment doesn't exist
+     * @return {@link PaymenyPojo} - The payment found or NULL if the payment doesn't exist
      */
     public PaymenyPojo findPaymentById(OpenHelper dbHelper, Long paymentId) {
         PaymenyPojo payment;
@@ -263,6 +368,15 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>getPaymentByCategoryName</h1>
+     * <p>Method to get all the payments by category name</p>
+     * @param dbHelper - DB handler
+     * @param categoryName - Name of the category
+     * @param dateFrom - Date from
+     * @param dateTo - Date to
+     * @return List<PaymenyPojo> - List of expenses
+     */
     public List<PaymenyPojo> getPaymentByCategoryName(OpenHelper dbHelper, String categoryName, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -292,7 +406,6 @@ public class MovementManager {
 
         String paymentOrderBy = PaymentEntry.getQName(PaymentEntry.COLUMN_DATE) + " DESC";
 
-
         Cursor paymentCur = db.query(tablesWithJoin,
                 columns,
                 selection,
@@ -307,6 +420,15 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>getPaymentByCategoryId</h1>
+     * <p>Method to get all the payments by category ID between dates</p>
+     * @param dbHelper - DB handler
+     * @param categoryId - ID of the category
+     * @param dateFrom - Date from
+     * @param dateTo - Date to
+     * @return List<PaymenyPojo> - List of expenses
+     */
     public List<PaymenyPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId, Date dateFrom, Date dateTo) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -347,6 +469,13 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>getPaymentByCategoryId</h1>
+     * <p>Method to get all the payments by category ID</p>
+     * @param dbHelper - DB handler
+     * @param categoryId - ID of the category
+     * @return List<PaymenyPojo> - List of expenses
+     */
     public List<PaymenyPojo> getPaymentByCategoryId(OpenHelper dbHelper, Long categoryId) {
         List<PaymenyPojo> payments;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -417,6 +546,12 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>insertPayment</h1>
+     * <p>Method to insert a payment</p>
+     * @param dbHelper - DB handler
+     * @param payment - {@link PaymenyPojo} payment to insert
+     */
     public void insertPayment(OpenHelper dbHelper, PaymenyPojo payment) {
 
         AccountPojo account;
@@ -559,6 +694,13 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>findTransferenceById</h1>
+     * <p>Method to find a transference by ID</p>
+     * @param dbHelper - DB handler
+     * @param transferenceId - ID of the transference to find
+     * @return {@link TransferencePojo} - The transference found or NULL if the transference doesn't exist
+     */
     public TransferencePojo findTransferenceById(OpenHelper dbHelper, Long transferenceId) {
         TransferencePojo transference;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -590,6 +732,14 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>getAllTransferences</h1>
+     * <p>Method to get all the transferences between dates</p>
+     * @param dbHelper - DB handler
+     * @param dateFrom - Date from
+     * @param dateTo - Date to
+     * @return {@link List}<{@link TransferencePojo}>} - List of transferences found
+     */
     public List<TransferencePojo> getAllTransferences(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
         List<TransferencePojo> transferences;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -659,6 +809,12 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>insertTransference</h1>
+     * <p>Method to insert a transference</p>
+     * @param dbHelper - DB handler
+     * @param transference - {@link TransferencePojo} transference to insert
+     */
     public void insertTransference(OpenHelper dbHelper, TransferencePojo transference) {
 
         AccountPojo accountOrigin;
@@ -787,6 +943,14 @@ public class MovementManager {
     }
 
 
+    /**
+     * <h1>getAllMovements</h1>
+     * <p>Method to get all the movements between dates</p>
+     * @param dbHelper - DB handler
+     * @param dateFrom - Date from
+     * @param dateTo - Date to
+     * @return {@link List}<{@link MovementPojo}> - List of momevements found
+     */
     public List<MovementPojo> getAllMovements(OpenHelper dbHelper, Date dateFrom, Date dateTo) {
 
         Comparator<MovementPojo> comparator = new Comparator<MovementPojo>() {

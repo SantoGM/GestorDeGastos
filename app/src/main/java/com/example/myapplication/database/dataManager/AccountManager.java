@@ -12,6 +12,9 @@ import java.util.List;
 
 import static com.example.myapplication.database.DataBaseContract.AccountEntry;
 
+/**
+ * Class to handle all the operations related with Acounts
+ */
 public class AccountManager {
 
     private final int DISABLE = 1;
@@ -24,6 +27,12 @@ public class AccountManager {
     }
 
 
+    /**
+     * <h1>getAccounts</h1>
+     * <p>Method to get all the accounts</p>
+     * @param dbHelper - DB Handler
+     * @return {@link List}<{@link AccountPojo}> - List of accounts found
+     */
     public List<AccountPojo> getAccounts(OpenHelper dbHelper) {
         List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -54,6 +63,12 @@ public class AccountManager {
     }
 
 
+    /**
+     * <h1>getBankAccounts</h1>
+     * <p>Method to get all the <i>Bank accounts</i></p>
+     * @param dbHelper - DB Handler
+     * @return {@link List}<{@link AccountPojo}> - List of accounts found
+     */
     public List<AccountPojo> getBankAccounts(OpenHelper dbHelper) {
         List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();

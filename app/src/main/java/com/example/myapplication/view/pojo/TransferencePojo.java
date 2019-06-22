@@ -2,6 +2,9 @@ package com.example.myapplication.view.pojo;
 
 import java.util.Date;
 
+/**
+ * Class which contains the representation of a transference for the <i>view</i>
+ */
 public class TransferencePojo extends AbstractPojo implements MovementPojo {
 
     private Date date;

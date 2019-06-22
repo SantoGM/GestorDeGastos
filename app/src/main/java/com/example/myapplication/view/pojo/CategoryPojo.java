@@ -1,5 +1,8 @@
 package com.example.myapplication.view.pojo;
 
+/**
+ * Class which contains the representation of a category for the <i>view</i>
+ */
 public class CategoryPojo extends AbstractPojo{
 
     private String name;

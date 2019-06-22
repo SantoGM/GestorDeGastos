@@ -2,6 +2,9 @@ package com.example.myapplication.view.pojo;
 
 import java.util.Date;
 
+/**
+ * Class which contains the representation of a payment for the <i>view</i>
+ */
 public class PaymenyPojo extends AbstractPojo implements MovementPojo {
 
     private Date date;

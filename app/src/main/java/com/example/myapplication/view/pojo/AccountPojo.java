@@ -1,5 +1,8 @@
 package com.example.myapplication.view.pojo;
 
+/**
+ * Class which contains the representation of an account for the <i>view</i>
+ */
 public class AccountPojo extends AbstractPojo{
 
     private String name;
