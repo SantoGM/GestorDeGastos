@@ -39,6 +39,13 @@ public class AccountsActivity extends BaseActivity implements Observer {
 
         createMenu();
 
+        initFabMenu();
+
+        AccountsFacade.getInstance().addObserver(this);
+        fetchData();
+    }
+
+    private void initFabMenu() {
         fabAddAccount =  findViewById(R.id.btnAddAcount);
         fabAddCard = findViewById(R.id.btnAddCard);
         fam = findViewById(R.id.fab_menu);
@@ -64,9 +71,6 @@ public class AccountsActivity extends BaseActivity implements Observer {
                 }
             }
         });
-
-        AccountsFacade.getInstance().addObserver(this);
-        fetchData();
     }
 
     private void fetchData() {

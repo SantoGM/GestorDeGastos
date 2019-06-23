@@ -133,4 +133,7 @@
     <string name="title_activity_add_transfer">Nueva Transferencia</string>
     <string name="error_trf_same_account">No se puede transferir hacia la misma cuenta (o si, pero no tiene sentido)</string>
     <string name="error_trf_amount_required">Ingrese el monto de la transferencia</string>
+    <string name="lblInternalTransfer">Transferencia entre cuentas</string>
+    <string name="fabTrfExternal">Depósito externo</string>
+    <string name="fabtTrfPayCard">Pagar Tarjetas</string>
 </resources>

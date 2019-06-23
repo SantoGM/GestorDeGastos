@@ -28,13 +28,73 @@
 
         <include layout="@layout/content_transfer" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_add_white_24dp" />
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:fab="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/fabTrfMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="0dp"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingBottom="@dimen/activity_horizontal_margin"
+                fab:menu_colorNormal="@color/colorAccent"
+                fab:menu_colorPressed="@color/colorAccent"
+                fab:menu_colorRipple="@color/secondaryColor"
+                fab:menu_fab_label="Menu"
+                fab:menu_labels_colorNormal="@color/colorFabLblTxt"
+                fab:menu_labels_ellipsize="end"
+                fab:menu_labels_maxLines="-1"
+                fab:menu_labels_position="left"
+                fab:menu_labels_showShadow="true"
+                fab:menu_labels_singleLine="true"
+                fab:menu_openDirection="up"
+                >
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fabTrfInternal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_white_24dp"
+                    fab:fab_colorNormal="@color/colorAccent"
+                    fab:fab_colorPressed="@color/colorAccent"
+                    fab:fab_colorRipple="@color/secondaryColor"
+                    fab:fab_label="@string/lblInternalTransfer"
+                    fab:fab_size="mini" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fabTrfExternal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_white_24dp"
+                    fab:fab_colorNormal="@color/colorAccent"
+                    fab:fab_colorPressed="@color/colorAccent"
+                    fab:fab_colorRipple="@color/secondaryColor"
+                    fab:fab_label="@string/fabTrfExternal"
+                    fab:fab_size="mini" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/fabTrfPayCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_white_24dp"
+                    fab:fab_colorNormal="@color/colorAccent"
+                    fab:fab_colorPressed="@color/colorAccent"
+                    fab:fab_colorRipple="@color/secondaryColor"
+                    fab:fab_label="@string/fabtTrfPayCard"
+                    fab:fab_size="mini" />
+
+
+            </com.github.clans.fab.FloatingActionMenu>
+
+        </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 

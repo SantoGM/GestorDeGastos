@@ -24,10 +24,18 @@ public class AccountsFacade extends AbstractFacade{
         return instance;
     }
 
-    public ArrayList<PersistentDataModel> getAccountsSpinnerModel(Context ctx) {
+    public ArrayList<PersistentDataModel> getBankAccountsSpinnerModel(Context ctx) {
         OpenHelper oh = new OpenHelper(ctx);
         AccountManager am = new AccountManager();
-        ArrayList<PersistentDataModel> result = buildDataModel(am.getAccounts(oh), AccountPojo.class);
+        ArrayList<PersistentDataModel> result = buildDataModel(am.getBankAccounts(oh), AccountPojo.class);
+        oh.close();
+        return result;
+    }
+
+    public ArrayList<PersistentDataModel> getCreditCardAccountSpinnerModel(Context ctx) {
+        OpenHelper oh = new OpenHelper(ctx);
+        AccountManager am = new AccountManager();
+        ArrayList<PersistentDataModel> result = buildDataModel(am.getCreditCardAccounts(oh), AccountPojo.class);
         oh.close();
         return result;
     }
