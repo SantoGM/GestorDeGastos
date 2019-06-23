@@ -50,10 +50,7 @@ public class MovementsFacade extends AbstractFacade {
     public List<PaymentPojo> obtainLastFiveMovementsByAccount(Context ctx, Long accountID) {
         OpenHelper oh = new OpenHelper(ctx);
         MovementManager mm = new MovementManager();
-        List<PaymentPojo> result = mm.getAllPaymentsByAccount(oh, new Date(0, 0, 1), new Date(3000-1900, 11, 31), accountID);
-        if (result.size()>5){
-            result = result.subList(0, 5);
-        }
+        List<PaymentPojo> result = mm.getExpensesByAccount(oh, accountID, 5);
         oh.close();
         return result;
     }
@@ -70,15 +67,11 @@ public class MovementsFacade extends AbstractFacade {
         return payments;
     }
 
-
     public List<PaymentPojo> getExpensesBetweenAndCats(List<String> cats,Date since,  Date until, Context ctx) {
         OpenHelper oh = new OpenHelper(ctx);
         MovementManager mmg = new MovementManager();
-
         List<PaymentPojo> payments = mmg.getAllExpensesFilterCat(oh,cats, since, until);
-
         oh.close();
-
         return payments;
     }
 
@@ -93,6 +86,21 @@ public class MovementsFacade extends AbstractFacade {
 
         MovementManager mm  = new MovementManager();
         mm.insertTransference(oh, transferToSave);
+        oh.close();
+        setChanged();
+    }
+
+    public void saveDeposit(Date date, Long destinationID, Float amount, String detail, Context ctx) {
+        AccountManager am = new AccountManager();
+        OpenHelper oh = new OpenHelper(ctx);
+
+        AccountPojo originAccount = new AccountPojo(-1L, "Externa", 0, "Externa", new Float(99999999999.00));
+        AccountPojo destinationAccount = am.findById(oh, destinationID);
+
+        TransferencePojo transferToSave = new TransferencePojo(null, date, amount, originAccount, destinationAccount, detail);
+
+        MovementManager mm  = new MovementManager();
+        mm.insertDeposit(oh, transferToSave);
         oh.close();
         setChanged();
     }

@@ -12,6 +12,9 @@ import java.util.List;
 
 import static com.example.myapplication.database.DataBaseContract.AccountEntry;
 
+/**
+ * Class to handle all the operations related with Accounts
+ */
 public class AccountManager {
 
     private final int DISABLE = 1;
@@ -24,6 +27,12 @@ public class AccountManager {
     }
 
 
+    /**
+     * <h1>getAccounts</h1>
+     * <p>Method to get all the accounts</p>
+     * @param dbHelper - DB Handler
+     * @return {@link List}<{@link AccountPojo}> - List of accounts found
+     */
     public List<AccountPojo> getAccounts(OpenHelper dbHelper) {
         List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -36,7 +45,8 @@ public class AccountManager {
                 AccountEntry.COLUMN_NAME,
                 AccountEntry.TYPE,
                 AccountEntry.COLUMN_DESCRIPTION,
-                AccountEntry.COLUMN_BALANCE};
+                AccountEntry.COLUMN_BALANCE,
+                AccountEntry.COLUMN_DISABLE};
 
         String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
@@ -54,6 +64,12 @@ public class AccountManager {
     }
 
 
+    /**
+     * <h1>getBankAccounts</h1>
+     * <p>Method to get all the <i>Bank accounts</i></p>
+     * @param dbHelper - DB Handler
+     * @return {@link List}<{@link AccountPojo}> - List of accounts found
+     */
     public List<AccountPojo> getBankAccounts(OpenHelper dbHelper) {
         List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -66,7 +82,8 @@ public class AccountManager {
                 AccountEntry.COLUMN_NAME,
                 AccountEntry.TYPE,
                 AccountEntry.COLUMN_DESCRIPTION,
-                AccountEntry.COLUMN_BALANCE};
+                AccountEntry.COLUMN_BALANCE,
+                AccountEntry.COLUMN_DISABLE};
 
         String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
@@ -96,7 +113,8 @@ public class AccountManager {
                 AccountEntry.COLUMN_NAME,
                 AccountEntry.TYPE,
                 AccountEntry.COLUMN_DESCRIPTION,
-                AccountEntry.COLUMN_BALANCE};
+                AccountEntry.COLUMN_BALANCE,
+                AccountEntry.COLUMN_DISABLE};
 
         String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
@@ -114,6 +132,37 @@ public class AccountManager {
     }
 
 
+    public AccountPojo findByIdWithDisabled(OpenHelper dbHelper, Long id) {
+        AccountPojo account;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String selection = AccountEntry._ID + " = ?";
+
+        String[] selectionArgs = {Long.toString(id)};
+
+        String[] columns = {AccountEntry._ID,
+                AccountEntry.COLUMN_NAME,
+                AccountEntry.TYPE,
+                AccountEntry.COLUMN_DESCRIPTION,
+                AccountEntry.COLUMN_BALANCE,
+                AccountEntry.COLUMN_DISABLE};
+
+        String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
+
+        Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                accountOrderBy);
+
+        account = loadAccounts(accountCur).get(0);
+        db.close();
+        return account;
+    }
+
+
     public AccountPojo findById(OpenHelper dbHelper, Long id) {
         AccountPojo account;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -123,20 +172,21 @@ public class AccountManager {
         String[] selectionArgs = {Long.toString(id), Integer.toString(ENABLE)};
 
         String[] columns = {AccountEntry._ID,
-                            AccountEntry.COLUMN_NAME,
-                            AccountEntry.TYPE,
-                            AccountEntry.COLUMN_DESCRIPTION,
-                            AccountEntry.COLUMN_BALANCE};
+                AccountEntry.COLUMN_NAME,
+                AccountEntry.TYPE,
+                AccountEntry.COLUMN_DESCRIPTION,
+                AccountEntry.COLUMN_BALANCE,
+                AccountEntry.COLUMN_DISABLE};
 
         String accountOrderBy = AccountEntry.COLUMN_NAME + " ASC";
 
         Cursor accountCur = db.query(AccountEntry.TABLE_NAME,
-                                     columns,
-                                     selection,
-                                     selectionArgs,
-                                     null,
-                                     null,
-                                     accountOrderBy);
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                accountOrderBy);
 
         account = loadAccounts(accountCur).get(0);
         db.close();
@@ -218,6 +268,12 @@ public class AccountManager {
     }
 
 
+    /**
+     * <h1>deleteAccount</h1>
+     * <p>Method to perform a logical delete (disable=1)</p>
+     * @param dbHelper - DB handler
+     * @param accountId - ID of the account to delete
+     */
     public void deleteAccount(OpenHelper dbHelper, Long accountId) {
         String selection = AccountEntry._ID + " = ? AND " + AccountEntry.COLUMN_DISABLE + " = ?";
 
@@ -239,6 +295,7 @@ public class AccountManager {
         int accCreditCard = cursor.getColumnIndex(AccountEntry.TYPE);
         int accDescriptionPos = cursor.getColumnIndex(AccountEntry.COLUMN_DESCRIPTION);
         int accBalancePos = cursor.getColumnIndex(AccountEntry.COLUMN_BALANCE);
+        int accDisablePos = cursor.getColumnIndex(AccountEntry.COLUMN_DISABLE);
 
         while (cursor.moveToNext()) {
             Long id = cursor.getLong(accIdPos);
@@ -246,8 +303,9 @@ public class AccountManager {
             Integer creditCard = cursor.getInt(accCreditCard);
             String description = cursor.getString(accDescriptionPos);
             Float balance = cursor.getFloat(accBalancePos);
+            Integer disable = cursor.getInt(accDisablePos);
 
-            AccountPojo account = new AccountPojo(id, name, creditCard, description, balance);
+            AccountPojo account = new AccountPojo(id, name, creditCard, description, balance, disable);
             accounts.add(account);
         }
 

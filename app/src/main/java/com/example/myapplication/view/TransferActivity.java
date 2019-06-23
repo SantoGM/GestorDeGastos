@@ -58,7 +58,7 @@ public class TransferActivity extends BaseActivity {
                 if (view == fabTrfInternal) {
                     startActivity(new Intent(getApplicationContext(), ActivityAddTransfer.class));
                 } else if (view == fabTrfExternal){
-                    //startActivity(new Intent(getApplicationContext(), CardCRUDActivity.class));
+                    startActivity(new Intent(getApplicationContext(), ActivityAddDeposit.class));
                 } else if (view == fabTrfPayCreditCard){
                     startActivity(new Intent(getApplicationContext(), ActivityPayCreditCard.class));
                 }

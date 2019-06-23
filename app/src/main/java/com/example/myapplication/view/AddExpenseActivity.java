@@ -110,7 +110,7 @@ public class AddExpenseActivity extends BaseActivity {
         category.setAdapter(categoryAdapter);
 
         Spinner payedWith = findViewById(R.id.spnPayedWith);
-        ArrayAdapter<PersistentDataModel> payedWithAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, AccountsFacade.getInstance().getBankAccountsSpinnerModel(getApplicationContext()));
+        ArrayAdapter<PersistentDataModel> payedWithAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, AccountsFacade.getInstance().getAllAccountsSpinnerModel(getApplicationContext()));
         payedWith.setAdapter(payedWithAdapter);
 
         // Set up DatePicker

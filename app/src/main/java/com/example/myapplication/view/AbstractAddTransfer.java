@@ -22,11 +22,11 @@ import java.util.Date;
 import java.util.HashMap;
 
 public abstract class AbstractAddTransfer extends AbstractCRUDActivity{
-    private static final String FIELD_DATE = "date";
-    private static final String FIELD_ORIGIN = "originID";
-    private static final String FIELD_DESTINATION = "destinationID";
-    private static final String FIELD_AMOUNT = "amount";
-    private static final String FIELD_DETAIL = "detail";
+    protected static final String FIELD_DATE = "date";
+    protected static final String FIELD_ORIGIN = "originID";
+    protected static final String FIELD_DESTINATION = "destinationID";
+    protected static final String FIELD_AMOUNT = "amount";
+    protected static final String FIELD_DETAIL = "detail";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public abstract class AbstractAddTransfer extends AbstractCRUDActivity{
         initButtons();
     }
 
-    private void initButtons() {
+    protected void initButtons() {
         Button btnSend = findViewById(R.id.btnAddTransfer);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -129,9 +129,9 @@ public abstract class AbstractAddTransfer extends AbstractCRUDActivity{
         Boolean result = Boolean.TRUE;
 
         Spinner spinner = findViewById(R.id.spnTrfOrigin);
-        Long origin = spinner.getSelectedItemId();
+        String origin = spinner.getSelectedItem().toString();
         spinner = findViewById(R.id.spnTrfDestination);
-        Long destination = spinner.getSelectedItemId();
+        String destination = spinner.getSelectedItem().toString();
 
         if (origin.equals(destination)){
             TextView errorText = (TextView)spinner.getSelectedView();

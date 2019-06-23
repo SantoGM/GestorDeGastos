@@ -40,6 +40,21 @@ public class AccountsFacade extends AbstractFacade{
         return result;
     }
 
+    public ArrayList<PersistentDataModel> getAllAccountsSpinnerModel(Context ctx) {
+        OpenHelper oh = new OpenHelper(ctx);
+        AccountManager am = new AccountManager();
+        ArrayList<PersistentDataModel> result = buildDataModel(am.getAccounts(oh), AccountPojo.class);
+        oh.close();
+        return result;
+    }
+
+    public ArrayList<PersistentDataModel> getExternalAccountSpinnerModel() {
+        ArrayList<PersistentDataModel> result = new ArrayList<>();
+        PersistentDataModel externalAccountModel = new PersistentDataModel("Externa",-1L,null);
+        result.add(externalAccountModel);
+        return result;
+    }
+
     public void saveAccount(String nameAccount, Integer type, String descAccount, Float balanceAccount, Context ctx){
         AccountManager am = new AccountManager();
         OpenHelper oh = new OpenHelper(ctx);

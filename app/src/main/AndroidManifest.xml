@@ -74,6 +74,10 @@
             android:name=".view.ActivityPayCreditCard"
             android:label="@string/title_activity_add_transfer"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.ActivityAddDeposit"
+            android:label="@string/title_activity_add_transfer"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
