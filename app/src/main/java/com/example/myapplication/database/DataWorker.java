@@ -106,8 +106,65 @@ public class DataWorker {
         insertPayment(stringToDate("2019-05-01"), 6800f, 4, 1, "Pago Ort", 0);
 
         //Almuerzo
+        insertPayment(stringToDate("2019-04-01"), 120f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-02"), 100f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-03"), 122f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-04"), 95f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-05"), 87f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-08"), 105f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-09"), 79f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-10"), 160f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-11"), 135f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-12"), 99f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-15"), 100f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-16"), 100f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-17"), 120f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-18"), 125f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-19"), 129f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-22"), 133f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-23"), 114f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-24"), 87f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-25"), 101f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-26"), 94f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-29"), 98f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-04-30"), 124f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-01"), 114f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-02"), 164f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-03"), 146f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-06"), 124f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-07"), 99f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-08"), 75f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-09"), 87f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-10"), 102f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-13"), 105f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-14"), 109f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-15"), 110f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-16"), 140f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-17"), 135f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-20"), 106f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-21"), 97f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-22"), 121f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-23"), 135f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-24"), 150f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-27"), 78f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-28"), 80f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-29"), 88f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-30"), 85f, 5, 1, "Comida", 0);
+        insertPayment(stringToDate("2019-05-31"), 96f, 5, 1, "Comida", 0);
 
         //Joda
+        insertPayment(stringToDate("2019-04-05"), 654f, 6, 1, "Bar", 0);
+        insertPayment(stringToDate("2019-04-06"), 416f, 6, 1, "Bar", 0);
+        insertPayment(stringToDate("2019-04-11"), 300f, 6, 1, "After", 0);
+        insertPayment(stringToDate("2019-04-20"), 740f, 6, 1, "Boliche", 0);
+        insertPayment(stringToDate("2019-04-27"), 788f, 6, 1, "Cena", 0);
+        insertPayment(stringToDate("2019-05-03"), 500f, 6, 1, "Cine", 0);
+        insertPayment(stringToDate("2019-05-04"), 465f, 6, 1, "Salida", 0);
+        insertPayment(stringToDate("2019-05-08"), 465f, 6, 1, "Bar", 0);
+        insertPayment(stringToDate("2019-05-12"), 321f, 6, 1, "Amigxs", 0);
+        insertPayment(stringToDate("2019-05-17"), 150f, 6, 1, "Bar", 0);
+        insertPayment(stringToDate("2019-05-18"), 150f, 6, 1, "Salida", 0);
+        insertPayment(stringToDate("2019-05-31"), 200f, 6, 1, "Cine", 0);
 
         //Telefono
         insertPayment(stringToDate("2019-03-21"), 1000f, 7, 1, "Pago Movistar", 0);
