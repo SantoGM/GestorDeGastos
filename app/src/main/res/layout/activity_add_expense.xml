@@ -14,26 +14,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/lblCategory"
-        app:layout_constraintEnd_toEndOf="@+id/lblDescription"
+        app:layout_constraintEnd_toEndOf="@+id/lblAmount"
         app:layout_constraintTop_toBottomOf="@+id/lblDate" />
+
+    <TextView
+        android:id="@+id/lblAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/lblAmount"
+        app:layout_constraintEnd_toEndOf="@+id/lblDescription"
+        app:layout_constraintTop_toBottomOf="@+id/lblCategory" />
 
     <TextView
         android:id="@+id/lblDescription"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/lblDescription"
-        app:layout_constraintEnd_toEndOf="@+id/lblAmount"
-        app:layout_constraintTop_toBottomOf="@+id/lblCategory" />
-
-    <TextView
-        android:id="@+id/lblAmount"
-        android:layout_width="43dp"
         android:layout_height="16dp"
         android:layout_marginTop="48dp"
-        android:text="@string/lblAmount"
+        android:text="@string/lblDescription"
         app:layout_constraintEnd_toEndOf="@+id/lblPayedWith"
-        app:layout_constraintTop_toBottomOf="@+id/lblDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/lblAmount" />
 
     <TextView
         android:id="@+id/lblPayedWith"
@@ -43,7 +43,7 @@
         android:layout_marginTop="44dp"
         android:text="@string/lblPayedWith"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription" />
 
     <Spinner
         android:id="@+id/spnCateogry"
@@ -61,19 +61,8 @@
         android:layout_height="25dp"
         android:entries="@android:array/imProtocols"
         app:layout_constraintBottom_toBottomOf="@+id/lblPayedWith"
-        app:layout_constraintStart_toStartOf="@+id/nmbAmount"
+        app:layout_constraintStart_toStartOf="@+id/txtDescription"
         app:layout_constraintTop_toTopOf="@+id/lblPayedWith" />
-
-    <EditText
-        android:id="@+id/txtDescripttion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/hintDescriptionExpense"
-        app:layout_constraintBottom_toBottomOf="@+id/lblDescription"
-        app:layout_constraintStart_toStartOf="@+id/spnCateogry"
-        app:layout_constraintTop_toTopOf="@+id/lblDescription" />
 
     <EditText
         android:id="@+id/nmbAmount"
@@ -81,12 +70,23 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="numberDecimal"
-        app:layout_constraintBottom_toBottomOf="@+id/lblAmount"
-        app:layout_constraintStart_toEndOf="@+id/lblAmount"
-        app:layout_constraintStart_toStartOf="@+id/txtDescripttion"
-        app:layout_constraintTop_toTopOf="@+id/lblAmount"
-        app:layout_constraintVertical_bias="0.482"
         android:hint="0.00"
+        app:layout_constraintBottom_toBottomOf="@+id/lblAmount"
+        app:layout_constraintStart_toStartOf="@+id/spnCateogry"
+        app:layout_constraintTop_toTopOf="@+id/lblAmount" />
+
+    <EditText
+        android:id="@+id/txtDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/lblDescription"
+        app:layout_constraintStart_toEndOf="@+id/lblDescription"
+        app:layout_constraintStart_toStartOf="@+id/nmbAmount"
+        app:layout_constraintTop_toTopOf="@+id/lblDescription"
+        app:layout_constraintVertical_bias="0.482"
+        android:hint="@string/hintDescriptionExpense"
         android:importantForAutofill="no" />
 
     <Button

@@ -3,11 +3,14 @@ package com.example.myapplication.view;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.myapplication.R;
 
@@ -19,13 +22,24 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             // Category CRUD
             case R.id.menu_categories:
-                goToActivity(CategoryCRUDActivity.class);
+                if (this.getClass() != CategoryCRUDActivity.class){
+                    goToActivity(CategoryCRUDActivity.class);
+                }
                 return true;
             case R.id.menu_account:
-                goToActivity(AccountsActivity.class);
+                if (this.getClass() != AccountsActivity.class) {
+                    goToActivity(AccountsActivity.class);
+                }
+                return true;
+            case R.id.menu_transferences:
+                if (this.getClass() != TransferActivity.class) {
+                    goToActivity(TransferActivity.class);
+                }
                 return true;
             case R.id.menu_action_report:
-                goToActivity(ReportActivity.class);
+                if (this.getClass() != ReportActivity.class) {
+                    goToActivity(ReportActivity.class);
+                }
                 return true;
             case R.id.menu_action_out:
                 finishAffinity();
@@ -73,5 +87,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawers();
         return onOptionsItemSelected(menuItem);
+    }
+
+    public void snackbarWithLightColor(View view, String msg){
+        Snackbar snb = Snackbar.make(view, msg, Snackbar.LENGTH_LONG).setAction("Action", null);
+        View snackbarView = snb.getView();
+        TextView textView = snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(getResources().getColor(R.color.primaryLightColor));
+        snb.show();
     }
 }

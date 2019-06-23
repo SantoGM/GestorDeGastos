@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="end">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
-
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -46,7 +45,9 @@
                     android:layout_marginBottom="0dp"
                     android:paddingRight="@dimen/activity_horizontal_margin"
                     android:paddingBottom="@dimen/activity_horizontal_margin"
-                    fab:fab_colorNormal="@color/colorAccent"
+                    fab:menu_colorNormal="@color/colorAccent"
+                    fab:menu_colorPressed="@color/colorAccent"
+                    fab:menu_colorRipple="@color/secondaryColor"
                     fab:menu_fab_label="Menu"
                     fab:menu_labels_colorNormal="@color/colorFabLblTxt"
                     fab:menu_labels_ellipsize="end"
@@ -54,13 +55,17 @@
                     fab:menu_labels_position="left"
                     fab:menu_labels_showShadow="true"
                     fab:menu_labels_singleLine="true"
-                    fab:menu_openDirection="up">
+                    fab:menu_openDirection="up"
+                    >
 
                     <com.github.clans.fab.FloatingActionButton
                         android:id="@+id/btnAddAcount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_add_white_24dp"
+                        fab:fab_colorNormal="@color/colorAccent"
+                        fab:fab_colorPressed="@color/colorAccent"
+                        fab:fab_colorRipple="@color/secondaryColor"
                         fab:fab_label="Crear cuenta"
                         fab:fab_size="mini" />
 
@@ -69,6 +74,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_add_white_24dp"
+                        fab:fab_colorNormal="@color/colorAccent"
+                        fab:fab_colorPressed="@color/colorAccent"
+                        fab:fab_colorRipple="@color/secondaryColor"
                         fab:fab_label="Crear tarjeta"
                         fab:fab_size="mini" />
 

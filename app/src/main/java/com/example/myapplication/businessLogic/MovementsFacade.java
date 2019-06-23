@@ -9,22 +9,23 @@ import com.example.myapplication.database.dataManager.MovementManager;
 import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.CategoryPojo;
 import com.example.myapplication.view.pojo.PaymentPojo;
+import com.example.myapplication.view.pojo.TransferencePojo;
 
 import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class ExpenseFacade extends AbstractFacade {
+public class MovementsFacade extends AbstractFacade {
 
-    private static ExpenseFacade instance;
+    private static MovementsFacade instance;
 
-    private ExpenseFacade(){
+    private MovementsFacade(){
         // Singleton
     }
 
-    public static ExpenseFacade getInstance() {
+    public static MovementsFacade getInstance() {
         if (instance == null) {
-            instance = new ExpenseFacade();
+            instance = new MovementsFacade();
         }
         return instance;
     }
@@ -34,10 +35,10 @@ public class ExpenseFacade extends AbstractFacade {
         AccountManager am = new AccountManager();
         OpenHelper oh = new OpenHelper(ctx);
 
-        CategoryPojo cateogry = cm.findById(oh, categoryID);
+        CategoryPojo category = cm.findById(oh, categoryID);
         AccountPojo account = am.findById(oh, accountID);
 
-        PaymentPojo paymentToSave = new PaymentPojo(null, date, amount, cateogry, account, detail, Boolean.FALSE);
+        PaymentPojo paymentToSave = new PaymentPojo(null, date, amount, category, account, detail, Boolean.FALSE);
 
         MovementManager mm  = new MovementManager();
         mm.insertPayment(oh, paymentToSave);
@@ -79,5 +80,20 @@ public class ExpenseFacade extends AbstractFacade {
         oh.close();
 
         return payments;
+    }
+
+    public void saveTransfer(Date date, Long originID, Long destinationID, Float amount, String detail, Context ctx) {
+        AccountManager am = new AccountManager();
+        OpenHelper oh = new OpenHelper(ctx);
+
+        AccountPojo originAccount = am.findById(oh, originID);
+        AccountPojo destinationAccount = am.findById(oh, destinationID);
+
+        TransferencePojo transferToSave = new TransferencePojo(null, date, amount, originAccount, destinationAccount, detail);
+
+        MovementManager mm  = new MovementManager();
+        mm.insertTransference(oh, transferToSave);
+        oh.close();
+        setChanged();
     }
 }

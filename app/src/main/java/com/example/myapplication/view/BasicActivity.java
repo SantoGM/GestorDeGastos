@@ -8,7 +8,7 @@ import android.widget.ExpandableListView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.businessLogic.AccountsFacade;
-import com.example.myapplication.businessLogic.ExpenseFacade;
+import com.example.myapplication.businessLogic.MovementsFacade;
 import com.example.myapplication.view.extras.ExpandableCategoryAdapter;
 import com.example.myapplication.view.pojo.AccountPojo;
 import com.example.myapplication.view.pojo.PaymentPojo;
@@ -37,7 +37,7 @@ public class BasicActivity extends BaseActivity implements Observer {
             }
         });
 
-        ExpenseFacade.getInstance().addObserver(this);
+        MovementsFacade.getInstance().addObserver(this);
         AccountsFacade.getInstance().addObserver(this);
         fetchData();
     }
@@ -49,7 +49,7 @@ public class BasicActivity extends BaseActivity implements Observer {
         HashMap<String, List<PaymentPojo>> expenses = new HashMap<>();
 
         for(AccountPojo account : accounts){
-            List<PaymentPojo> data = ExpenseFacade.getInstance().obtainLastFiveMovementsByAccount(getApplicationContext(), account.getId());
+            List<PaymentPojo> data = MovementsFacade.getInstance().obtainLastFiveMovementsByAccount(getApplicationContext(), account.getId());
             accountNames.add(account.getName());
             expenses.put(account.getName(), data);
         }

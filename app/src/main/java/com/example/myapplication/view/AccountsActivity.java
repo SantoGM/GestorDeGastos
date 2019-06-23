@@ -67,7 +67,6 @@ public class AccountsActivity extends BaseActivity implements Observer {
 
         AccountsFacade.getInstance().addObserver(this);
         fetchData();
-
     }
 
     private void fetchData() {

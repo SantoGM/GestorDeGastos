@@ -20,6 +20,7 @@
     <string name="btnAddCard">Agregar Tarjeta</string>
     <string name="btnUpdCard">Modificar Tarjeta</string>
     <string name="btnUpdAccount">Modificar Tarjeta</string>
+    <string name="btnAgregar">Agregar</string>
 
     <!--Titles -->
     <string name="app_name">Gestor de Gastos</string>
@@ -38,16 +39,15 @@
     <string name="action_sign_in_short">Sign in</string>
 
     <!--Error -->
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_email">Ingrese una dirección de email válida</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_invalid_name">Ingrese el nombre (al menos 3 caracteres)</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_basic">Gestor de Gastos</string>
-    <string name="title_activity_add_expense">AddExpenseActivity</string>
+    <string name="title_activity_add_category">Agregar categoría</string>
+    <string name="title_activity_add_expense">Agregar Gasto</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -68,9 +68,9 @@
     <string name="txtDate">Fecha</string>
 
     <!-- -->
-    <string name="hello_blank_fragment1">Evolución del gasto por categoria</string>
+    <string name="hello_blank_fragment1">Evolución del gasto por categoría</string>
     <string name="hello_blank_fragment2">Hello blank fragment2</string>
-    <string name="resume_report_title">Resuen de Gastos</string>
+    <string name="resume_report_title">Resumen de Gastos</string>
     <string name="report_evolution_expenses">Evolucion de Gasto</string>
     <string name="report_expense_by_cat">Gasto por rubro</string>
     <string name="report_expense_by_date">Resumen de Movimientos</string>
@@ -83,7 +83,9 @@
 
     <!--Messages -->
     <string name="expense_saved_successfuly">Se guardó correctamente el gasto</string>
+    <string name="category_saved_successfuly">Se guardó correctamente la categoría</string>
     <string name="message_complete_mandatory_fields">Complete los campos obligatorios</string>
+    <string name="error_category_name_required">Ingrese el nombre de la categoría</string>
     <string name="error_amount_required">Ingrese el monto del gasto</string>
     <string name="error_amount_must_be_greater_than_zero">El monto ingresado debe ser mayor a cero</string>
     <string name="error_unable_to_send_pin_by_mail">Se produjo un error al intentar enviar el mail con el PIN</string>
@@ -122,4 +124,13 @@
 
     <string name="msg_no_expenses_recorded">No registra gastos</string>
     <string name="preffix_cash">$ %1$s</string>
+    <string name="menu_op_transfer">Transferencias</string>
+    <string name="title_activity_transfer">Transferencias</string>
+    <string name="lblOrigin">Origen</string>
+    <string name="lblDestination">Destino</string>
+    <string name="lblAddTransference">Agregar transferencia</string>
+    <string name="hintDescriptionTrf">Sueldo, préstamo…</string>
+    <string name="title_activity_add_transfer">Nueva Transferencia</string>
+    <string name="error_trf_same_account">No se puede transferir hacia la misma cuenta (o si, pero no tiene sentido)</string>
+    <string name="error_trf_amount_required">Ingrese el monto de la transferencia</string>
 </resources>

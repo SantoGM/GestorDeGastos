@@ -21,9 +21,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.businessLogic.ExpenseFacade;
+import com.example.myapplication.businessLogic.MovementsFacade;
 import com.example.myapplication.view.extras.DateHelper;
 import com.example.myapplication.view.extras.DatePickerFragment;
+import com.example.myapplication.view.extras.BarViewExtended;
 import com.example.myapplication.view.pojo.PaymentPojo;
 
 import java.text.ParseException;
@@ -33,7 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import im.dacer.androidcharts.BarView;
+
 
 
 
@@ -44,8 +45,7 @@ public class ReportBarFragment extends Fragment {
     private Date since = addMonth(Calendar.getInstance().getTime(),-1);
     private Date until = Calendar.getInstance().getTime();
 
-    final int randomint = 9;
-    private BarView barView;
+    private BarViewExtended barView;
     private OnFragmentInteractionListener mListener;
     Switch aSwitch;
 
@@ -87,16 +87,13 @@ public class ReportBarFragment extends Fragment {
 
     }
 
-
-
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View inflate = inflater.inflate(R.layout.fragment_report_lineal, container, false);
         // Inflate the layout for this fragment
         //lineViewFloat =  inflate.findViewById(R.id.line_view_float);
-        barView = new BarView(getContext());
+        barView = new BarViewExtended(getContext());
         final LinearLayout filterContainer = inflate.findViewById(R.id.filtro_cat);
         final LinearLayout colorContainer = inflate.findViewById(R.id.colors_cont);
         final EditText txtDateFrom = inflate.findViewById(R.id.txtDateFrom);
@@ -109,7 +106,7 @@ public class ReportBarFragment extends Fragment {
         txtDateFrom.setText(simpleDateFormat.format(since));
         txtDateTo.setText(simpleDateFormat.format(until));
 
-        List<PaymentPojo> payments = ExpenseFacade.getInstance().getExpensesBetween(since, until, getContext());
+        List<PaymentPojo> payments = MovementsFacade.getInstance().getExpensesBetween(since, until, getContext());
         final BarReportAdapter Lineal = new BarReportAdapter(payments,barView,colorContainer);
 
         Lineal.loadData();
@@ -136,9 +133,9 @@ public class ReportBarFragment extends Fragment {
 
                     Log.e("since",txtDateFrom.getText().toString());
                     Log.e("until",txtDateTo.getText().toString());
-                    barView = new BarView(getContext());
-                    List<PaymentPojo> paymentsLocal =ExpenseFacade.getInstance().getExpensesBetweenAndCats(categories,since, until,getContext());
-                    BarReportAdapter Lineal = new BarReportAdapter(paymentsLocal,barView,colorContainer);
+                    barView = new BarViewExtended(getContext());
+                    List<PaymentPojo> paymentsLocal = MovementsFacade.getInstance().getExpensesBetweenAndCats(categories,since, until,getContext());
+                    BarReportAdapter Lineal = new BarReportAdapter(paymentsLocal, barView, colorContainer);
 
                     cont.removeAllViews();
                     cont.addView(barView);
@@ -152,13 +149,6 @@ public class ReportBarFragment extends Fragment {
 
             }
         });
-
-
-
-
-
-
-
 
         txtDateFrom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,33 +222,10 @@ public class ReportBarFragment extends Fragment {
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-
-
-
-    private ArrayList<Integer> generarRandom(){
-        ArrayList<Integer> dataList = new ArrayList<>();
-        float random = (float) (Math.random() * 9 + 1);
-        for (int i = 0; i < randomint; i++) {
-            dataList.add((int) (Math.random() * random));
-
-        }
-        return dataList;
-
-    }
-    private ArrayList<Float> generarRandomFloat(){
-        ArrayList<Float> dataListF = new ArrayList<>();
-        float randomF = (float) (Math.random() * 9 + 1);
-        for (int i = 0; i < randomint; i++) {
-            dataListF.add((float) (Math.random() * randomF));
-        }
-        return dataListF;
-
-    }
-
     class BarReportAdapter implements CompoundButton.OnCheckedChangeListener {
         private final HashMap<String,DataLine> data = new HashMap<>();
         private final HashMap<String,DataLine> dataHidden = new HashMap<>();
-        private final BarView barView;
+        private final BarViewExtended barView;
         private List<PaymentPojo> paymentPojos;
         private final List<Switch> options = new ArrayList<>();
         private final LinearLayout containerColors;
@@ -267,13 +234,14 @@ public class ReportBarFragment extends Fragment {
 
         private ArrayList<ArrayList<Float>> dataListFs = new ArrayList<>();
 
-        final int[] colors = new int[] {Color.parseColor("#F44336"), Color.parseColor("#F44336"), Color.parseColor("#F44336"), Color.parseColor("#F44336"), Color.parseColor("#F44336"), Color.parseColor("#F44336") };
+        final int[] colors = new int[] {Color.parseColor("#F44336"), Color.parseColor("#9C27B0"), Color.parseColor("#2196F3"), Color.parseColor("#009688"), Color.parseColor("#FFCC33"), Color.parseColor("#FF6633") };
         public HashMap<String,DataLine> getDataArray(){
             return data;
         }
         public HashMap<String,DataLine> getDataHiddenArray(){
             return dataHidden;
         }
+
         private void fillDataHolder(){
             data.clear();
             dataHidden.clear();
@@ -297,16 +265,17 @@ public class ReportBarFragment extends Fragment {
             }
 
         }
+
         public void setPaymentPojo(List<PaymentPojo> payments){
             this.paymentPojos =payments;
         }
-        BarReportAdapter(List<PaymentPojo> paymentPojos, BarView barView, LinearLayout containerColors ){
+
+        BarReportAdapter(List<PaymentPojo> paymentPojos, BarViewExtended barView, LinearLayout containerColors ){
             setPaymentPojo(paymentPojos);
-            this.barView=barView;
+            this.barView = barView;
 
-            this.containerColors=containerColors;
+            this.containerColors = containerColors;
             fillDataHolder();
-
 
             for(String key : getDataArray().keySet()) {
                 Log.e("key",key);
@@ -319,21 +288,20 @@ public class ReportBarFragment extends Fragment {
                 options.add(aSwitch);
             }
         }
+
         public List<Switch> getOptions(){
             return options;
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            Log.e("pasa color",buttonView.getText().toString());
+            Log.e("pasa color", buttonView.getText().toString());
 
         }
         private void initLineView() {
 
-            //barView.setColorArray(colors);
-           // lineViewFloat.setDrawDotLine(true);
-           // barView.setShowPopup(LineView.SHOW_POPUPS_All);
         }
+
         private void addColor(int color, String tipo){
 
             TextView color_desc = new TextView(getContext());
@@ -343,6 +311,7 @@ public class ReportBarFragment extends Fragment {
             containerColors.addView(color_desc);
 
         }
+
         private void loadData() {
 
             initLineView();
@@ -350,8 +319,6 @@ public class ReportBarFragment extends Fragment {
             containerColors.removeAllViewsInLayout();
 
             ArrayList<String> buttonLabels = new ArrayList<>();
-
-
             ArrayList<String> dates = new ArrayList<>();
             int j = 0;
             for(String key : getDataArray().keySet()) {
@@ -363,8 +330,6 @@ public class ReportBarFragment extends Fragment {
                 j++;
             }
 
-
-            //int dias=(int) ((since.getTime()-until.getTime())/86400000)*-1;
             int mayor=0;
             for (ArrayList<Float> expense:dataListFs){
                 if(mayor<expense.size()){
@@ -372,13 +337,6 @@ public class ReportBarFragment extends Fragment {
                 }
             }
 
-            //for(int i=1;i<=mayor+5;i++){
-            //    dates.add(String.valueOf(i));
-
-            //}
-
-            //barView.setBottomTextList(dates);
-            // lineViewFloat.setDataList(null);
             ArrayList<Float> barDataList = new ArrayList<>();
             float total = 0;
             for (List<Float> cat:dataListFs) {
@@ -389,14 +347,17 @@ public class ReportBarFragment extends Fragment {
                 barDataList.add(acum);
                 total=acum+total;
             }
+
             ArrayList<Integer> porcent = new ArrayList<>();
             for (Float acum_expense :barDataList) {
                 porcent.add(Math.round(acum_expense*100/total));
                 dates.add(String.valueOf(Math.round(acum_expense*100/total)));
 
             }
+
             barView.setDataList(porcent,100);
             barView.setBottomTextList(dates);
+            barView.setColors(new int[] {Color.parseColor("#F44336"), Color.parseColor("#9C27B0"), Color.parseColor("#2196F3"), Color.parseColor("#009688"), Color.parseColor("#FFCC33"), Color.parseColor("#FF6633") });
         }
 
 

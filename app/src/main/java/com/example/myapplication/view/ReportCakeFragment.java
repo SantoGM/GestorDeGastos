@@ -23,7 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.businessLogic.ExpenseFacade;
+import com.example.myapplication.businessLogic.MovementsFacade;
 import com.example.myapplication.view.extras.DateHelper;
 import com.example.myapplication.view.extras.DatePickerFragment;
 import com.example.myapplication.view.pojo.PaymentPojo;
@@ -105,7 +105,7 @@ public class ReportCakeFragment extends Fragment {
         final Button button_filter = inflate.findViewById(R.id.button_filter);
         final HorizontalScrollView cont = inflate.findViewById(R.id.horizontalScrollViewFloat);
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        final List<PaymentPojo> payments = ExpenseFacade.getInstance().getExpensesBetween(since, until, getContext());
+        final List<PaymentPojo> payments = MovementsFacade.getInstance().getExpensesBetween(since, until, getContext());
         //final ResumeReportAdapter Lineal = new ResumeReportAdapter(payments,pieChartView,colorContainer);
         //cont.removeAllViews();
         //cont.addView(pieChartView);
@@ -146,7 +146,7 @@ public class ReportCakeFragment extends Fragment {
                     Log.e("since",txtDateFrom.getText().toString());
                     Log.e("until",txtDateTo.getText().toString());
                     PieView pieView = new PieView(getContext());
-                    List<PaymentPojo> paymentsLocal =ExpenseFacade.getInstance().getExpensesBetweenAndCats(categories,since, until,getContext());
+                    List<PaymentPojo> paymentsLocal = MovementsFacade.getInstance().getExpensesBetweenAndCats(categories,since, until,getContext());
                     ResumeReportAdapter Lineal = new ResumeReportAdapter(paymentsLocal,colorContainer,getContext(), R.layout.list_item);
 
 //                    cont.removeAllViews();

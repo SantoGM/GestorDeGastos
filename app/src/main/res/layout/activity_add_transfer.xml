@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.AddExpenseActivity">
+
+
+    <TextView
+        android:id="@+id/lblTrfDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="@string/txtDate"
+        app:layout_constraintEnd_toEndOf="@+id/lblTrfOrigin"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblTrfOrigin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/lblOrigin"
+        app:layout_constraintEnd_toEndOf="@+id/lblTrfDestination"
+        app:layout_constraintTop_toBottomOf="@+id/lblTrfDate" />
+
+    <TextView
+        android:id="@+id/lblTrfDestination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/lblDestination"
+        app:layout_constraintEnd_toEndOf="@+id/lblTrfAmount"
+        app:layout_constraintTop_toBottomOf="@+id/lblTrfOrigin" />
+
+    <TextView
+        android:id="@+id/lblTrfAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/lblAmount"
+        app:layout_constraintEnd_toEndOf="@+id/lblTrfDescription"
+        app:layout_constraintTop_toBottomOf="@+id/lblTrfDestination" />
+
+    <TextView
+        android:id="@+id/lblTrfDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="44dp"
+        android:text="@string/lblDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblTrfAmount" />
+
+    <EditText
+        android:id="@+id/txtDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:ems="10"
+        android:inputType="date"
+        android:focusable="false"
+        android:clickable="true"
+        android:maxLines="1"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/lblTrfDate"
+        app:layout_constraintTop_toTopOf="@+id/lblTrfDate"
+        android:importantForAutofill="no" />
+    
+    <Spinner
+        android:id="@+id/spnTrfOrigin"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:entries="@android:array/organizationTypes"
+        app:layout_constraintBottom_toBottomOf="@+id/lblTrfOrigin"
+        app:layout_constraintStart_toStartOf="@+id/txtDate"
+        app:layout_constraintTop_toTopOf="@+id/lblTrfOrigin" />
+
+    <Spinner
+        android:id="@+id/spnTrfDestination"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:entries="@android:array/imProtocols"
+        app:layout_constraintBottom_toBottomOf="@+id/lblTrfDestination"
+        app:layout_constraintStart_toStartOf="@+id/spnTrfOrigin"
+        app:layout_constraintTop_toTopOf="@+id/lblTrfDestination" />
+
+    <EditText
+        android:id="@+id/txtTrfAmount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="@+id/lblTrfAmount"
+        app:layout_constraintStart_toEndOf="@+id/lblTrfAmount"
+        app:layout_constraintStart_toStartOf="@+id/spnTrfDestination"
+        app:layout_constraintTop_toTopOf="@+id/lblTrfAmount"
+        app:layout_constraintVertical_bias="0.482"
+        android:hint="0.00"
+        android:importantForAutofill="no" />
+    
+    <EditText
+        android:id="@+id/txtTrfDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:entries="@android:array/imProtocols"
+        android:hint="@string/hintDescriptionTrf"
+        app:layout_constraintBottom_toBottomOf="@+id/lblTrfDescription"
+        app:layout_constraintStart_toStartOf="@+id/txtTrfAmount"
+        app:layout_constraintTop_toTopOf="@+id/lblTrfDescription" />
+
+
+    <Button
+        android:id="@+id/btnAddTransfer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/lblAddTransference"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblTrfDescription"
+        app:layout_constraintVertical_bias="0.215" />
+
+
+
+</android.support.constraint.ConstraintLayout>

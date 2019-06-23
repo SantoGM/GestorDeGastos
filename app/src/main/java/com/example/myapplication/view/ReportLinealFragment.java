@@ -21,7 +21,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.businessLogic.ExpenseFacade;
+import com.example.myapplication.businessLogic.MovementsFacade;
 import com.example.myapplication.view.extras.DateHelper;
 import com.example.myapplication.view.extras.DatePickerFragment;
 import com.example.myapplication.view.pojo.PaymentPojo;
@@ -88,9 +88,6 @@ public class ReportLinealFragment extends Fragment {
 
     }
 
-
-
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -106,7 +103,7 @@ public class ReportLinealFragment extends Fragment {
         txtDateFrom.setText(simpleDateFormat.format(since));
         txtDateTo.setText(simpleDateFormat.format(until));
 
-        List<PaymentPojo> payments = ExpenseFacade.getInstance().getExpensesBetween(since, until, getContext());
+        List<PaymentPojo> payments = MovementsFacade.getInstance().getExpensesBetween(since, until, getContext());
         final LinealReportAdapter Lineal = new LinealReportAdapter(payments,lineViewFloat,colorContainer);
 
         Lineal.loadData();
@@ -134,7 +131,7 @@ public class ReportLinealFragment extends Fragment {
                     Log.e("since",txtDateFrom.getText().toString());
                     Log.e("until",txtDateTo.getText().toString());
                     lineViewFloat = new LineView(getContext());
-                    List<PaymentPojo> paymentsLocal =ExpenseFacade.getInstance().getExpensesBetweenAndCats(categories,since, until,getContext());
+                    List<PaymentPojo> paymentsLocal = MovementsFacade.getInstance().getExpensesBetweenAndCats(categories,since, until,getContext());
                     LinealReportAdapter Lineal = new LinealReportAdapter(paymentsLocal,lineViewFloat,colorContainer);
 
                     cont.removeAllViews();
@@ -149,13 +146,6 @@ public class ReportLinealFragment extends Fragment {
 
             }
         });
-
-
-
-
-
-
-
 
         txtDateFrom.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,9 +164,6 @@ public class ReportLinealFragment extends Fragment {
                 }
             }
         });
-
-
-
 
         return inflate;
     }
@@ -229,29 +216,6 @@ public class ReportLinealFragment extends Fragment {
         newFragment.show(getFragmentManager(), "datePicker");
     }
 
-
-
-
-    private ArrayList<Integer> generarRandom(){
-        ArrayList<Integer> dataList = new ArrayList<>();
-        float random = (float) (Math.random() * 9 + 1);
-        for (int i = 0; i < randomint; i++) {
-            dataList.add((int) (Math.random() * random));
-
-        }
-        return dataList;
-
-    }
-    private ArrayList<Float> generarRandomFloat(){
-        ArrayList<Float> dataListF = new ArrayList<>();
-        float randomF = (float) (Math.random() * 9 + 1);
-        for (int i = 0; i < randomint; i++) {
-            dataListF.add((float) (Math.random() * randomF));
-        }
-        return dataListF;
-
-    }
-
     class LinealReportAdapter implements CompoundButton.OnCheckedChangeListener {
         private final HashMap<String,DataLine> data = new HashMap<>();
         private final HashMap<String,DataLine> dataHidden = new HashMap<>();
@@ -271,6 +235,7 @@ public class ReportLinealFragment extends Fragment {
         public HashMap<String,DataLine> getDataHiddenArray(){
             return dataHidden;
         }
+
         private void fillDataHolder(){
             data.clear();
             dataHidden.clear();
@@ -294,16 +259,17 @@ public class ReportLinealFragment extends Fragment {
             }
 
         }
+
         public void setPaymentPojo(List<PaymentPojo> payments){
             this.paymentPojos =payments;
         }
+
         LinealReportAdapter(List<PaymentPojo> paymentPojos, LineView lineViewFloat, LinearLayout containerColors ){
             setPaymentPojo(paymentPojos);
-            this.lineViewFloat=lineViewFloat;
+            this.lineViewFloat = lineViewFloat;
 
             this.containerColors=containerColors;
             fillDataHolder();
-
 
             for(String key : getDataArray().keySet()) {
                 Log.e("key",key);
@@ -316,13 +282,14 @@ public class ReportLinealFragment extends Fragment {
                 options.add(aSwitch);
             }
         }
+
         public List<Switch> getOptions(){
             return options;
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            Log.e("pasa color",buttonView.getText().toString());
+            Log.e("pasa color", buttonView.getText().toString());
 
         }
         private void initLineView() {
@@ -332,6 +299,7 @@ public class ReportLinealFragment extends Fragment {
             lineViewFloat.setShowPopup(LineView.SHOW_POPUPS_All
             );
         }
+
         private void addColor(int color, String tipo){
 
             TextView color_desc = new TextView(getContext());
@@ -341,6 +309,7 @@ public class ReportLinealFragment extends Fragment {
             containerColors.addView(color_desc);
 
         }
+
         private void loadData() {
 
             initLineView();
@@ -358,8 +327,6 @@ public class ReportLinealFragment extends Fragment {
                 j++;
             }
 
-
-            //int dias=(int) ((since.getTime()-until.getTime())/86400000)*-1;
             int mayor=0;
             for (ArrayList<Float> expense:dataListFs){
                 if(mayor<expense.size()){
@@ -369,15 +336,12 @@ public class ReportLinealFragment extends Fragment {
 
             for(int i=1;i<=mayor+5;i++){
                 dates.add(String.valueOf(i));
-
             }
 
 
             lineViewFloat.setBottomTextList(dates);
-           // lineViewFloat.setDataList(null);
             lineViewFloat.setFloatDataList(dataListFs,true);
-
-
+            lineViewFloat.setBottomTextList(dates);
         }
 
 
