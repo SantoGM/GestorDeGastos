@@ -11,7 +11,7 @@ public final class DataBaseContract {
         public static final String TABLE_NAME = "accounts";
 
         public static final String COLUMN_NAME = "name";
-        public static final String TYPE = "type";
+        public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_DESCRIPTION = "description";
         public static final String COLUMN_BALANCE = "balance";
         public static final String COLUMN_DISABLE = "disable";
@@ -20,7 +20,7 @@ public final class DataBaseContract {
                 "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (" +
                         _ID + " INTEGER PRIMARY KEY, " +
                         COLUMN_NAME + " TEXT UNIQUE NOT NULL, " +
-                        TYPE + " INTEGER NOT NULL, " +
+                        COLUMN_TYPE + " INTEGER NOT NULL, " +
                         COLUMN_DESCRIPTION + " TEXT, " +
                         COLUMN_BALANCE + " REAL NOT NULL, " +
                         COLUMN_DISABLE + " INTEGER DEFAULT 0 )";

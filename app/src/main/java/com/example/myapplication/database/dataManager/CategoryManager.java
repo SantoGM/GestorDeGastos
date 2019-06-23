@@ -189,7 +189,7 @@ public class CategoryManager {
 
 
     /**
-     * <h1>insertCategory</h1>
+     * <h1>insertCategories</h1>
      * <p>Method to insert a category</p>
      * @param dbHelper - DB handler
      * @param category - {@link CategoryPojo} category to insert

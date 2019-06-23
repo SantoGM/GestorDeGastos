@@ -43,7 +43,7 @@ public class AccountManager {
 
         String[] columns = {AccountEntry._ID,
                 AccountEntry.COLUMN_NAME,
-                AccountEntry.TYPE,
+                AccountEntry.COLUMN_TYPE,
                 AccountEntry.COLUMN_DESCRIPTION,
                 AccountEntry.COLUMN_BALANCE};
 
@@ -73,13 +73,13 @@ public class AccountManager {
         List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = AccountEntry.COLUMN_DISABLE + " = ? AND " + AccountEntry.TYPE + " = ?";
+        String selection = AccountEntry.COLUMN_DISABLE + " = ? AND " + AccountEntry.COLUMN_TYPE + " = ?";
 
         String[] selectionArgs = {Integer.toString(ENABLE), Integer.toString(BANK_ACCOUNT)};
 
         String[] columns = {AccountEntry._ID,
                 AccountEntry.COLUMN_NAME,
-                AccountEntry.TYPE,
+                AccountEntry.COLUMN_TYPE,
                 AccountEntry.COLUMN_DESCRIPTION,
                 AccountEntry.COLUMN_BALANCE};
 
@@ -103,13 +103,13 @@ public class AccountManager {
         List<AccountPojo> accounts;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        String selection = AccountEntry.COLUMN_DISABLE + " = ? AND " + AccountEntry.TYPE + " = ?";
+        String selection = AccountEntry.COLUMN_DISABLE + " = ? AND " + AccountEntry.COLUMN_TYPE + " = ?";
 
         String[] selectionArgs = {Integer.toString(ENABLE), Integer.toString(CREDIT_CARD_ACCOUNT)};
 
         String[] columns = {AccountEntry._ID,
                 AccountEntry.COLUMN_NAME,
-                AccountEntry.TYPE,
+                AccountEntry.COLUMN_TYPE,
                 AccountEntry.COLUMN_DESCRIPTION,
                 AccountEntry.COLUMN_BALANCE};
 
@@ -139,7 +139,7 @@ public class AccountManager {
 
         String[] columns = {AccountEntry._ID,
                 AccountEntry.COLUMN_NAME,
-                AccountEntry.TYPE,
+                AccountEntry.COLUMN_TYPE,
                 AccountEntry.COLUMN_DESCRIPTION,
                 AccountEntry.COLUMN_BALANCE};
 
@@ -169,7 +169,7 @@ public class AccountManager {
 
         String[] columns = {AccountEntry._ID,
                 AccountEntry.COLUMN_NAME,
-                AccountEntry.TYPE,
+                AccountEntry.COLUMN_TYPE,
                 AccountEntry.COLUMN_DESCRIPTION,
                 AccountEntry.COLUMN_BALANCE};
 
@@ -199,7 +199,7 @@ public class AccountManager {
 
         String[] columns = {AccountEntry._ID,
                             AccountEntry.COLUMN_NAME,
-                            AccountEntry.TYPE,
+                            AccountEntry.COLUMN_TYPE,
                             AccountEntry.COLUMN_DESCRIPTION,
                             AccountEntry.COLUMN_BALANCE};
 
@@ -236,7 +236,7 @@ public class AccountManager {
 
         ContentValues values = new ContentValues();
         values.put(AccountEntry.COLUMN_NAME, account.getName());
-        values.put(AccountEntry.TYPE, account.getType());
+        values.put(AccountEntry.COLUMN_TYPE, account.getType());
         values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
         values.put(AccountEntry.COLUMN_BALANCE, balance);
         values.put(AccountEntry.COLUMN_DISABLE, ENABLE);
@@ -254,7 +254,7 @@ public class AccountManager {
         ContentValues values = new ContentValues();
         values.put(AccountEntry._ID, accountId);
         values.put(AccountEntry.COLUMN_NAME, account.getName());
-        values.put(AccountEntry.TYPE, account.getType());
+        values.put(AccountEntry.COLUMN_TYPE, account.getType());
         values.put(AccountEntry.COLUMN_DESCRIPTION, account.getDescription());
         values.put(AccountEntry.COLUMN_BALANCE, account.getBalance());
 
@@ -287,7 +287,7 @@ public class AccountManager {
 
         int accIdPos = cursor.getColumnIndex(AccountEntry._ID);
         int accNamePos = cursor.getColumnIndex(AccountEntry.COLUMN_NAME);
-        int accCreditCard = cursor.getColumnIndex(AccountEntry.TYPE);
+        int accCreditCard = cursor.getColumnIndex(AccountEntry.COLUMN_TYPE);
         int accDescriptionPos = cursor.getColumnIndex(AccountEntry.COLUMN_DESCRIPTION);
         int accBalancePos = cursor.getColumnIndex(AccountEntry.COLUMN_BALANCE);
         int accDisablePos = cursor.getColumnIndex(AccountEntry.COLUMN_DISABLE);

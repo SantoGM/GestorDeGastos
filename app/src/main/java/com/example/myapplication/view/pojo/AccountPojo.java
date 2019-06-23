@@ -9,7 +9,6 @@ public class AccountPojo extends AbstractPojo{
     private Integer type;
     private String description;
     private Float balance;
-
     private Integer disable;
 
 
